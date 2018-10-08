@@ -1,4 +1,4 @@
-package com.czh.testmpeg.videorecord;
+package com.silversnowsoftware.vc.ui.compression.videorecord;
 
 import android.content.Context;
 import android.content.res.Configuration;
@@ -7,7 +7,7 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import com.czh.testmpeg.Screens;
+import com.silversnowsoftware.vc.ui.Screens;
 
 import java.io.IOException;
 import java.util.List;

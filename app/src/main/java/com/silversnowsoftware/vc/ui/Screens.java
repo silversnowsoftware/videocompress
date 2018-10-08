@@ -1,4 +1,4 @@
-package com.czh.testmpeg;
+package com.silversnowsoftware.vc.ui;
 
 import android.content.Context;
 import android.content.res.Configuration;

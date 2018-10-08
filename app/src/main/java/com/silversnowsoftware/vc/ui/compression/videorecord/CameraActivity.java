@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.czh.testmpeg.videorecord;
+package com.silversnowsoftware.vc.ui.compression.videorecord;
 
 import android.app.Activity;
 import android.content.Context;
@@ -45,7 +45,7 @@ import android.widget.Toast;
 
 import com.czh.testmpeg.R;
 import com.czh.testmpeg.databinding.ActivityCameraBinding;
-import com.czh.testmpeg.videocompress.MainActivity;
+import com.silversnowsoftware.vc.ui.compression.videocompress.MainActivity;
 
 import java.io.File;
 import java.io.IOException;

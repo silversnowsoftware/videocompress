@@ -1,4 +1,4 @@
-package com.czh.testmpeg;
+package com.silversnowsoftware.vc.ui.compression;
 
 /**
  * Created by chenzhihui on 16/8/19.

@@ -1,4 +1,4 @@
-package com.czh.testmpeg.videocompress;
+package com.silversnowsoftware.vc.ui.compression.videocompress;
 
 import android.app.Activity;
 

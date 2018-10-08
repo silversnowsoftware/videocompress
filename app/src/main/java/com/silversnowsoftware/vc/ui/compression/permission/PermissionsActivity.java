@@ -1,4 +1,4 @@
-package com.czh.testmpeg.permission;
+package com.silversnowsoftware.vc.ui.compression.permission;
 
 import android.app.Activity;
 import android.content.DialogInterface;

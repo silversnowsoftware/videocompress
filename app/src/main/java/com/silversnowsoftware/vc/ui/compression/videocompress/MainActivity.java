@@ -1,4 +1,4 @@
-package com.czh.testmpeg.videocompress;
+package com.silversnowsoftware.vc.ui.compression.videocompress;
 
 import android.Manifest;
 import android.content.Intent;
@@ -16,8 +16,8 @@ import android.widget.Toast;
 
 import com.czh.testmpeg.R;
 import com.czh.testmpeg.databinding.ActivityMainBinding;
-import com.czh.testmpeg.permission.PermissionsActivity;
-import com.czh.testmpeg.permission.PermissionsChecker;
+import com.silversnowsoftware.vc.ui.compression.permission.PermissionsActivity;
+import com.silversnowsoftware.vc.ui.compression.permission.PermissionsChecker;
 import com.silversnowsoftware.vc.ui.compression.videorecord.CameraActivity;
 
 import java.io.File;

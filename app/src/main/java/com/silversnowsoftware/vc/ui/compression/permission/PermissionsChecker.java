@@ -1,4 +1,4 @@
-package com.czh.testmpeg.permission;
+package com.silversnowsoftware.vc.ui.compression.permission;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
