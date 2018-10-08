@@ -18,7 +18,7 @@ import com.czh.testmpeg.R;
 import com.czh.testmpeg.databinding.ActivityMainBinding;
 import com.czh.testmpeg.permission.PermissionsActivity;
 import com.czh.testmpeg.permission.PermissionsChecker;
-import com.czh.testmpeg.videorecord.CameraActivity;
+import com.silversnowsoftware.vc.ui.compression.videorecord.CameraActivity;
 
 import java.io.File;
 import java.util.regex.Matcher;
