@@ -9,9 +9,6 @@ import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunnin
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException;
 
 
-/**
- * Created by karan on 13/2/15.
- */
 public class Compressor {
 
     public Activity a;

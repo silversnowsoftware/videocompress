@@ -43,8 +43,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Chronometer;
 import android.widget.Toast;
 
-import com.czh.testmpeg.R;
-import com.czh.testmpeg.databinding.ActivityCameraBinding;
+import com.silversnowsoftware.vc.R;
+import com.silversnowsoftware.vc.databinding.ActivityCameraBinding;
 import com.silversnowsoftware.vc.ui.compression.videocompress.MainActivity;
 
 import java.io.File;

@@ -14,8 +14,8 @@ import android.view.View;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
-import com.czh.testmpeg.R;
-import com.czh.testmpeg.databinding.ActivityMainBinding;
+import com.silversnowsoftware.vc.R;
+import com.silversnowsoftware.vc.databinding.ActivityMainBinding;
 import com.silversnowsoftware.vc.ui.compression.permission.PermissionsActivity;
 import com.silversnowsoftware.vc.ui.compression.permission.PermissionsChecker;
 import com.silversnowsoftware.vc.ui.compression.videorecord.CameraActivity;
