@@ -34,4 +34,7 @@
     <string name="path">video path:%1$s,size:%2$s</string>
     <string name="dont_have_app_to_open_file">cannot open file</string>
 
+    <string name="take_video">Video Çek</string>
+    <string name="load_from_gallery">Galeriden Yükle</string>
+
 </resources>
