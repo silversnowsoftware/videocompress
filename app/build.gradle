@@ -38,4 +38,24 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.7.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.7.0'
     compile project(path: ':FFmpegAndroid')
+
+
+
+    implementation "com.google.dagger:dagger:$rootProject.dagger2Version"
+
+    annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.dagger2Version"
+
+
+    // dependencies for local unit tests
+
+
+
+    testAnnotationProcessor "com.google.dagger:dagger-compiler:$rootProject.dagger2Version"
+
+
+
+    // UI Testing
+
+
+    androidTestAnnotationProcessor "com.google.dagger:dagger-compiler:$rootProject.dagger2Version"
 }
