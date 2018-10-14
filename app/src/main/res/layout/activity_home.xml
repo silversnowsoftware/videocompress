@@ -4,29 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg_home"
-    tools:context="com.silversnowsoftware.vc.ui.HomeActivity">
+    tools:context="com.silversnowsoftware.vc.ui.HomeActivity"
+    android:background="@color/colorBackgroundLight">
 
     <Button
         android:id="@+id/btn_take_video"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/AppTheme.MainButton"
         android:layout_gravity="center"
         android:layout_margin="15dp"
         android:padding="10dp"
         android:text="@string/take_video"
-        android:textSize="18dp"
-        android:background="@drawable/standard_button"
+
         android:layout_centerVertical="true"/>
     <Button
         android:id="@+id/btn_choose_gallery"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        style="@style/AppTheme.MainButton"
         android:layout_gravity="center"
         android:layout_margin="15dp"
-        android:padding="10dp"
         android:text="@string/load_from_gallery"
-        android:textSize="18dp"
-        android:background="@drawable/standard_button"
         android:layout_below="@id/btn_take_video"/>
 </RelativeLayout>

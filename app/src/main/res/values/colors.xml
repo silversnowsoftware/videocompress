@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <!--appTheme-->
+    <color name="colorPrimary">#9ad4cb</color>
+    <color name="colorPrimaryDark">#2196F3</color>
+    <color name="colorAccent">#2196F3</color>
+    <!--appTheme-->
+
+    <!--Activity-->
+    <color name="colorBackgroundLight">#5a517c</color>
+    <!--Activity-->
 
     <color name="list_qualities_bg">#88FFFFFF</color>
 
-    <color name="home_page_color">#393254</color>
 </resources>
