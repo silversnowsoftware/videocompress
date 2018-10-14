@@ -13,8 +13,8 @@
     </style>
 
     <style name="AppTheme.MainButton" parent="Base.Widget.AppCompat.Button.Colored">
+        <item name="android:background">@drawable/button_main</item>
         <item name="android:textSize">18sp</item>
-        <item name="android:radius">18dp</item>
     </style>
 
 </resources>
