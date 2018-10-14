@@ -11,7 +11,7 @@ import com.silversnowsoftware.vc.di.module.ApplicationModule;
  * Created by burak on 10/12/2018.
  */
 
-public class Dagger2Application extends Application {
+public class VideoCompressApplication extends Application {
 
 
     private ApplicationComponent mApplicationComponent;

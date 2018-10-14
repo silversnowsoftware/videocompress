@@ -9,7 +9,7 @@ import android.view.MotionEvent;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
-import com.silversnowsoftware.vc.Dagger2Application;
+import com.silversnowsoftware.vc.VideoCompressApplication;
 import com.silversnowsoftware.vc.di.component.ActivityComponent;
 import com.silversnowsoftware.vc.di.component.DaggerActivityComponent;
 import com.silversnowsoftware.vc.di.module.ActivityModule;
@@ -30,7 +30,7 @@ public abstract class BaseActivity extends AppCompatActivity implements IView {
 
         mActivityComponent = DaggerActivityComponent.builder()
                 .activityModule(new ActivityModule(this))
-                .applicationComponent(((Dagger2Application) getApplication()).getComponent())
+                .applicationComponent(((VideoCompressApplication) getApplication()).getComponent())
                 .build();
 
     }

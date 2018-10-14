@@ -1,4 +1,4 @@
-package com.silversnowsoftware.vc.ui.compression.videocompress;
+package com.silversnowsoftware.vc.ui.main;
 
 import android.Manifest;
 import android.content.Intent;
@@ -16,13 +16,19 @@ import android.widget.Toast;
 
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.databinding.ActivityMainBinding;
+import com.silversnowsoftware.vc.ui.base.BaseActivity;
 import com.silversnowsoftware.vc.ui.compression.permission.PermissionsActivity;
 import com.silversnowsoftware.vc.ui.compression.permission.PermissionsChecker;
+import com.silversnowsoftware.vc.ui.compression.videocompress.CompressListener;
+import com.silversnowsoftware.vc.ui.compression.videocompress.Compressor;
+import com.silversnowsoftware.vc.ui.compression.videocompress.InitListener;
 import com.silversnowsoftware.vc.ui.compression.videorecord.CameraActivity;
 
 import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.inject.Inject;
 
 import me.drakeet.materialdialog.MaterialDialog;
 
@@ -43,7 +49,7 @@ import me.drakeet.materialdialog.MaterialDialog;
  * And -b 900k
  * To improve quality (and get less compression).﻿
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity implements IMainView {
     private final String TAG = getClass().getSimpleName();
     private Compressor mCompressor;
     ActivityMainBinding mBinding;
@@ -68,11 +74,16 @@ public class MainActivity extends AppCompatActivity {
     private Double videoLength = 0.00;//视频时长 s
     private static final Handler handler = new Handler();
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+    @Inject
+    IMainPresenter<IMainView> mPresenter;
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mBinding = DataBindingUtil.setContentView(this, getLayoutResourceId());
+        getActivityComponent().inject(this);
+        mPresenter.onAttach(this);
+        showToastMethod(mPresenter.TestInject());
         mBinding.btnRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -120,6 +131,12 @@ public class MainActivity extends AppCompatActivity {
             PermissionsActivity.startActivityForResult(this, REQUEST_CODE_FOR_PERMISSIONS, PERMISSIONS);
         }
 
+
+    }
+
+    @Override
+    protected int getLayoutResourceId() {
+        return  R.layout.activity_main;
     }
 
 

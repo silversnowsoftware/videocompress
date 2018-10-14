@@ -45,7 +45,7 @@ import android.widget.Toast;
 
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.databinding.ActivityCameraBinding;
-import com.silversnowsoftware.vc.ui.compression.videocompress.MainActivity;
+import com.silversnowsoftware.vc.ui.main.MainActivity;
 
 import java.io.File;
 import java.io.IOException;

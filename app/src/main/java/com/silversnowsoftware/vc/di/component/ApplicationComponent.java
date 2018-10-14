@@ -1,12 +1,10 @@
 package com.silversnowsoftware.vc.di.component;
 
-import android.app.Application;
 import android.content.Context;
 
-import com.silversnowsoftware.vc.Dagger2Application;
+import com.silversnowsoftware.vc.VideoCompressApplication;
 import com.silversnowsoftware.vc.di.ApplicationContext;
 import com.silversnowsoftware.vc.di.module.ApplicationModule;
-import com.silversnowsoftware.vc.ui.compression.videocompress.MainActivity;
 
 import javax.inject.Singleton;
 
@@ -23,7 +21,7 @@ import dagger.Component;
 public interface ApplicationComponent {
 
 
-    void inject(Dagger2Application app);
+    void inject(VideoCompressApplication app);
 
 
     @ApplicationContext
