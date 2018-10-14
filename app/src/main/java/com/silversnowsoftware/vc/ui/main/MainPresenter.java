@@ -11,10 +11,11 @@ import javax.inject.Inject;
 public class MainPresenter<V extends IMainView> extends BasePresenter<V>
         implements IMainPresenter<V> {
 
+
     @Inject
     public MainPresenter() {
+        super();
     }
-
     @Override
     public String TestInject() {
         return "Test Injectt";
