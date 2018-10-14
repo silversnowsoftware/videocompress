@@ -2,6 +2,7 @@ package com.silversnowsoftware.vc;
 
 import android.app.Application;
 import com.silversnowsoftware.vc.di.component.ApplicationComponent;
+//import com.silversnowsoftware.vc.di.component.DaggerApplicationComponent;
 import com.silversnowsoftware.vc.di.component.DaggerApplicationComponent;
 import com.silversnowsoftware.vc.di.module.ApplicationModule;
 
@@ -21,7 +22,7 @@ public class Dagger2Application extends Application {
 
         initializeInjector();
 
-    }
+  }
 
     private void initializeInjector(){
         appComponent =  DaggerApplicationComponent.builder()

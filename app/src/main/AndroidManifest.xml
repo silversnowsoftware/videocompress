@@ -24,13 +24,14 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".ui.compression.videocompress.MainActivity">
-
-        </activity>
+        <activity android:name=".ui.compression.videocompress.MainActivity"></activity>
         <activity android:name=".ui.compression.permission.PermissionsActivity" />
         <activity android:name=".ui.compression.videorecord.CameraActivity" />
         <activity android:name=".ui.test.TestActivity" />
         <activity android:name=".ui.HomeActivity">
+
+        </activity>
+        <activity android:name=".ui.main.Main2Activity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
