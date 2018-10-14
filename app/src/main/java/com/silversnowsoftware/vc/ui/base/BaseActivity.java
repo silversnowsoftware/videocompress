@@ -9,6 +9,11 @@ import android.view.MotionEvent;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import com.silversnowsoftware.vc.Dagger2Application;
+import com.silversnowsoftware.vc.di.component.ActivityComponent;
+import com.silversnowsoftware.vc.di.component.DaggerActivityComponent;
+import com.silversnowsoftware.vc.di.module.ActivityModule;
+
 import static android.content.SharedPreferences.*;
 
 /**
@@ -16,12 +21,22 @@ import static android.content.SharedPreferences.*;
  */
 
 public abstract class BaseActivity extends AppCompatActivity implements IView {
+
+    private ActivityComponent mActivityComponent;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResourceId());
-    }
 
+        mActivityComponent = DaggerActivityComponent.builder()
+                .activityModule(new ActivityModule(this))
+                .applicationComponent(((Dagger2Application) getApplication()).getComponent())
+                .build();
+
+    }
+    public ActivityComponent getActivityComponent() {
+        return mActivityComponent;
+    }
     protected abstract int getLayoutResourceId();
 
     @Override
