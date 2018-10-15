@@ -46,6 +46,7 @@ import android.widget.Toast;
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.databinding.ActivityCameraBinding;
 import com.silversnowsoftware.vc.ui.main.MainActivity;
+import com.silversnowsoftware.vc.utils.constants.Constants;
 
 import java.io.File;
 import java.io.IOException;
@@ -135,7 +136,7 @@ public class CameraActivity extends AppCompatActivity {
             //这台设备没有发现摄像头
             Toast.makeText(getApplicationContext(), R.string.dont_have_camera_error
                     , Toast.LENGTH_SHORT).show();
-            setResult(MainActivity.RESULT_CODE_FOR_RECORD_VIDEO_FAILED);
+            setResult(Constants.RESULT_CODE_FOR_RECORD_VIDEO_FAILED);
             releaseCamera();
             releaseMediaRecorder();
             finish();
@@ -395,8 +396,8 @@ public class CameraActivity extends AppCompatActivity {
                 Toast.makeText(CameraActivity.this, R.string.video_captured, Toast.LENGTH_SHORT).show();
                 recording = false;
                 Intent intent = new Intent();
-                intent.putExtra(MainActivity.INTENT_EXTRA_VIDEO_PATH, url_file);
-                setResult(MainActivity.RESULT_CODE_FOR_RECORD_VIDEO_SUCCEED, intent);
+                intent.putExtra(Constants.INTENT_EXTRA_VIDEO_PATH, url_file);
+                setResult(Constants.RESULT_CODE_FOR_RECORD_VIDEO_SUCCEED, intent);
                 releaseCamera();
                 releaseMediaRecorder();
                 finish();
@@ -404,7 +405,7 @@ public class CameraActivity extends AppCompatActivity {
                 //准备开始录制视频
                 if (!prepareMediaRecorder()) {
                     Toast.makeText(CameraActivity.this, getString(R.string.camera_init_fail), Toast.LENGTH_SHORT).show();
-                    setResult(MainActivity.RESULT_CODE_FOR_RECORD_VIDEO_FAILED);
+                    setResult(Constants.RESULT_CODE_FOR_RECORD_VIDEO_FAILED);
                     releaseCamera();
                     releaseMediaRecorder();
                     finish();
@@ -424,7 +425,7 @@ public class CameraActivity extends AppCompatActivity {
                             mBinding.buttonCapture.setImageResource(R.mipmap.player_stop);
                         } catch (final Exception ex) {
                             Log.i("---", "Exception in thread");
-                            setResult(MainActivity.RESULT_CODE_FOR_RECORD_VIDEO_FAILED);
+                            setResult(Constants.RESULT_CODE_FOR_RECORD_VIDEO_FAILED);
                             releaseCamera();
                             releaseMediaRecorder();
                             finish();
@@ -617,7 +618,7 @@ public class CameraActivity extends AppCompatActivity {
                 mp4.delete();
             }
         }
-        setResult(MainActivity.RESULT_CODE_FOR_RECORD_VIDEO_CANCEL);
+        setResult(Constants.RESULT_CODE_FOR_RECORD_VIDEO_CANCEL);
         releaseCamera();
         releaseMediaRecorder();
         finish();

@@ -1,0 +1,15 @@
+/*
+ http://androidwarzone.blogspot.hk/2011/12/ffmpeg4android.html
+ Video Compress:
+ // simple regular commad
+ ffmpeg -y -i /sdcard/videokit/in.mp4 -strict experimental -s 160x120 -r 25 -vcodec mpeg4 -b 150k -ab 48000 -ac 2 -ar 22050 /sdcard/videokit/out.mp4
+ <p/>
+ // compress with h264 (to support chrome)
+ ffmpeg -y -i /sdcard/videokit/in.mp4 -strict experimental -vcodec libx264 -preset ultrafast -crf 24 -acodec aac -ar 44100 -ac 2 -b:a 96k -s 320x240 -aspect 4:3 /sdcard/videokit/out3.mp4
+ // As complex command, don't forget to use setCommandComplex(complexCommand)
+ // Use this format to support files that contains spaces and special characters
+ String[] complexCommand = {"ffmpeg","-y" ,"-i", "/sdcard/video kit/in.mp4","-strict","experimental","-s", "160x120","-r","25", "-vcodec", "mpeg4", "-b", "150k", "-ab","48000", "-ac", "2", "-ar", "22050", "/sdcard/video kit/out.mp4"};
+ The parameters that control the quality are the -s (resolution, currently set on 160x120) and the -b (the bitrate, currently set on 150k).
+ Increase them, e.g -s 480x320
+ And -b 900k
+ To improve quality (and get less compression).﻿*/
