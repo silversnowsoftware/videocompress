@@ -20,7 +20,6 @@ public class Main2Activity extends BaseActivity implements IMainView {
         getActivityComponent().inject(this);
         mPresenter.onAttach(this);
         setContentView(getLayoutResourceId());
-        showToastMethod(mPresenter.TestInject());
     }
 
     @Override

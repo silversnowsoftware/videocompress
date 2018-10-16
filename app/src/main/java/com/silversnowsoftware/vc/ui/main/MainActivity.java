@@ -23,6 +23,7 @@ import com.silversnowsoftware.vc.ui.compression.videocompress.InitListener;
 import com.silversnowsoftware.vc.ui.compression.videorecord.CameraActivity;
 import com.silversnowsoftware.vc.utils.ManifestUtil;
 import com.silversnowsoftware.vc.utils.constants.Constants;
+import com.silversnowsoftware.vc.utils.constants.Globals;
 import com.silversnowsoftware.vc.utils.helpers.FileHelper;
 
 import java.io.File;
@@ -37,18 +38,9 @@ import static com.silversnowsoftware.vc.utils.helpers.FileHelper.getFileSize;
 
 
 public class MainActivity extends BaseActivity implements IMainView {
-    private final String TAG = getClass().getSimpleName();
 
     private Compressor mCompressor;
     ActivityMainBinding mBinding;
-    //    private String currentInputVideoPath = "/mnt/sdcard/videokit/in.mp4";
-    private String currentInputVideoPath = "";
-    private String currentOutputVideoPath = "/mnt/sdcard/videokit/out.mp4";
-
-    String cmd = "-y -i " + currentInputVideoPath + " -strict -2 -vcodec libx264 -preset ultrafast " +
-            "-crf 24 -acodec aac -ar 44100 -ac 2 -b:a 96k -s 640x480 -aspect 16:9 " + currentOutputVideoPath;
-
-
     private MaterialDialog mMaterialDialog;
     private Double videoLength = 0.00;
     private static final Handler handler = new Handler();
@@ -62,7 +54,7 @@ public class MainActivity extends BaseActivity implements IMainView {
         mBinding = DataBindingUtil.setContentView(this, getLayoutResourceId());
         getActivityComponent().inject(this);
         mPresenter.onAttach(this);
-        showToastMethod(mPresenter.TestInject());
+
         mBinding.btnRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,18 +62,18 @@ public class MainActivity extends BaseActivity implements IMainView {
             }
         });
 
-        mBinding.etCommand.setText(cmd);
+        mBinding.etCommand.setText(mPresenter.getCmd());
         mBinding.btnRun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String command = mBinding.etCommand.getText().toString();
+                String command = mPresenter.getCmd();
                 if (TextUtils.isEmpty(command)) {
                     Toast.makeText(MainActivity.this, getString(R.string.compree_please_input_command)
                             , Toast.LENGTH_SHORT).show();
-                } else if (TextUtils.isEmpty(currentInputVideoPath)) {
+                } else if (TextUtils.isEmpty(Globals.currentInputVideoPath)) {
                     Toast.makeText(MainActivity.this, R.string.no_video_tips, Toast.LENGTH_SHORT).show();
                 } else {
-                    File file = new File(currentOutputVideoPath);
+                    File file = new File(Globals.currentOutputVideoPath);
                     if (file.exists()) {
                         file.delete();
                     }
@@ -93,13 +85,13 @@ public class MainActivity extends BaseActivity implements IMainView {
         mCompressor.loadBinary(new InitListener() {
             @Override
             public void onLoadSuccess() {
-                Log.v(TAG, "load library succeed");
+
                 textAppend(getString(R.string.compress_load_library_succeed));
             }
 
             @Override
             public void onLoadFail(String reason) {
-                Log.i(TAG, "load library fail:" + reason);
+
                 textAppend(getString(R.string.compress_load_library_failed, reason));
             }
         });
@@ -121,7 +113,7 @@ public class MainActivity extends BaseActivity implements IMainView {
 
     private void execCommand(String cmd) {
 
-        File mFile = new File(currentOutputVideoPath);
+        File mFile = new File(Globals.currentOutputVideoPath);
         if (mFile.exists()) {
             mFile.delete();
         }
@@ -129,11 +121,11 @@ public class MainActivity extends BaseActivity implements IMainView {
         mCompressor.execCommand(cmd, new CompressListener() {
             @Override
             public void onExecSuccess(String message) {
-                Log.i(TAG, "success " + message);
+
                 textAppend(getString(R.string.compress_succeed));
                 Toast.makeText(getApplicationContext(), R.string.compress_succeed, Toast.LENGTH_SHORT).show();
-                String result = getString(R.string.compress_result_input_output, currentInputVideoPath
-                        , getFileSize(currentInputVideoPath), currentOutputVideoPath, getFileSize(currentOutputVideoPath));
+                String result = getString(R.string.compress_result_input_output, Globals.currentInputVideoPath
+                        , getFileSize(Globals.currentInputVideoPath), Globals.currentOutputVideoPath, getFileSize(Globals.currentOutputVideoPath));
                 textAppend(result);
                 mMaterialDialog = new MaterialDialog(MainActivity.this)
                         .setTitle(getString(R.string.compress_succeed))
@@ -142,7 +134,7 @@ public class MainActivity extends BaseActivity implements IMainView {
                             @Override
                             public void onClick(View v) {
                                 try {
-                                    startActivity(FileHelper.openFile(new File(currentOutputVideoPath)));
+                                    startActivity(FileHelper.openFile(new File(Globals.currentOutputVideoPath)));
                                 }catch(Exception ex) {
                                     showToastMethod(ex.getMessage());
                                 };
@@ -162,7 +154,7 @@ public class MainActivity extends BaseActivity implements IMainView {
 
             @Override
             public void onExecFail(String reason) {
-                Log.i(TAG, "fail " + reason);
+
                 textAppend(getString(R.string.compress_failed, reason));
                 mMaterialDialog = new MaterialDialog(MainActivity.this)
                         .setTitle(getString(R.string.compress_failed))
@@ -178,9 +170,9 @@ public class MainActivity extends BaseActivity implements IMainView {
 
             @Override
             public void onExecProgress(String message) {
-                Log.i(TAG, "progress " + message);
+
                 textAppend(getString(R.string.compress_progress, message));
-                Log.v(TAG, getString(R.string.compress_progress, getProgress(message)));
+
 
 
             }
@@ -199,52 +191,12 @@ public class MainActivity extends BaseActivity implements IMainView {
         }
     }
 
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == Constants.REQUEST_CODE_FOR_PERMISSIONS) {
 
-            if (PermissionsActivity.PERMISSIONS_DENIED == resultCode) {
-
-                finish();
-            } else if (PermissionsActivity.PERMISSIONS_GRANTED == resultCode) {
-                //权限被授予
-                //do nothing
-            }
-        } else if (requestCode == Constants.REQUEST_CODE_FOR_RECORD_VIDEO) {
-
-            if (resultCode == Constants.RESULT_CODE_FOR_RECORD_VIDEO_SUCCEED) {
-
-                String videoPath = data.getStringExtra(Constants.INTENT_EXTRA_VIDEO_PATH);
-                if (!TextUtils.isEmpty(videoPath)) {
-                    currentInputVideoPath = videoPath;
-                    MediaMetadataRetriever retr = new MediaMetadataRetriever();
-                    retr.setDataSource(currentInputVideoPath);
-                    String time = retr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-                    //7680
-                    try {
-                        videoLength = Double.parseDouble(time) / 1000.00;
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        videoLength = 0.00;
-                    }
-                    Log.v(TAG, "videoLength = " + videoLength + "s");
-                    refreshCurrentPath();
-                }
-            } else if (resultCode == Constants.RESULT_CODE_FOR_RECORD_VIDEO_FAILED) {
-
-                currentInputVideoPath = "";
-            }
-        }
-
-    }
-
-    private void refreshCurrentPath() {
-        mBinding.tvVideoFilePath.setText(getString(R.string.path, currentInputVideoPath, getFileSize(currentInputVideoPath)));
-        cmd = "-y -i " + currentInputVideoPath + " -strict -2 -vcodec libx264 -preset ultrafast " +
-                "-crf 24 -acodec aac -ar 44100 -ac 2 -b:a 96k -s 480x320 -aspect 16:9 " + currentOutputVideoPath;
-        mBinding.etCommand.setText(cmd);
-        mBinding.tvLog.setText("");
+        mPresenter.ActivityResult(requestCode,resultCode,data);
     }
 
 
@@ -257,7 +209,7 @@ public class MainActivity extends BaseActivity implements IMainView {
             String result = m.group(0);
             String temp[] = result.split(":");
             Double seconds = Double.parseDouble(temp[1]) * 60 + Double.parseDouble(temp[2]);
-            Log.v(TAG, "current second = " + seconds);
+
             if (0 != videoLength) {
                 return seconds / videoLength + "";
             }

@@ -9,4 +9,6 @@ public interface IPresenter<V extends IView> {
 
     void onDetach();
 
+    public V getView();
+
 }

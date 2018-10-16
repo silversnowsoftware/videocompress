@@ -68,23 +68,6 @@ public class FileCompressor implements IFileCompressor {
         });
     }
 
-//    private String getProgress(String source) {
-//        //progress frame=   28 fps=0.0 q=24.0 size= 107kB time=00:00:00.91 bitrate= 956.4kbits/s
-//        Pattern p = Pattern.compile("00:\\d{2}:\\d{2}");
-//        Matcher m = p.matcher(source);
-//        if (m.find()) {
-//            //00:00:00
-//            String result = m.group(0);
-//            String temp[] = result.split(":");
-//            Double seconds = Double.parseDouble(temp[1]) * 60 + Double.parseDouble(temp[2]);
-//
-//            if (0 != videoLength) {
-//                return seconds / videoLength + "";
-//            }
-//            return "0";
-//        }
-//        return "";
-//    }
 
 
 }

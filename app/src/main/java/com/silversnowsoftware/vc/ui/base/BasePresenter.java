@@ -6,15 +6,19 @@ package com.silversnowsoftware.vc.ui.base;
 
 public class BasePresenter <V extends IView> implements IPresenter<V> {
 
-    private V mMvpView;
+    private V mView;
 
     @Override
-    public void onAttach(V mvpView) {
-        mMvpView = mvpView;
+    public void onAttach(V view) {
+        mView = view;
     }
 
     @Override
     public void onDetach() {
 
+    }
+    @Override
+    public V getView() {
+        return mView;
     }
 }
