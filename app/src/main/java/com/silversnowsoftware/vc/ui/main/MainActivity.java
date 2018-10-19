@@ -2,18 +2,17 @@ package com.silversnowsoftware.vc.ui.main;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.media.MediaMetadataRetriever;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.silversnowsoftware.vc.R;
+import com.silversnowsoftware.vc.VideoCompressApplication;
 import com.silversnowsoftware.vc.databinding.ActivityMainBinding;
+import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.ui.base.BaseActivity;
 import com.silversnowsoftware.vc.ui.compression.permission.PermissionsActivity;
 import com.silversnowsoftware.vc.ui.compression.permission.PermissionsChecker;
@@ -50,6 +49,7 @@ public class MainActivity extends BaseActivity implements IMainView {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, getLayoutResourceId());
         getActivityComponent().inject(this);
@@ -77,7 +77,7 @@ public class MainActivity extends BaseActivity implements IMainView {
                     if (file.exists()) {
                         file.delete();
                     }
-                    execCommand(command);
+                   mPresenter.Compress(command);
                 }
             }
         });
@@ -104,13 +104,6 @@ public class MainActivity extends BaseActivity implements IMainView {
 
 
     }
-
-    @Override
-    protected int getLayoutResourceId() {
-        return R.layout.activity_main;
-    }
-
-
     private void execCommand(String cmd) {
 
         File mFile = new File(Globals.currentOutputVideoPath);
@@ -122,62 +115,31 @@ public class MainActivity extends BaseActivity implements IMainView {
             @Override
             public void onExecSuccess(String message) {
 
-                textAppend(getString(R.string.compress_succeed));
-                Toast.makeText(getApplicationContext(), R.string.compress_succeed, Toast.LENGTH_SHORT).show();
-                String result = getString(R.string.compress_result_input_output, Globals.currentInputVideoPath
-                        , getFileSize(Globals.currentInputVideoPath), Globals.currentOutputVideoPath, getFileSize(Globals.currentOutputVideoPath));
-                textAppend(result);
-                mMaterialDialog = new MaterialDialog(MainActivity.this)
-                        .setTitle(getString(R.string.compress_succeed))
-                        .setMessage(result)
-                        .setPositiveButton(getString(R.string.open_video), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                try {
-                                    startActivity(FileHelper.openFile(new File(Globals.currentOutputVideoPath)));
-                                }catch(Exception ex) {
-                                    showToastMethod(ex.getMessage());
-                                };
 
-                                mMaterialDialog.dismiss();
-                            }
-                        })
-                        .setNegativeButton(getString(R.string.cancel), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                mMaterialDialog.dismiss();
-                            }
-                        });
-                mMaterialDialog.show();
 
             }
 
             @Override
             public void onExecFail(String reason) {
 
-                textAppend(getString(R.string.compress_failed, reason));
-                mMaterialDialog = new MaterialDialog(MainActivity.this)
-                        .setTitle(getString(R.string.compress_failed))
-                        .setMessage(getString(R.string.compress_failed))
-                        .setPositiveButton(getString(R.string.confirm), new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                mMaterialDialog.dismiss();
-                            }
-                        });
-                mMaterialDialog.show();
+
             }
 
             @Override
             public void onExecProgress(String message) {
-
-                textAppend(getString(R.string.compress_progress, message));
 
 
 
             }
         });
     }
+    @Override
+    protected int getLayoutResourceId() {
+        return R.layout.activity_main;
+    }
+
+
+
 
     private void textAppend(String text) {
         if (!TextUtils.isEmpty(text)) {

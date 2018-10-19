@@ -13,4 +13,5 @@ public interface IMainPresenter <V extends IMainView> extends IPresenter<V> {
     void ActivityResult(int requestCode, int resultCode, Intent data);
     String getCmd();
      void setCmd(String cmd) ;
+     void Compress(String cmd);
 }

@@ -1,6 +1,6 @@
 package com.github.hiteshsondhi88.libffmpeg;
 
-class CommandResult {
+public class CommandResult {
     final String output;
     final boolean success;
 
@@ -9,11 +9,11 @@ class CommandResult {
         this.output = output;
     }
 
-    static CommandResult getDummyFailureResponse() {
+    public static CommandResult getDummyFailureResponse() {
         return new CommandResult(false, "");
     }
 
-    static CommandResult getOutputFromProcess(Process process) {
+    public static CommandResult getOutputFromProcess(Process process) {
         String output;
         if (success(process.exitValue())) {
             output = Util.convertInputStreamToString(process.getInputStream());

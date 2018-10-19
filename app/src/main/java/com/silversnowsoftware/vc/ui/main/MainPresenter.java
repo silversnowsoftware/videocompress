@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.silversnowsoftware.vc.R;
+import com.silversnowsoftware.vc.operations.compressor.FileCompressor;
 import com.silversnowsoftware.vc.ui.base.BasePresenter;
 import com.silversnowsoftware.vc.ui.compression.permission.PermissionsActivity;
 import com.silversnowsoftware.vc.utils.constants.Constants;
@@ -76,7 +77,7 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
     private void refreshCurrentPath() {
 
         setCmd("-y -i " + Globals.currentInputVideoPath + " -strict -2 -vcodec libx264 -preset ultrafast " +
-                "-crf 24 -acodec aac -ar 44100 -ac 2 -b:a 96k -s 480x320 -aspect 16:9 " + Globals.currentOutputVideoPath);
+                "-crf 24 -acodec aac -ar 44100 -ac 2 -b:a 96k -s 858x480 -aspect 16:9 " + Globals.currentOutputVideoPath);
 
     }
 
@@ -86,5 +87,11 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
 
     public void setCmd(String cmd) {
         this.cmd = cmd;
+    }
+
+    public void Compress(String cmd)
+    {
+        FileCompressor fileCompressor = new FileCompressor( ((Activity)getView()));
+        fileCompressor.myCompress(cmd);
     }
 }

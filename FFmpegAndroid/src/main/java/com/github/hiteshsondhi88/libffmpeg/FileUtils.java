@@ -13,7 +13,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Formatter;
 import java.util.Map;
 
-class FileUtils {
+public class FileUtils {
 
     static final String ffmpegFileName = "ffmpeg";
     private static final int DEFAULT_BUFFER_SIZE = 1024 * 4;
@@ -51,11 +51,11 @@ class FileUtils {
         return context.getFilesDir();
 	}
 
-    static String getFFmpeg(Context context) {
+  public   static String getFFmpeg(Context context) {
         return getFilesDirectory(context).getAbsolutePath() + File.separator + FileUtils.ffmpegFileName;
     }
 
-    static String getFFmpeg(Context context, Map<String,String> environmentVars) {
+   public static String getFFmpeg(Context context, Map<String,String> environmentVars) {
         String ffmpegCommand = "";
         if (environmentVars != null) {
             for (Map.Entry<String, String> var : environmentVars.entrySet()) {

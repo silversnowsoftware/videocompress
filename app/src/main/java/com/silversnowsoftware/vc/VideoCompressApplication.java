@@ -1,10 +1,15 @@
 package com.silversnowsoftware.vc;
 
 import android.app.Application;
+
 import com.silversnowsoftware.vc.di.component.ApplicationComponent;
 //import com.silversnowsoftware.vc.di.component.DaggerApplicationComponent;
 import com.silversnowsoftware.vc.di.component.DaggerApplicationComponent;
 import com.silversnowsoftware.vc.di.module.ApplicationModule;
+import com.silversnowsoftware.vc.model.FileModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -13,6 +18,7 @@ import com.silversnowsoftware.vc.di.module.ApplicationModule;
 
 public class VideoCompressApplication extends Application {
 
+    public static ArrayList<FileModel> fileModels;
 
     private ApplicationComponent mApplicationComponent;
 
@@ -24,7 +30,6 @@ public class VideoCompressApplication extends Application {
                 .applicationModule(new ApplicationModule(this)).build();
 
         mApplicationComponent.inject(this);
-
 
     }
 

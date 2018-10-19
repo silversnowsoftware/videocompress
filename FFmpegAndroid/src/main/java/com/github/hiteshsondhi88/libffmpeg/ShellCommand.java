@@ -2,9 +2,9 @@ package com.github.hiteshsondhi88.libffmpeg;
 
 import java.io.IOException;
 
-class ShellCommand {
+public class ShellCommand {
 
-    Process run(String[] commandString) {
+  public Process run(String[] commandString) {
         Process process = null;
         try {
             process = Runtime.getRuntime().exec(commandString);
