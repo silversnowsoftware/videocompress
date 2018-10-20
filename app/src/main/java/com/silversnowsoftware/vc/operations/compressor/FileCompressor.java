@@ -52,6 +52,10 @@ public class FileCompressor implements IFileCompressor {
     public String TAG = getClass().getName();
     static FileCompressor mFileCompressor;
 
+    private FileCompressor(Activity a) {
+        ffmpeg = FFmpeg.getInstance(context);
+        mCompressor = new Compressor(a);
+    }
     private FileCompressor(Context context) {
         this.context = context;
         ffmpeg = FFmpeg.getInstance(context);
@@ -65,12 +69,11 @@ public class FileCompressor implements IFileCompressor {
             return mFileCompressor;
     }
 
-    public void Compress(String cmd) {
-
+    public void Compress(String cmd, final Double videoLength) {
       File mFile = new File(Globals.currentOutputVideoPath);
-      if (mFile.exists()) {
-          mFile.delete();
-      }
+        if (mFile.exists()) {
+            mFile.delete();
+        }
 
         mCompressor.execCommand(cmd, new CompressListener() {
             @Override
@@ -90,7 +93,7 @@ public class FileCompressor implements IFileCompressor {
             public void onExecProgress(String message) {
 
                Log.i("Progress::",message);
-
+                getProgress(message, videoLength);
             }
         });
 
@@ -120,6 +123,25 @@ public class FileCompressor implements IFileCompressor {
         } catch (FFmpegNotSupportedException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public String getProgress(String source,Double videoLength) {
+        //progress frame=   28 fps=0.0 q=24.0 size= 107kB time=00:00:00.91 bitrate= 956.4kbits/s
+        Pattern p = Pattern.compile("00:\\d{2}:\\d{2}");
+        Matcher m = p.matcher(source);
+        if (m.find()) {
+            //00:00:00
+            String result = m.group(0);
+            String temp[] = result.split(":");
+            Double seconds = Double.parseDouble(temp[1]) * 60 + Double.parseDouble(temp[2]);
+
+            if (0 != videoLength) {
+                return seconds / videoLength + "";
+            }
+            return "0";
+        }
+        return "";
     }
 
 }

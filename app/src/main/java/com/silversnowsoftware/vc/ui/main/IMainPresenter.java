@@ -18,5 +18,4 @@ public interface IMainPresenter<V extends IMainView> extends IPresenter<V> {
 
     void VideoCompress(String cmd);
 
-    String getProgress(String source);
 }

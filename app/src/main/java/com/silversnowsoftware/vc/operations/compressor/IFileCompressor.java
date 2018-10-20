@@ -15,7 +15,9 @@ import java.io.File;
 
 public interface IFileCompressor {
 
-    void Compress(String cmd);
+    void Compress(String cmd,final Double videoLength);
 
     void loadBinary(final InitListener mListener);
+
+    String getProgress(String source,Double videoLength);
 }
