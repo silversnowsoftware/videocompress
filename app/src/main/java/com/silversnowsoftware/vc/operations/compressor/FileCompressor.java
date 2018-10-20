@@ -52,15 +52,16 @@ public class FileCompressor implements IFileCompressor {
     public String TAG = getClass().getName();
     static FileCompressor mFileCompressor;
 
-    private FileCompressor(Context context) {
-        this.context = context;
-        ffmpeg = FFmpeg.getInstance(context);
-        mCompressor = new Compressor(context);
+    private FileCompressor(Activity activity) {
+        this.context = activity.getApplicationContext();
+        this.a = activity;
+        ffmpeg = FFmpeg.getInstance(activity);
+        mCompressor = new Compressor(activity);
     }
 
-    public static FileCompressor getInstance(Context context){
+    public static FileCompressor getInstance(Activity activity){
         if(mFileCompressor == null)
-            return new FileCompressor(context);
+            return new FileCompressor(activity);
         else
             return mFileCompressor;
     }
