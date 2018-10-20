@@ -52,11 +52,22 @@ public class FileCompressor implements IFileCompressor {
     public String TAG = getClass().getName();
     static FileCompressor mFileCompressor;
 
+<<<<<<< HEAD
+    private FileCompressor(Activity a) {
+        ffmpeg = FFmpeg.getInstance(context);
+        mCompressor = new Compressor(a);
+    }
+    private FileCompressor(Context context) {
+        this.context = context;
+        ffmpeg = FFmpeg.getInstance(context);
+        mCompressor = new Compressor(context);
+=======
     private FileCompressor(Activity activity) {
         this.context = activity.getApplicationContext();
         this.a = activity;
         ffmpeg = FFmpeg.getInstance(activity);
         mCompressor = new Compressor(activity);
+>>>>>>> 0ceac5703daa15d4583a9701c6bf5e2df542e63c
     }
 
     public static FileCompressor getInstance(Activity activity){
@@ -66,8 +77,7 @@ public class FileCompressor implements IFileCompressor {
             return mFileCompressor;
     }
 
-    public void Compress(String cmd) {
-
+    public void Compress(String cmd, final Double videoLength) {
       File mFile = new File(Globals.currentOutputVideoPath);
         if (mFile.exists()) {
             mFile.delete();
