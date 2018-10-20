@@ -66,7 +66,7 @@ public class FileCompressor implements IFileCompressor {
             return mFileCompressor;
     }
 
-    public void Compress(String cmd) {
+    public void Compress(String cmd, final Double videoLength) {
 
       File mFile = new File(Globals.currentOutputVideoPath);
         if (mFile.exists()) {
