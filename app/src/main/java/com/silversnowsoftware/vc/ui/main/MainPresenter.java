@@ -94,7 +94,7 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
 
     public void VideoCompress(String cmd)
     {
-        FileCompressor.getInstance(((Activity)getView())).VideoCompress(cmd);
+        FileCompressor.getInstance(((Activity)getView())).Compress(cmd);
     }
 
     public String getProgress(String source) {

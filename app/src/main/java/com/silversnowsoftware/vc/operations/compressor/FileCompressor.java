@@ -46,8 +46,6 @@ public class FileCompressor implements IFileCompressor {
 
 
     private Compressor mCompressor;
-    private ShellCommand shellCommand;
-    private Process process;
     private Context context;
     public Activity a;
     FFmpegInterface ffmpeg;
@@ -57,6 +55,7 @@ public class FileCompressor implements IFileCompressor {
     private FileCompressor(Context context) {
         this.context = context;
         ffmpeg = FFmpeg.getInstance(context);
+        mCompressor = new Compressor(context);
     }
 
     public static FileCompressor getInstance(Context context){
@@ -66,7 +65,36 @@ public class FileCompressor implements IFileCompressor {
             return mFileCompressor;
     }
 
+    public void Compress(String cmd) {
 
+      File mFile = new File(Globals.currentOutputVideoPath);
+      if (mFile.exists()) {
+          mFile.delete();
+      }
+
+        mCompressor.execCommand(cmd, new CompressListener() {
+            @Override
+            public void onExecSuccess(String message) {
+                Toast.makeText(context,"Video Compressed", Toast.LENGTH_SHORT).show();
+
+
+            }
+
+            @Override
+            public void onExecFail(String reason) {
+                Toast.makeText(context,"Video Error", Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onExecProgress(String message) {
+
+               Log.i("Progress::",message);
+
+            }
+        });
+
+    }
     public void loadBinary(final InitListener mListener) {
         try {
             ffmpeg.loadBinary(new LoadBinaryResponseHandler() {
@@ -93,36 +121,5 @@ public class FileCompressor implements IFileCompressor {
             e.printStackTrace();
         }
     }
-
-    @Override
-    public void VideoCompress(String cmd) {
-        try {
-            String[] cmds = cmd.split(" ");
-
-            String[] ffmpegBinary = new String[]{FileUtils.getFFmpeg(context, null)};
-            String[] command = concatenate(ffmpegBinary, cmds);
-            shellCommand = new ShellCommand();
-            process = shellCommand.run(command);
-            if (process == null) {
-                CommandResult.getDummyFailureResponse();
-            }
-
-        } catch (Exception ex) {
-            Log.e(TAG, ex.getMessage());
-        }
-    }
-
-    private <T> T[] concatenate(T[] a, T[] b) {
-        int aLen = a.length;
-        int bLen = b.length;
-
-        @SuppressWarnings("unchecked")
-        T[] c = (T[]) Array.newInstance(a.getClass().getComponentType(), aLen + bLen);
-        System.arraycopy(a, 0, c, 0, aLen);
-        System.arraycopy(b, 0, c, aLen, bLen);
-
-        return c;
-    }
-
 
 }

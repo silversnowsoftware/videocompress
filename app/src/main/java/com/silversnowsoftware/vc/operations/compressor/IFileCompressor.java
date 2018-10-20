@@ -5,6 +5,7 @@ import android.app.Activity;
 import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.ui.compression.videocompress.CompressListener;
 import com.silversnowsoftware.vc.ui.compression.videocompress.Compressor;
+import com.silversnowsoftware.vc.ui.compression.videocompress.InitListener;
 
 import java.io.File;
 
@@ -14,5 +15,7 @@ import java.io.File;
 
 public interface IFileCompressor {
 
-    void VideoCompress(String cmd);
+    void Compress(String cmd);
+
+    void loadBinary(final InitListener mListener);
 }
