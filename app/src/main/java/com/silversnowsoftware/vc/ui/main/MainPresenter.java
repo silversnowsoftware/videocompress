@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.operations.compressor.FileCompressor;
+import com.silversnowsoftware.vc.operations.compressor.IFileCompressor;
 import com.silversnowsoftware.vc.ui.base.BasePresenter;
 import com.silversnowsoftware.vc.ui.compression.permission.PermissionsActivity;
 import com.silversnowsoftware.vc.utils.constants.Constants;
@@ -16,6 +17,8 @@ import com.silversnowsoftware.vc.utils.constants.Globals;
 import com.silversnowsoftware.vc.utils.helpers.FileHelper;
 
 import java.io.File;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
@@ -27,12 +30,12 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
         implements IMainPresenter<V> {
 
     private Double videoLength = 0.00;
-
     private String cmd = "-y -i " + Globals.currentInputVideoPath + " -strict -2 -vcodec libx264 -preset ultrafast " +
             "-crf 24 -acodec aac -ar 44100 -ac 2 -b:a 96k -s 640x480 -aspect 16:9 " + Globals.currentOutputVideoPath;
     @Inject
     public MainPresenter() {
         super();
+
     }
 
 
@@ -89,9 +92,26 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
         this.cmd = cmd;
     }
 
-    public void Compress(String cmd)
+    public void VideoCompress(String cmd)
     {
-        FileCompressor fileCompressor = new FileCompressor( ((Activity)getView()));
-        fileCompressor.myCompress(cmd);
+        FileCompressor.getInstance(((Activity)getView())).VideoCompress(cmd);
+    }
+
+    public String getProgress(String source) {
+        //progress frame=   28 fps=0.0 q=24.0 size= 107kB time=00:00:00.91 bitrate= 956.4kbits/s
+        Pattern p = Pattern.compile("00:\\d{2}:\\d{2}");
+        Matcher m = p.matcher(source);
+        if (m.find()) {
+            //00:00:00
+            String result = m.group(0);
+            String temp[] = result.split(":");
+            Double seconds = Double.parseDouble(temp[1]) * 60 + Double.parseDouble(temp[2]);
+
+            if (0 != videoLength) {
+                return seconds / videoLength + "";
+            }
+            return "0";
+        }
+        return "";
     }
 }

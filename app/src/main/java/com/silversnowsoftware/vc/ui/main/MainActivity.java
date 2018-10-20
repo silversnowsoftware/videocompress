@@ -38,10 +38,8 @@ import static com.silversnowsoftware.vc.utils.helpers.FileHelper.getFileSize;
 
 public class MainActivity extends BaseActivity implements IMainView {
 
-    private Compressor mCompressor;
+
     ActivityMainBinding mBinding;
-    private MaterialDialog mMaterialDialog;
-    private Double videoLength = 0.00;
     private static final Handler handler = new Handler();
 
     @Inject
@@ -77,22 +75,8 @@ public class MainActivity extends BaseActivity implements IMainView {
                     if (file.exists()) {
                         file.delete();
                     }
-                   mPresenter.Compress(command);
+                    mPresenter.VideoCompress(command);
                 }
-            }
-        });
-        mCompressor = new Compressor(this);
-        mCompressor.loadBinary(new InitListener() {
-            @Override
-            public void onLoadSuccess() {
-
-                textAppend(getString(R.string.compress_load_library_succeed));
-            }
-
-            @Override
-            public void onLoadFail(String reason) {
-
-                textAppend(getString(R.string.compress_load_library_failed, reason));
             }
         });
 
@@ -104,41 +88,11 @@ public class MainActivity extends BaseActivity implements IMainView {
 
 
     }
-    private void execCommand(String cmd) {
 
-        File mFile = new File(Globals.currentOutputVideoPath);
-        if (mFile.exists()) {
-            mFile.delete();
-        }
-
-        mCompressor.execCommand(cmd, new CompressListener() {
-            @Override
-            public void onExecSuccess(String message) {
-
-
-
-            }
-
-            @Override
-            public void onExecFail(String reason) {
-
-
-            }
-
-            @Override
-            public void onExecProgress(String message) {
-
-
-
-            }
-        });
-    }
     @Override
     protected int getLayoutResourceId() {
         return R.layout.activity_main;
     }
-
-
 
 
     private void textAppend(String text) {
@@ -158,26 +112,8 @@ public class MainActivity extends BaseActivity implements IMainView {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        mPresenter.ActivityResult(requestCode,resultCode,data);
+        mPresenter.ActivityResult(requestCode, resultCode, data);
     }
 
-
-    private String getProgress(String source) {
-        //progress frame=   28 fps=0.0 q=24.0 size= 107kB time=00:00:00.91 bitrate= 956.4kbits/s
-        Pattern p = Pattern.compile("00:\\d{2}:\\d{2}");
-        Matcher m = p.matcher(source);
-        if (m.find()) {
-            //00:00:00
-            String result = m.group(0);
-            String temp[] = result.split(":");
-            Double seconds = Double.parseDouble(temp[1]) * 60 + Double.parseDouble(temp[2]);
-
-            if (0 != videoLength) {
-                return seconds / videoLength + "";
-            }
-            return "0";
-        }
-        return "";
-    }
 
 }

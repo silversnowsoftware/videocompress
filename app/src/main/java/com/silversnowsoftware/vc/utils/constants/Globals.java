@@ -8,6 +8,6 @@ import android.os.Environment;
 
 public class Globals {
 
-    public static String currentInputVideoPath = "";
+    public static String currentInputVideoPath = Environment.getExternalStorageDirectory().getPath() + "/videoKit/in.mp4";
     public static String currentOutputVideoPath = Environment.getExternalStorageDirectory().getPath() + "/videoKit/out.mp4";
 }

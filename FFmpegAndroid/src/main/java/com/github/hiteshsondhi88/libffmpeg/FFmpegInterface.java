@@ -6,7 +6,7 @@ import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunnin
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException;
 
 @SuppressWarnings("unused")
-interface FFmpegInterface {
+public interface FFmpegInterface {
 
     /**
      * Load binary to the device according to archituecture. This also updates FFmpeg binary if the binary on device have old version.

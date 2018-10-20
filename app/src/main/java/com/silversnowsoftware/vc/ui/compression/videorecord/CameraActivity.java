@@ -48,6 +48,7 @@ import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.databinding.ActivityCameraBinding;
 import com.silversnowsoftware.vc.ui.main.MainActivity;
 import com.silversnowsoftware.vc.utils.constants.Constants;
+import com.silversnowsoftware.vc.utils.constants.Globals;
 
 import java.io.File;
 import java.io.IOException;
@@ -472,7 +473,7 @@ public class CameraActivity extends AppCompatActivity {
         }
         Date d = new Date();
         String timestamp = String.valueOf(d.getTime());
-       url_file = Environment.getExternalStorageDirectory().getPath() + "/videoKit/in.mp4";
+       url_file = Globals.currentInputVideoPath;
   //      url_file = "/mnt/sdcard/videokit/in.mp4";
 //        url_file = "/mnt/sdcard/videokit/" + timestamp + ".mp4";
 

@@ -8,10 +8,15 @@ import com.silversnowsoftware.vc.ui.base.IPresenter;
  * Created by burak on 10/14/2018.
  */
 
-public interface IMainPresenter <V extends IMainView> extends IPresenter<V> {
+public interface IMainPresenter<V extends IMainView> extends IPresenter<V> {
 
     void ActivityResult(int requestCode, int resultCode, Intent data);
+
     String getCmd();
-     void setCmd(String cmd) ;
-     void Compress(String cmd);
+
+    void setCmd(String cmd);
+
+    void VideoCompress(String cmd);
+
+    String getProgress(String source);
 }

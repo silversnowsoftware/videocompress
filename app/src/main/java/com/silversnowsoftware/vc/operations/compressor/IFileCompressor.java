@@ -13,7 +13,6 @@ import java.io.File;
  */
 
 public interface IFileCompressor {
-    Compressor mCompressor(Activity act);
 
-    void Compress(String cmd, final  FileModel mFile);
+    void VideoCompress(String cmd);
 }
