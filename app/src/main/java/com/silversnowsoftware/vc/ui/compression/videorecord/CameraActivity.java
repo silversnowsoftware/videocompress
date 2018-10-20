@@ -30,6 +30,7 @@ import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -471,8 +472,8 @@ public class CameraActivity extends AppCompatActivity {
         }
         Date d = new Date();
         String timestamp = String.valueOf(d.getTime());
-//        url_file = Environment.getExternalStorageDirectory().getPath() + "/videoKit" + timestamp + ".mp4";
-        url_file = "/mnt/sdcard/videokit/in.mp4";
+       url_file = Environment.getExternalStorageDirectory().getPath() + "/videoKit/in.mp4";
+  //      url_file = "/mnt/sdcard/videokit/in.mp4";
 //        url_file = "/mnt/sdcard/videokit/" + timestamp + ".mp4";
 
         File file1 = new File(url_file);
