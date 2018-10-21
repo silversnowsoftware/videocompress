@@ -2,6 +2,7 @@ package com.silversnowsoftware.vc.model;
 
 import android.support.annotation.NonNull;
 
+import com.silversnowsoftware.vc.utils.constants.Globals;
 import com.silversnowsoftware.vc.utils.enums.FileStatusEnum;
 import com.silversnowsoftware.vc.utils.enums.MediaTypeEnum;
 
@@ -25,8 +26,9 @@ public class FileModel {
     private String Extension;
     private FileStatusEnum FileStatus;
     private MediaTypeEnum MediaType;
-    public  FileAttributes Attributes;
-    private int ThreadId;
+    private Double VideoLength;
+    private  FileAttributes Attributes;
+
 
 
     public String getName() {
@@ -93,11 +95,18 @@ public class FileModel {
         MediaType = mediaType;
     }
 
-    public int getThreadId() {
-        return ThreadId;
+
+    public  String getCompressCmd()
+    {
+        return "-y -i " + Path + " -strict -2 -vcodec libx264 -preset ultrafast " +
+                "-crf 24 -acodec aac -ar 44100 -ac 2 -b:a 96k -s 858x480 -aspect 16:9 " + Globals.currentOutputVideoPath + Name;
     }
 
-    public void setThreadId(int threadId) {
-        ThreadId = threadId;
+    public Double getVideoLength() {
+        return VideoLength;
+    }
+
+    public void setVideoLength(Double videoLength) {
+        VideoLength = videoLength;
     }
 }

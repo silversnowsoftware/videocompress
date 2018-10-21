@@ -26,6 +26,7 @@ import com.silversnowsoftware.vc.utils.constants.Globals;
 import com.silversnowsoftware.vc.utils.helpers.FileHelper;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -75,7 +76,7 @@ public class MainActivity extends BaseActivity implements IMainView {
                     if (file.exists()) {
                         file.delete();
                     }
-                    mPresenter.VideoCompress(command);
+                        mPresenter.VideoCompress();
                 }
             }
         });

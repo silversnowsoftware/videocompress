@@ -7,6 +7,7 @@ import com.silversnowsoftware.vc.di.component.ApplicationComponent;
 import com.silversnowsoftware.vc.di.component.DaggerApplicationComponent;
 import com.silversnowsoftware.vc.di.module.ApplicationModule;
 import com.silversnowsoftware.vc.model.FileModel;
+import com.silversnowsoftware.vc.utils.constants.Globals;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,14 +19,12 @@ import java.util.List;
 
 public class VideoCompressApplication extends Application {
 
-    public static ArrayList<FileModel> fileModels;
-
     private ApplicationComponent mApplicationComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
-
+        Globals.FileModelList = new ArrayList<FileModel>();
         mApplicationComponent = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(this)).build();
 

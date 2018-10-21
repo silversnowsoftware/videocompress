@@ -399,6 +399,7 @@ public class CameraActivity extends AppCompatActivity {
                 recording = false;
                 Intent intent = new Intent();
                 intent.putExtra(Constants.INTENT_EXTRA_VIDEO_PATH, url_file);
+
                 setResult(Constants.RESULT_CODE_FOR_RECORD_VIDEO_SUCCEED, intent);
                 releaseCamera();
                 releaseMediaRecorder();

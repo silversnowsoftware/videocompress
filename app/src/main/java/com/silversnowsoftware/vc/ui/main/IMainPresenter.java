@@ -16,6 +16,6 @@ public interface IMainPresenter<V extends IMainView> extends IPresenter<V> {
 
     void setCmd(String cmd);
 
-    void VideoCompress(String cmd);
+    void VideoCompress();
 
 }

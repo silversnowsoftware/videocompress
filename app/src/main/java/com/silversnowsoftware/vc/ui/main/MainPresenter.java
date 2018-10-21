@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 import com.silversnowsoftware.vc.R;
+import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.operations.compressor.FileCompressor;
 import com.silversnowsoftware.vc.operations.compressor.IFileCompressor;
 import com.silversnowsoftware.vc.ui.base.BasePresenter;
@@ -32,6 +33,7 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
     private Double videoLength = 0.00;
     private String cmd = "-y -i " + Globals.currentInputVideoPath + " -strict -2 -vcodec libx264 -preset ultrafast " +
             "-crf 24 -acodec aac -ar 44100 -ac 2 -b:a 96k -s 640x480 -aspect 16:9 " + Globals.currentOutputVideoPath;
+
     @Inject
     public MainPresenter() {
         super();
@@ -46,7 +48,7 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
 
             if (PermissionsActivity.PERMISSIONS_DENIED == resultCode) {
 
-                ((Activity)getView()).finish();
+                ((Activity) getView()).finish();
             } else if (PermissionsActivity.PERMISSIONS_GRANTED == resultCode) {
                 //do nothing
             }
@@ -57,6 +59,17 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
                 String videoPath = data.getStringExtra(Constants.INTENT_EXTRA_VIDEO_PATH);
                 if (!TextUtils.isEmpty(videoPath)) {
                     Globals.currentInputVideoPath = videoPath;
+
+                    FileModel mFileModel = new FileModel();
+                    mFileModel.setPath(videoPath);
+                    mFileModel.setName("out1.mp4");
+
+                    FileModel mFileModel2 = new FileModel();
+                    mFileModel2.setPath(videoPath);
+                    mFileModel2.setName("out2.mp4");
+
+
+
                     MediaMetadataRetriever retr = new MediaMetadataRetriever();
                     retr.setDataSource(Globals.currentInputVideoPath);
                     String time = retr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
@@ -68,7 +81,11 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
                         videoLength = 0.00;
                     }
 
-                    refreshCurrentPath();
+                    mFileModel.setVideoLength(videoLength);
+                    mFileModel2.setVideoLength(videoLength);
+                    Globals.FileModelList.add(mFileModel);
+                    Globals.FileModelList.add(mFileModel2);
+                   // refreshCurrentPath();
                 }
             } else if (resultCode == Constants.RESULT_CODE_FOR_RECORD_VIDEO_FAILED) {
 
@@ -92,9 +109,10 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
         this.cmd = cmd;
     }
 
-    public void VideoCompress(String cmd)
-    {
-        FileCompressor.getInstance(((Activity)getView())).Compress(cmd, videoLength);
+    public void VideoCompress() {
+        FileCompressor fileCompressor = new FileCompressor(((Activity) getView()));
+        fileCompressor.Compress();
+
     }
 
 
