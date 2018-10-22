@@ -2,31 +2,46 @@ package com.silversnowsoftware.vc.model;
 
 import android.support.annotation.NonNull;
 
+import com.j256.ormlite.field.DataType;
+import com.j256.ormlite.field.DatabaseField;
 import com.silversnowsoftware.vc.utils.constants.Globals;
 import com.silversnowsoftware.vc.utils.enums.FileStatusEnum;
 import com.silversnowsoftware.vc.utils.enums.MediaTypeEnum;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by burak on 10/17/2018.
  */
 
-public class FileModel {
+public class FileModel implements Serializable {
     public FileModel() {
         Attributes = new FileAttributes();
     }
 
+    @DatabaseField(columnName = "Id", generatedId = true)
+    private int id;
+    @DatabaseField(columnName = "Name")
     private String Name;
+    @DatabaseField(columnName = "Path")
     private String Path;
+    @DatabaseField(columnName = "FileSize")
     private Long FileSize;
+    @DatabaseField(columnName = "ConvertTime")
     private Date ConvertTime;
-    private String ThumbNail;
+    @DatabaseField(columnName = "Thumbnail")
+    private String Thumbnail;
+    @DatabaseField(columnName = "Extension")
     private String Extension;
+    @DatabaseField(columnName = "FileStatus")
     private FileStatusEnum FileStatus;
+    @DatabaseField(columnName = "MediaType")
     private MediaTypeEnum MediaType;
+
     private Double VideoLength;
+
     private  FileAttributes Attributes;
 
 
@@ -63,12 +78,12 @@ public class FileModel {
         ConvertTime = convertTime;
     }
 
-    public String getThumbNail() {
-        return ThumbNail;
+    public String getThumbnail() {
+        return Thumbnail;
     }
 
-    public void setThumbNail(String thumbNail) {
-        ThumbNail = thumbNail;
+    public void setThumbnail(String thumbnail) {
+        Thumbnail = thumbnail;
     }
 
     public String getExtension() {
@@ -108,5 +123,13 @@ public class FileModel {
 
     public void setVideoLength(Double videoLength) {
         VideoLength = videoLength;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

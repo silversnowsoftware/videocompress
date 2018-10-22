@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.silversnowsoftware.vc.R;
@@ -85,6 +86,12 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
                     mFileModel2.setVideoLength(videoLength);
                     Globals.FileModelList.add(mFileModel);
                     Globals.FileModelList.add(mFileModel2);
+
+                    DbFileModel().add(Globals.FileModelList);
+
+                    for (FileModel item: DbFileModel().getAll()) {
+                        Log.v("FileModel::  ",item.getName() + "-" + item.getId());
+                    }
                    // refreshCurrentPath();
                 }
             } else if (resultCode == Constants.RESULT_CODE_FOR_RECORD_VIDEO_FAILED) {
