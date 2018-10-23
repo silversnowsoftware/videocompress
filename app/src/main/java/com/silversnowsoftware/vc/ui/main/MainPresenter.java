@@ -48,7 +48,6 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
         if (requestCode == Constants.REQUEST_CODE_FOR_PERMISSIONS) {
 
             if (PermissionsActivity.PERMISSIONS_DENIED == resultCode) {
-
                 ((Activity) getView()).finish();
             } else if (PermissionsActivity.PERMISSIONS_GRANTED == resultCode) {
                 //do nothing
@@ -69,12 +68,10 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
                     mFileModel2.setPath(videoPath);
                     mFileModel2.setName("out2.mp4");
 
-
-
                     MediaMetadataRetriever retr = new MediaMetadataRetriever();
                     retr.setDataSource(Globals.currentInputVideoPath);
                     String time = retr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-                    //7680
+
                     try {
                         videoLength = Double.parseDouble(time) / 1000.00;
                     } catch (Exception e) {
@@ -92,20 +89,13 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
                     for (FileModel item: DbFileModel().getAll()) {
                         Log.v("FileModel::  ",item.getName() + "-" + item.getId());
                     }
-                   // refreshCurrentPath();
+
                 }
             } else if (resultCode == Constants.RESULT_CODE_FOR_RECORD_VIDEO_FAILED) {
 
                 Globals.currentInputVideoPath = "";
             }
         }
-    }
-
-    private void refreshCurrentPath() {
-
-        setCmd("-y -i " + Globals.currentInputVideoPath + " -strict -2 -vcodec libx264 -preset ultrafast " +
-                "-crf 24 -acodec aac -ar 44100 -ac 2 -b:a 96k -s 858x480 -aspect 16:9 " + Globals.currentOutputVideoPath);
-
     }
 
     public String getCmd() {

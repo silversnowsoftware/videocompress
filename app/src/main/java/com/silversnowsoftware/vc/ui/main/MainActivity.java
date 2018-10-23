@@ -65,19 +65,7 @@ public class MainActivity extends BaseActivity implements IMainView {
         mBinding.btnRun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String command = mPresenter.getCmd();
-                if (TextUtils.isEmpty(command)) {
-                    Toast.makeText(MainActivity.this, getString(R.string.compree_please_input_command)
-                            , Toast.LENGTH_SHORT).show();
-                } else if (TextUtils.isEmpty(Globals.currentInputVideoPath)) {
-                    Toast.makeText(MainActivity.this, R.string.no_video_tips, Toast.LENGTH_SHORT).show();
-                } else {
-                    File file = new File(Globals.currentOutputVideoPath);
-                    if (file.exists()) {
-                        file.delete();
-                    }
                         mPresenter.VideoCompress();
-                }
             }
         });
 
@@ -112,7 +100,6 @@ public class MainActivity extends BaseActivity implements IMainView {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         mPresenter.ActivityResult(requestCode, resultCode, data);
     }
 

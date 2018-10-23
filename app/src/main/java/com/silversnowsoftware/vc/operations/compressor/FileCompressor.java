@@ -49,14 +49,12 @@ public class FileCompressor implements IFileCompressor {
 
     private Compressor mCompressor;
     private Context context;
-    public Activity a;
     private FFmpegInterface ffmpeg;
     public String TAG = getClass().getName();
 
 
     public FileCompressor(Activity activity) {
         this.context = activity.getApplicationContext();
-        this.a = activity;
         ffmpeg = FFmpeg.getInstance(activity);
         mCompressor = new Compressor(activity);
 
