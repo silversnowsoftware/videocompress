@@ -80,8 +80,7 @@ public class MainActivity extends BaseActivity implements IMainView {
                     @Override
                     public void onProgress(Double rate) {
                         Log.i("Progressss--->", String.valueOf(rate));
-                        mBinding.progressBar.setProgress(Integer.valueOf(String.valueOf(rate)));
-
+                        mBinding.progressBar.setProgress(rate.intValue());
                     }
 
                     @Override
