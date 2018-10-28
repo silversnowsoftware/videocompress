@@ -38,6 +38,7 @@ import java.util.regex.Pattern;
 import me.drakeet.materialdialog.MaterialDialog;
 
 import static com.silversnowsoftware.vc.utils.constants.Globals.FileModelList;
+import static com.silversnowsoftware.vc.utils.constants.Globals.handler;
 import static com.silversnowsoftware.vc.utils.helpers.FileHelper.getFileSize;
 
 /**
@@ -62,36 +63,39 @@ public class FileCompressor implements IFileCompressor {
 
 
     public void Compress() {
-        if(FileModelList.size()<1)
+        if (FileModelList.size() < 1)
             return;
 
-            final FileModel fileModel = FileModelList.remove(0);
-            File mFile = new File(Globals.currentOutputVideoPath + fileModel.getName());
-            if (mFile.exists()) {
-                mFile.delete();
+        final FileModel fileModel = FileModelList.get(0);
+        File mFile = new File(Globals.currentOutputVideoPath + fileModel.getName());
+        if (mFile.exists()) {
+            mFile.delete();
+        }
+        Log.i("Progress " , fileModel.getName() + "--" +  fileModel.getVideoLength());
+        mCompressor.execCommand(fileModel.getCompressCmd(), new CompressListener() {
+            @Override
+            public void onExecSuccess(String message) {
+                Toast.makeText(context, "Video Compressed", Toast.LENGTH_SHORT).show();
+                fileModel.setProgress(100.0);
+                Log.i(TAG,"--->" + 100);
+                FileModelList.remove(0);
+                Compress();
+
             }
 
-                mCompressor.execCommand(fileModel.getCompressCmd(), new CompressListener() {
-                    @Override
-                    public void onExecSuccess(String message) {
-                        Toast.makeText(context, "Video Compressed", Toast.LENGTH_SHORT).show();
-                        Compress();
+            @Override
+            public void onExecFail(String reason) {
+                Toast.makeText(context, reason, Toast.LENGTH_SHORT).show();
+                Compress();
+            }
 
-                    }
-
-                    @Override
-                    public void onExecFail(String reason) {
-                        Toast.makeText(context, reason, Toast.LENGTH_SHORT).show();
-                        Compress();
-                    }
-
-                    @Override
-                    public void onExecProgress(String message) {
-
-                        Log.i("Progress " + fileModel.getName() + ":: ", message);
-                        getProgress(message, fileModel.getVideoLength());
-                    }
-                });
+            @Override
+            public void onExecProgress(String message) {
+                fileModel.setProgress(getProgress(message, fileModel.getVideoLength()) * 100);
+                fileModel.listener.onProgress(getProgress(message, fileModel.getVideoLength()) * 100);
+                Log.i(TAG,"--->" + getProgress(message, fileModel.getVideoLength()) * 100);
+            }
+        });
 
     }
 
@@ -123,7 +127,7 @@ public class FileCompressor implements IFileCompressor {
     }
 
     @Override
-    public String getProgress(String source, Double videoLength) {
+    public Double getProgress(String source, Double videoLength) {
         //progress frame=   28 fps=0.0 q=24.0 size= 107kB time=00:00:00.91 bitrate= 956.4kbits/s
         Pattern p = Pattern.compile("00:\\d{2}:\\d{2}");
         Matcher m = p.matcher(source);
@@ -134,11 +138,11 @@ public class FileCompressor implements IFileCompressor {
             Double seconds = Double.parseDouble(temp[1]) * 60 + Double.parseDouble(temp[2]);
 
             if (0 != videoLength) {
-                return seconds / videoLength + "";
+                return (seconds / videoLength);
             }
-            return "0";
+            return 0.0;
         }
-        return "";
+        return 0.0;
     }
 
 

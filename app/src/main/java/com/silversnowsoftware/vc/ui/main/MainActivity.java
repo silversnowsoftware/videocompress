@@ -2,9 +2,11 @@ package com.silversnowsoftware.vc.ui.main;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ScrollView;
 import android.widget.Toast;
@@ -13,6 +15,7 @@ import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.VideoCompressApplication;
 import com.silversnowsoftware.vc.databinding.ActivityMainBinding;
 import com.silversnowsoftware.vc.model.FileModel;
+import com.silversnowsoftware.vc.model.listener.ICustomListener;
 import com.silversnowsoftware.vc.ui.base.BaseActivity;
 import com.silversnowsoftware.vc.ui.compression.permission.PermissionsActivity;
 import com.silversnowsoftware.vc.ui.compression.permission.PermissionsChecker;
@@ -34,6 +37,7 @@ import javax.inject.Inject;
 
 import me.drakeet.materialdialog.MaterialDialog;
 
+import static com.silversnowsoftware.vc.utils.constants.Globals.handler;
 import static com.silversnowsoftware.vc.utils.helpers.FileHelper.getFileSize;
 
 
@@ -41,18 +45,19 @@ public class MainActivity extends BaseActivity implements IMainView {
 
 
     ActivityMainBinding mBinding;
-    private static final Handler handler = new Handler();
+
 
     @Inject
     IMainPresenter<IMainView> mPresenter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
+        handler = new Handler();
         super.onCreate(savedInstanceState);
         mBinding = DataBindingUtil.setContentView(this, getLayoutResourceId());
         getActivityComponent().inject(this);
         mPresenter.onAttach(this);
+        mBinding.progressBar.setMax(100);
 
         mBinding.btnRecord.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,11 +66,30 @@ public class MainActivity extends BaseActivity implements IMainView {
             }
         });
 
-        mBinding.etCommand.setText(mPresenter.getCmd());
         mBinding.btnRun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                        mPresenter.VideoCompress();
+
+
+                Globals.FileModelList.get(0).getCustomListener(new ICustomListener() {
+                    @Override
+                    public void onSuccess(Double rate) {
+
+                    }
+
+                    @Override
+                    public void onProgress(Double rate) {
+                        Log.i("Progressss--->", String.valueOf(rate));
+                        mBinding.progressBar.setProgress(Integer.valueOf(String.valueOf(rate)));
+
+                    }
+
+                    @Override
+                    public void onFailure(String error) {
+
+                    }
+                });
+                mPresenter.VideoCompress();
             }
         });
 
@@ -74,6 +98,8 @@ public class MainActivity extends BaseActivity implements IMainView {
         if (mChecker.lacksPermissions(ManifestUtil.PERMISSIONS)) {
             PermissionsActivity.startActivityForResult(this, Constants.REQUEST_CODE_FOR_PERMISSIONS, ManifestUtil.PERMISSIONS);
         }
+
+
 
 
     }

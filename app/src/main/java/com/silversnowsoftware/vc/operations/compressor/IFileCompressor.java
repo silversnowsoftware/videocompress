@@ -19,5 +19,5 @@ public interface IFileCompressor {
 
     void loadBinary(final InitListener mListener);
 
-    String getProgress(String source,Double videoLength);
+    Double getProgress(String source,Double videoLength);
 }

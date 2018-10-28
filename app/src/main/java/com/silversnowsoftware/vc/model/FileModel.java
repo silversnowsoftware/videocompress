@@ -1,15 +1,13 @@
 package com.silversnowsoftware.vc.model;
 
-import android.support.annotation.NonNull;
-
-import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
+import com.silversnowsoftware.vc.model.listener.ICustomListener;
 import com.silversnowsoftware.vc.utils.constants.Globals;
 import com.silversnowsoftware.vc.utils.enums.FileStatusEnum;
 import com.silversnowsoftware.vc.utils.enums.MediaTypeEnum;
 
-import java.io.File;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -17,8 +15,14 @@ import java.util.Date;
  */
 
 public class FileModel implements Serializable {
+    public ICustomListener listener;
+
     public FileModel() {
-        Attributes = new FileAttributes();
+
+    }
+
+    public void getCustomListener(ICustomListener listener) {
+        this.listener = listener;
     }
 
     @DatabaseField(columnName = "Id", generatedId = true)
@@ -39,10 +43,11 @@ public class FileModel implements Serializable {
     private FileStatusEnum FileStatus;
     @DatabaseField(columnName = "MediaType")
     private MediaTypeEnum MediaType;
-
+    private String ResolutionX;
+    private String ResolutionY;
     private Double VideoLength;
+    private Double Progress;
 
-    private  FileAttributes Attributes;
 
 
 
@@ -113,8 +118,8 @@ public class FileModel implements Serializable {
 
     public  String getCompressCmd()
     {
-        return "-y -i " + Path + " -strict -2 -vcodec libx264 -preset ultrafast " +
-                "-crf 24 -acodec aac -ar 44100 -ac 2 -b:a 96k -s 858x480 -aspect 16:9 " + Globals.currentOutputVideoPath + Name;
+        return  "-y -i " + this.Path + " -strict -2 -vcodec libx264 -preset ultrafast " +
+                "-crf 24 -acodec aac -ar 44100 -ac 2 -b:a 96k -s "+ getResolutionX() +  "x" + getResolutionY() +" -aspect 16:9 " + Globals.currentOutputVideoPath + this.Name;
     }
 
     public Double getVideoLength() {
@@ -131,5 +136,29 @@ public class FileModel implements Serializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getResolutionX() {
+        return ResolutionX;
+    }
+
+    public void setResolutionX(String resolutionX) {
+        ResolutionX = resolutionX;
+    }
+
+    public String getResolutionY() {
+        return ResolutionY;
+    }
+
+    public void setResolutionY(String resolutionY) {
+        ResolutionY = resolutionY;
+    }
+
+    public Double getProgress() {
+        return Progress;
+    }
+
+    public void setProgress(Double progress) {
+        Progress = progress;
     }
 }

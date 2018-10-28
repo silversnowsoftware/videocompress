@@ -32,15 +32,12 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
         implements IMainPresenter<V> {
 
     private Double videoLength = 0.00;
-    private String cmd = "-y -i " + Globals.currentInputVideoPath + " -strict -2 -vcodec libx264 -preset ultrafast " +
-            "-crf 24 -acodec aac -ar 44100 -ac 2 -b:a 96k -s 640x480 -aspect 16:9 " + Globals.currentOutputVideoPath;
 
     @Inject
     public MainPresenter() {
         super();
 
     }
-
 
     @Override
     public void ActivityResult(int requestCode, int resultCode, Intent data) {
@@ -63,10 +60,15 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
                     FileModel mFileModel = new FileModel();
                     mFileModel.setPath(videoPath);
                     mFileModel.setName("out1.mp4");
+                    mFileModel.setResolutionX("480");
+                    mFileModel.setResolutionY("320");
 
                     FileModel mFileModel2 = new FileModel();
                     mFileModel2.setPath(videoPath);
                     mFileModel2.setName("out2.mp4");
+                    mFileModel2.setResolutionX("720");
+                    mFileModel2.setResolutionY("480");
+
 
                     MediaMetadataRetriever retr = new MediaMetadataRetriever();
                     retr.setDataSource(Globals.currentInputVideoPath);
@@ -82,7 +84,7 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
                     mFileModel.setVideoLength(videoLength);
                     mFileModel2.setVideoLength(videoLength);
                     Globals.FileModelList.add(mFileModel);
-                    Globals.FileModelList.add(mFileModel2);
+                   // Globals.FileModelList.add(mFileModel2);
 
                     DbFileModel().add(Globals.FileModelList);
 
@@ -96,14 +98,6 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
                 Globals.currentInputVideoPath = "";
             }
         }
-    }
-
-    public String getCmd() {
-        return cmd;
-    }
-
-    public void setCmd(String cmd) {
-        this.cmd = cmd;
     }
 
     public void VideoCompress() {
