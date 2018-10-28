@@ -2,50 +2,39 @@ package com.silversnowsoftware.vc.ui.main;
 
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.nfc.Tag;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ScrollView;
-import android.widget.Toast;
 
 import com.silversnowsoftware.vc.R;
-import com.silversnowsoftware.vc.VideoCompressApplication;
 import com.silversnowsoftware.vc.databinding.ActivityMainBinding;
-import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.model.listener.ICustomListener;
 import com.silversnowsoftware.vc.ui.base.BaseActivity;
 import com.silversnowsoftware.vc.ui.compression.permission.PermissionsActivity;
 import com.silversnowsoftware.vc.ui.compression.permission.PermissionsChecker;
-import com.silversnowsoftware.vc.ui.compression.videocompress.CompressListener;
-import com.silversnowsoftware.vc.ui.compression.videocompress.Compressor;
-import com.silversnowsoftware.vc.ui.compression.videocompress.InitListener;
 import com.silversnowsoftware.vc.ui.compression.videorecord.CameraActivity;
 import com.silversnowsoftware.vc.utils.ManifestUtil;
 import com.silversnowsoftware.vc.utils.constants.Constants;
 import com.silversnowsoftware.vc.utils.constants.Globals;
 import com.silversnowsoftware.vc.utils.helpers.FileHelper;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 
-import me.drakeet.materialdialog.MaterialDialog;
-
 import static com.silversnowsoftware.vc.utils.constants.Globals.handler;
-import static com.silversnowsoftware.vc.utils.helpers.FileHelper.getFileSize;
 
 
 public class MainActivity extends BaseActivity implements IMainView {
 
 
     ActivityMainBinding mBinding;
-
+    static ArrayList<String> MediasPaths = new ArrayList<>();
 
     @Inject
     IMainPresenter<IMainView> mPresenter;
@@ -92,14 +81,24 @@ public class MainActivity extends BaseActivity implements IMainView {
             }
         });
 
-
+        mBinding.btnChoose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent mediaIntent = new Intent(
+                        Intent.ACTION_GET_CONTENT
+                        //,Uri.parse(Environment.DIRECTORY_DCIM)
+                );
+                // mediaIntent.setType("*/*");
+                mediaIntent.setType("video/*");
+                mediaIntent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"video/*"});
+                mediaIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+                startActivityForResult(mediaIntent, 1);
+            }
+        });
         PermissionsChecker mChecker = new PermissionsChecker(getApplicationContext());
         if (mChecker.lacksPermissions(ManifestUtil.PERMISSIONS)) {
             PermissionsActivity.startActivityForResult(this, Constants.REQUEST_CODE_FOR_PERMISSIONS, ManifestUtil.PERMISSIONS);
         }
-
-
-
 
     }
 
@@ -109,23 +108,29 @@ public class MainActivity extends BaseActivity implements IMainView {
     }
 
 
-    private void textAppend(String text) {
-        if (!TextUtils.isEmpty(text)) {
-            mBinding.tvLog.append(text + "\n");
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    mBinding.scrollView.fullScroll(ScrollView.FOCUS_DOWN);
-                }
-            });
-        }
-    }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        mPresenter.ActivityResult(requestCode, resultCode, data);
+        //mPresenter.ActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            //MediaStore.Video.Thumbnails.getThumbnail()
+            MediasPaths = null;
+            MediasPaths = FileHelper.GetAllPath(getApplicationContext(), data);
+            Log.i("MAIN",String.valueOf(MediasPaths.size()));
+
+
+            Bitmap bitmap = null;
+            try {
+                bitmap = FileHelper.retriveVideoFrameFromVideo(MediasPaths.get(0));
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+            }
+            if (bitmap != null) {
+                bitmap = Bitmap.createScaledBitmap(bitmap, 240, 240, false);
+                mBinding.imageView.setImageBitmap(bitmap);
+            }
+        }
     }
 
 

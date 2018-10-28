@@ -2,44 +2,24 @@ package com.silversnowsoftware.vc.operations.compressor;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.media.MediaMetadataRetriever;
-import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
-import android.widget.ScrollView;
 import android.widget.Toast;
 
-import com.github.hiteshsondhi88.libffmpeg.CommandResult;
 import com.github.hiteshsondhi88.libffmpeg.FFmpeg;
 import com.github.hiteshsondhi88.libffmpeg.FFmpegInterface;
-import com.github.hiteshsondhi88.libffmpeg.FileUtils;
 import com.github.hiteshsondhi88.libffmpeg.LoadBinaryResponseHandler;
-import com.github.hiteshsondhi88.libffmpeg.ShellCommand;
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException;
-import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.model.FileModel;
-import com.silversnowsoftware.vc.ui.compression.permission.PermissionsActivity;
 import com.silversnowsoftware.vc.ui.compression.videocompress.CompressListener;
 import com.silversnowsoftware.vc.ui.compression.videocompress.Compressor;
 import com.silversnowsoftware.vc.ui.compression.videocompress.InitListener;
-import com.silversnowsoftware.vc.ui.main.MainActivity;
-import com.silversnowsoftware.vc.utils.constants.Constants;
 import com.silversnowsoftware.vc.utils.constants.Globals;
-import com.silversnowsoftware.vc.utils.enums.FileStatusEnum;
-import com.silversnowsoftware.vc.utils.helpers.FileHelper;
 
 import java.io.File;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import me.drakeet.materialdialog.MaterialDialog;
-
 import static com.silversnowsoftware.vc.utils.constants.Globals.FileModelList;
-import static com.silversnowsoftware.vc.utils.constants.Globals.handler;
-import static com.silversnowsoftware.vc.utils.helpers.FileHelper.getFileSize;
 
 /**
  * Created by burak on 10/15/2018.

@@ -3,24 +3,15 @@ package com.silversnowsoftware.vc.ui.main;
 import android.app.Activity;
 import android.content.Intent;
 import android.media.MediaMetadataRetriever;
-import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.operations.compressor.FileCompressor;
-import com.silversnowsoftware.vc.operations.compressor.IFileCompressor;
 import com.silversnowsoftware.vc.ui.base.BasePresenter;
 import com.silversnowsoftware.vc.ui.compression.permission.PermissionsActivity;
 import com.silversnowsoftware.vc.utils.constants.Constants;
 import com.silversnowsoftware.vc.utils.constants.Globals;
-import com.silversnowsoftware.vc.utils.helpers.FileHelper;
-
-import java.io.File;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 

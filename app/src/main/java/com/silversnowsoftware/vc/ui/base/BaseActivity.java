@@ -39,13 +39,13 @@ public abstract class BaseActivity extends AppCompatActivity implements IView {
     }
     protected abstract int getLayoutResourceId();
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
+   // @Override
+ /*   public boolean onTouchEvent(MotionEvent event) {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.
                 INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         return super.onTouchEvent(event);
-    }
+    }*/
     public  void showToastMethod(String message) {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
