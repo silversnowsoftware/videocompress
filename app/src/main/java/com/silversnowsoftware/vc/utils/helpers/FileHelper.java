@@ -307,4 +307,10 @@ public class FileHelper {
         return bitmap;
     }
 
+    public static Bitmap getBitmapFromBase64(String encodedImage){
+        byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        return decodedByte;
+    }
+
 }

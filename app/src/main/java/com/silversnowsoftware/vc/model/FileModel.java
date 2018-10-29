@@ -1,10 +1,13 @@
 package com.silversnowsoftware.vc.model;
 
+import android.graphics.Bitmap;
+
 import com.j256.ormlite.field.DatabaseField;
 import com.silversnowsoftware.vc.model.listener.ICustomListener;
 import com.silversnowsoftware.vc.utils.constants.Globals;
 import com.silversnowsoftware.vc.utils.enums.FileStatusEnum;
 import com.silversnowsoftware.vc.utils.enums.MediaTypeEnum;
+import com.silversnowsoftware.vc.utils.helpers.FileHelper;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -85,6 +88,10 @@ public class FileModel implements Serializable {
 
     public String getThumbnail() {
         return Thumbnail;
+    }
+
+    public Bitmap getThumbnailBmp() {
+        return FileHelper.getBitmapFromBase64(Thumbnail);
     }
 
     public void setThumbnail(String thumbnail) {
