@@ -18,6 +18,7 @@ import com.silversnowsoftware.vc.ui.base.BaseActivity;
 import com.silversnowsoftware.vc.ui.compression.permission.PermissionsActivity;
 import com.silversnowsoftware.vc.ui.compression.permission.PermissionsChecker;
 import com.silversnowsoftware.vc.ui.compression.videorecord.CameraActivity;
+import com.silversnowsoftware.vc.ui.list.ListActivity;
 import com.silversnowsoftware.vc.utils.ManifestUtil;
 import com.silversnowsoftware.vc.utils.constants.Constants;
 import com.silversnowsoftware.vc.utils.constants.Globals;
@@ -93,6 +94,13 @@ public class MainActivity extends BaseActivity implements IMainView {
                 mediaIntent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"video/*"});
                 mediaIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 startActivityForResult(mediaIntent, 1);
+            }
+        });
+        mBinding.btnListFile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent listActivity = new Intent(getApplicationContext(),ListActivity.class);
+                startActivity(listActivity);
             }
         });
         PermissionsChecker mChecker = new PermissionsChecker(getApplicationContext());
