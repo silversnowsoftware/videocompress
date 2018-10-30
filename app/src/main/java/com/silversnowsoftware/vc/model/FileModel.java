@@ -50,8 +50,7 @@ public class FileModel implements Serializable {
     private String ResolutionY;
     private Double VideoLength;
     private Double Progress;
-
-
+    private Bitmap ThumbnailBmp;
 
 
     public String getName() {
@@ -91,7 +90,11 @@ public class FileModel implements Serializable {
     }
 
     public Bitmap getThumbnailBmp() {
-        return FileHelper.getBitmapFromBase64(Thumbnail);
+        return ThumbnailBmp;
+    }
+
+    public void setThumbnailBmp(Bitmap bitmap) {
+        ThumbnailBmp = bitmap;
     }
 
     public void setThumbnail(String thumbnail) {
@@ -123,10 +126,9 @@ public class FileModel implements Serializable {
     }
 
 
-    public  String getCompressCmd()
-    {
-        return  "-y -i " + this.Path + " -strict -2 -vcodec libx264 -preset ultrafast " +
-                "-crf 24 -acodec aac -ar 44100 -ac 2 -b:a 96k -s "+ getResolutionX() +  "x" + getResolutionY() +" -aspect 16:9 " + Globals.currentOutputVideoPath + this.Name;
+    public String getCompressCmd() {
+        return "-y -i " + this.Path + " -strict -2 -vcodec libx264 -preset ultrafast " +
+                "-crf 24 -acodec aac -ar 44100 -ac 2 -b:a 96k -s " + getResolutionX() + "x" + getResolutionY() + " -aspect 16:9 " + Globals.currentOutputVideoPath + this.Name;
     }
 
     public Double getVideoLength() {

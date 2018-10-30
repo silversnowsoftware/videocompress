@@ -13,6 +13,7 @@ import android.widget.ScrollView;
 
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.databinding.ActivityMainBinding;
+import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.model.listener.ICustomListener;
 import com.silversnowsoftware.vc.ui.base.BaseActivity;
 import com.silversnowsoftware.vc.ui.compression.permission.PermissionsActivity;
@@ -94,6 +95,7 @@ public class MainActivity extends BaseActivity implements IMainView {
                 mediaIntent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"video/*"});
                 mediaIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
                 startActivityForResult(mediaIntent, 1);
+
             }
         });
         mBinding.btnListFile.setOnClickListener(new View.OnClickListener() {
@@ -124,19 +126,27 @@ public class MainActivity extends BaseActivity implements IMainView {
         if (resultCode == RESULT_OK) {
             //MediaStore.Video.Thumbnails.getThumbnail()
             MediasPaths = null;
-            MediasPaths = FileHelper.GetAllPath(getApplicationContext(), data);
-            Log.i("MAIN",String.valueOf(MediasPaths.size()));
+            ArrayList<String> tempfilepath = FileHelper.GetAllPath(getApplicationContext(), data);
+            FileModel mdl = null;
+            for (String item : tempfilepath) {
+                mdl = new FileModel();
+                mdl.setName(item);
 
 
-            Bitmap bitmap = null;
-            try {
-                bitmap = FileHelper.retriveVideoFrameFromVideo(MediasPaths.get(0));
-            } catch (Throwable throwable) {
-                throwable.printStackTrace();
-            }
-            if (bitmap != null) {
-                bitmap = Bitmap.createScaledBitmap(bitmap, 240, 240, false);
-                mBinding.imageView.setImageBitmap(bitmap);
+
+
+                Bitmap bitmap = null;
+                try {
+                    bitmap = FileHelper.retriveVideoFrameFromVideo(item);
+                } catch (Throwable throwable) {
+                    throwable.printStackTrace();
+                }
+                if (bitmap != null) {
+                    bitmap = Bitmap.createScaledBitmap(bitmap, 240, 240, false);
+                    //mBinding.imageView.setImageBitmap(bitmap);
+                    mdl.setThumbnailBmp(bitmap);
+                }
+                Globals.FileModelList.add(mdl);
             }
         }
     }
