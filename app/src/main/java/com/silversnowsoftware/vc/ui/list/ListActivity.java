@@ -18,9 +18,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.silversnowsoftware.vc.R;
+import com.silversnowsoftware.vc.ui.base.component.VideoCompressAdapter;
+import com.silversnowsoftware.vc.utils.constants.Globals;
 
 public class ListActivity extends AppCompatActivity implements ActionBar.TabListener {
 
@@ -143,12 +146,16 @@ public class ListActivity extends AppCompatActivity implements ActionBar.TabList
             return fragment;
         }
 
+        ListView lvFileModel;
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_list, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+            VideoCompressAdapter videoCompressAdapter = new VideoCompressAdapter(getActivity(),R.layout.file_model_list, Globals.FileModelList);
+            lvFileModel = (ListView) rootView.findViewById(R.id.lvFileModel);
+            lvFileModel.setAdapter(videoCompressAdapter);
             return rootView;
         }
     }
