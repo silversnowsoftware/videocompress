@@ -5,8 +5,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.MotionEvent;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.silversnowsoftware.vc.VideoCompressApplication;
@@ -20,7 +18,7 @@ import static android.content.SharedPreferences.*;
  * Created by burak on 10/8/2018.
  */
 
-public abstract class BaseActivity extends AppCompatActivity implements IView {
+public abstract class BaseActivity extends AppCompatActivity implements IBaseView {
 
     private ActivityComponent mActivityComponent;
     @Override

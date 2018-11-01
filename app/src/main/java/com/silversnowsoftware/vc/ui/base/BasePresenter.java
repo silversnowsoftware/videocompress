@@ -10,7 +10,7 @@ import com.silversnowsoftware.vc.model.FileModel;
  * Created by burak on 10/14/2018.
  */
 
-public class BasePresenter<V extends IView> implements IPresenter<V> {
+public class BasePresenter<V extends IBaseView> implements IBasePresenter<V> {
 
     private V mView;
 

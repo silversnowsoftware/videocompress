@@ -11,7 +11,7 @@ import android.view.ViewGroup;
  * Created by burak on 10/8/2018.
  */
 
-public abstract class BaseFragment extends Fragment implements IView {
+public abstract class BaseFragment extends Fragment implements IBaseView {
 
     public void onCreate(Bundle savedInstanceState)
     {

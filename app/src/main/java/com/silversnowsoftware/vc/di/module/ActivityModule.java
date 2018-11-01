@@ -9,7 +9,6 @@ import com.silversnowsoftware.vc.ui.main.MainPresenter;
 
 import dagger.Module;
 import dagger.Provides;
-import dagger.Module;
 
 /**
  * Created by burak on 10/14/2018.

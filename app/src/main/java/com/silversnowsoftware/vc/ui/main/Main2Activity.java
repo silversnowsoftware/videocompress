@@ -1,7 +1,5 @@
 package com.silversnowsoftware.vc.ui.main;
 
-import android.app.Dialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.silversnowsoftware.vc.R;

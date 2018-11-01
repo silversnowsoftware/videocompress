@@ -1,17 +1,15 @@
-package com.silversnowsoftware.vc.ui.main;
+package com.silversnowsoftware.vc.ui.editor;
 
 import android.content.Intent;
 
 import com.silversnowsoftware.vc.ui.base.IBasePresenter;
 
 /**
- * Created by burak on 10/14/2018.
+ * Created by burak on 11/1/2018.
  */
 
-public interface IMainPresenter<V extends IMainView> extends IBasePresenter<V> {
-
+public interface IEditorPresenter<V extends IEditorView> extends IBasePresenter<V> {
     void ActivityResult(int requestCode, int resultCode, Intent data);
 
     void VideoCompress();
-
 }
