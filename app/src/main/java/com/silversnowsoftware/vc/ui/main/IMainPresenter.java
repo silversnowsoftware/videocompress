@@ -10,8 +10,5 @@ import com.silversnowsoftware.vc.ui.base.IBasePresenter;
 
 public interface IMainPresenter<V extends IMainView> extends IBasePresenter<V> {
 
-    void ActivityResult(int requestCode, int resultCode, Intent data);
-
-    void VideoCompress();
 
 }

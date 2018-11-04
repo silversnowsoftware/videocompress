@@ -22,8 +22,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.silversnowsoftware.vc.R;
+import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.ui.base.component.VideoCompressAdapter;
 import com.silversnowsoftware.vc.utils.constants.Globals;
+
+import java.util.List;
 
 public class ListActivity extends AppCompatActivity implements ActionBar.TabListener {
 

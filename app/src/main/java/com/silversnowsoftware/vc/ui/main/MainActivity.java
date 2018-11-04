@@ -15,6 +15,7 @@ import com.silversnowsoftware.vc.ui.base.BaseActivity;
 import com.silversnowsoftware.vc.ui.compression.permission.PermissionsActivity;
 import com.silversnowsoftware.vc.ui.compression.permission.PermissionsChecker;
 import com.silversnowsoftware.vc.ui.compression.videorecord.CameraActivity;
+import com.silversnowsoftware.vc.ui.editor.EditorActivity;
 import com.silversnowsoftware.vc.ui.list.ListActivity;
 import com.silversnowsoftware.vc.utils.ManifestUtil;
 import com.silversnowsoftware.vc.utils.constants.Constants;
@@ -22,6 +23,7 @@ import com.silversnowsoftware.vc.utils.constants.Globals;
 import com.silversnowsoftware.vc.utils.helpers.FileHelper;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -95,38 +97,22 @@ public class MainActivity extends BaseActivity implements IMainView {
                     bitmap = Bitmap.createScaledBitmap(bitmap, 240, 240, false);
                     mdl.setThumbnailBmp(bitmap);
                 }
-                Globals.FileModelList.add(mdl);
+                List<FileModel> list = mPresenter.getData("MyKey",ArrayList.class,getApplicationContext());
+                if (list == null) {
+                        list = new ArrayList<FileModel>();
+
+                }
+                if (!list.contains(mdl))
+                list.add(mdl);
+
+                mPresenter.putData("MyKey",list,getApplicationContext());
             }
+            //startActivity(new Intent(getApplicationContext(), ListActivity.class));
         }
     }
 
 
-    @OnClick(R.id.btnRecord)
-    void btnRecord_onClick(){
-        CameraActivity.startActivityForResult(MainActivity.this, Constants.REQUEST_CODE_FOR_RECORD_VIDEO);
-    }
 
-    @OnClick(R.id.btnRun)
-    void btnRun_onClick(){
-        Globals.FileModelList.get(0).getCustomListener(new ICustomListener() {
-            @Override
-            public void onSuccess(Double rate) {
-
-            }
-
-            @Override
-            public void onProgress(Double rate) {
-                Log.i("Progressss--->", String.valueOf(rate));
-                progressBar.setProgress(rate.intValue());
-            }
-
-            @Override
-            public void onFailure(String error) {
-
-            }
-        });
-        mPresenter.VideoCompress();
-    }
 
     @OnClick(R.id.btnChoose)
     void btnChoose_onClick() {

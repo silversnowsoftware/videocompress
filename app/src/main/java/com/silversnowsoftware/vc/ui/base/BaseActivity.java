@@ -7,6 +7,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.silversnowsoftware.vc.VideoCompressApplication;
 import com.silversnowsoftware.vc.di.component.ActivityComponent;
 import com.silversnowsoftware.vc.di.component.DaggerActivityComponent;
@@ -21,6 +22,7 @@ import static android.content.SharedPreferences.*;
 public abstract class BaseActivity extends AppCompatActivity implements IBaseView {
 
     private ActivityComponent mActivityComponent;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,31 +34,25 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
                 .build();
 
     }
+
     public ActivityComponent getActivityComponent() {
         return mActivityComponent;
     }
+
     protected abstract int getLayoutResourceId();
 
-   // @Override
+    // @Override
  /*   public boolean onTouchEvent(MotionEvent event) {
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.
                 INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         return super.onTouchEvent(event);
     }*/
-    public  void showToastMethod(String message) {
+    public void showToastMethod(String message) {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
-    public static void setDefaults(String key, String value, Context context) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        Editor editor = preferences.edit();
-        editor.putString(key, value);
-        editor.commit();
-    }
-    public static String getDefaults(String key, Context context) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        return preferences.getString(key, null);
-    }
+
+
 
     @Override
     public void showLoading() {

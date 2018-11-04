@@ -13,3 +13,57 @@
  Increase them, e.g -s 480x320
  And -b 900k
  To improve quality (and get less compression).﻿*/
+
+  @OnClick(R.id.btnRecord)
+    void btnRecord_onClick(){
+        CameraActivity.startActivityForResult(MainActivity.this, Constants.REQUEST_CODE_FOR_RECORD_VIDEO);
+    }
+
+
+
+  @Override
+     public void ActivityResult(int requestCode, int resultCode, Intent data) {
+
+         if (requestCode == Constants.REQUEST_CODE_FOR_PERMISSIONS) {
+
+             if (PermissionsActivity.PERMISSIONS_DENIED == resultCode) {
+                 ((Activity) getView()).finish();
+             } else if (PermissionsActivity.PERMISSIONS_GRANTED == resultCode) {
+                 //do nothing
+             }
+         } else if (requestCode == Constants.REQUEST_CODE_FOR_RECORD_VIDEO) {
+
+             if (resultCode == Constants.RESULT_CODE_FOR_RECORD_VIDEO_SUCCEED) {
+
+                 String videoPath = data.getStringExtra(Constants.INTENT_EXTRA_VIDEO_PATH);
+                 if (!TextUtils.isEmpty(videoPath)) {
+                     Globals.currentInputVideoPath = videoPath;
+
+
+                     MediaMetadataRetriever retr = new MediaMetadataRetriever();
+                     retr.setDataSource(Globals.currentInputVideoPath);
+                     String time = retr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+
+                     try {
+                         videoLength = Double.parseDouble(time) / 1000.00;
+                     } catch (Exception e) {
+                         e.printStackTrace();
+                         videoLength = 0.00;
+                     }
+
+
+                    // Globals.FileModelList.add(mFileModel2);
+
+                     DbFileModel().add(Globals.FileModelList);
+
+                     for (FileModel item: DbFileModel().getAll()) {
+                         Log.v("FileModel::  ",item.getName() + "-" + item.getId());
+                     }
+
+                 }
+             } else if (resultCode == Constants.RESULT_CODE_FOR_RECORD_VIDEO_FAILED) {
+
+                 Globals.currentInputVideoPath = "";
+             }
+         }
+     }
