@@ -28,6 +28,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static com.silversnowsoftware.vc.utils.constants.Globals.handler;
@@ -49,6 +50,8 @@ public class MainActivity extends BaseActivity implements IMainView {
 
     static ArrayList<String> MediasPaths = new ArrayList<>();
 
+
+
     @Inject
     IMainPresenter<IMainView> mPresenter;
 
@@ -58,13 +61,13 @@ public class MainActivity extends BaseActivity implements IMainView {
         super.onCreate(savedInstanceState);
         getActivityComponent().inject(this);
         mPresenter.onAttach(this);
-        progressBar.setMax(100);
+        //progressBar.setMax(100);
 
         PermissionsChecker mChecker = new PermissionsChecker(getApplicationContext());
         if (mChecker.lacksPermissions(ManifestUtil.PERMISSIONS)) {
             PermissionsActivity.startActivityForResult(this, Constants.REQUEST_CODE_FOR_PERMISSIONS, ManifestUtil.PERMISSIONS);
         }
-
+        ButterKnife.bind(this);
     }
 
     @Override
@@ -77,36 +80,8 @@ public class MainActivity extends BaseActivity implements IMainView {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        //mPresenter.ActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
-            //MediaStore.Video.Thumbnails.getThumbnail()
-            MediasPaths = null;
-            ArrayList<String> tempfilepath = FileHelper.GetAllPath(getApplicationContext(), data);
-            FileModel mdl = null;
-            for (String item : tempfilepath) {
-                mdl = new FileModel();
-                mdl.setName(item);
-
-                Bitmap bitmap = null;
-                try {
-                    bitmap = FileHelper.retriveVideoFrameFromVideo(item);
-                } catch (Throwable throwable) {
-                    throwable.printStackTrace();
-                }
-                if (bitmap != null) {
-                    bitmap = Bitmap.createScaledBitmap(bitmap, 240, 240, false);
-                    mdl.setThumbnailBmp(bitmap);
-                }
-                List<FileModel> list = mPresenter.getData("MyKey",ArrayList.class,getApplicationContext());
-                if (list == null) {
-                        list = new ArrayList<FileModel>();
-
-                }
-                if (!list.contains(mdl))
-                list.add(mdl);
-
-                mPresenter.putData("MyKey",list,getApplicationContext());
-            }
+            mPresenter.collectFiles(data);
             //startActivity(new Intent(getApplicationContext(), ListActivity.class));
         }
     }

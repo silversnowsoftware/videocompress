@@ -1,6 +1,8 @@
 package com.silversnowsoftware.vc.ui.editor;
 
 import android.app.Activity;
+import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -51,7 +53,8 @@ public class EditorActivity extends Activity {
             }
         });
         mPresenter.VideoCompress();
-
+        Intent listActivity = new Intent(getApplicationContext(),ListActivity.class);
+        startActivity(listActivity);
     }
 
 }

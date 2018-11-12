@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:id="@+id/videoCard"
     android:layout_height="wrap_content"
     App:cardBackgroundColor="@color/card_background"
     xmlns:App="http://schemas.android.com/apk/res-auto"

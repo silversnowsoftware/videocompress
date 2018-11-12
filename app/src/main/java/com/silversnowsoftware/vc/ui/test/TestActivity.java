@@ -26,7 +26,7 @@ public class TestActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResourceId());
 
-        setDefaults("key1", "selam", getApplicationContext());
+       // setDefaults("key1", "selam", getApplicationContext());
         // Intent homepage = new Intent(HomeActivity.this, ShowActivity.class);
         //startActivity(homepage);
 

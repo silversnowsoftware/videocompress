@@ -50,7 +50,6 @@ public class FileModel implements Serializable {
     private String ResolutionY;
     private Double VideoLength;
     private Double Progress;
-    private Bitmap ThumbnailBmp;
 
 
     public String getName() {
@@ -89,17 +88,10 @@ public class FileModel implements Serializable {
         return Thumbnail;
     }
 
-    public Bitmap getThumbnailBmp() {
-        return ThumbnailBmp;
+    public void setThumbnail(String bytes) {
+        Thumbnail = bytes;
     }
 
-    public void setThumbnailBmp(Bitmap bitmap) {
-        ThumbnailBmp = bitmap;
-    }
-
-    public void setThumbnail(String thumbnail) {
-        Thumbnail = thumbnail;
-    }
 
     public String getExtension() {
         return Extension;
