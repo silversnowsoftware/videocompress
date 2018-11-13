@@ -3,17 +3,18 @@ package com.silversnowsoftware.vc.ui.main;
 import android.content.Intent;
 import android.graphics.Bitmap;
 
+import com.google.gson.reflect.TypeToken;
 import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.ui.base.BasePresenter;
 import com.silversnowsoftware.vc.utils.helpers.FileHelper;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import static com.silversnowsoftware.vc.utils.SharedPref.getData;
-import static com.silversnowsoftware.vc.utils.SharedPref.getDataList;
 import static com.silversnowsoftware.vc.utils.SharedPref.putData;
 import static com.silversnowsoftware.vc.utils.helpers.FileHelper.getBase64FromBitmap;
 
@@ -39,7 +40,7 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
 
             FileModel fileModel = createFileModel(path);
 
-            List<FileModel> list = getDataList("MyKey",FileModel.class, getContext());
+            List<FileModel> list = (List<FileModel>) getData("MyKey",new TypeToken<ArrayList<FileModel>>(){}.getType(), getContext());
             if(list == null) list = new  ArrayList<FileModel>();
             if (!list.contains(fileModel)) list.add(fileModel);
 

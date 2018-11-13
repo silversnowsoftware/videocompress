@@ -17,13 +17,16 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.gson.reflect.TypeToken;
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.ui.base.component.VideoCompressAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import static com.silversnowsoftware.vc.utils.SharedPref.getDataList;
+import static com.silversnowsoftware.vc.utils.SharedPref.getData;
+
 
 public class ListActivity extends AppCompatActivity implements ActionBar.TabListener {
 
@@ -165,7 +168,7 @@ public class ListActivity extends AppCompatActivity implements ActionBar.TabList
             View rootView = inflater.inflate(R.layout.fragment_list, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-            List<FileModel> files = getDataList("MyKey",FileModel.class, getActivity());
+            List<FileModel> files = (List<FileModel>) getData("MyKey",new TypeToken<ArrayList<FileModel>>(){}.getType(), getActivity());
             VideoCompressAdapter videoCompressAdapter = new VideoCompressAdapter(getActivity(), R.layout.file_model_list, files);
             lvFileModel = (ListView) rootView.findViewById(R.id.lvFileModel);
             lvFileModel.setAdapter(videoCompressAdapter);

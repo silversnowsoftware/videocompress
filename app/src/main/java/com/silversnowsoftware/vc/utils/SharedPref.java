@@ -29,23 +29,15 @@ public class SharedPref {
     }
 
 
-    public static  <T>Class<T> getData(String key,  Class<T> type, Context context) {
-        Gson gson = new Gson();
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String json = preferences.getString(key, "");
-        Class<T> obj = null;
-        Type listType = new TypeToken<T>(){}.getType();
-        obj = (Class<T>) gson.fromJson(json, listType);
-        return obj;
-    }
 
-    public static  <T>ArrayList<T> getDataList(String key,  Class<T> type, Context context) {
+
+    public static  Object getData(String key,  Type type, Context context) {
         Gson gson = new Gson();
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         String json = preferences.getString(key, "");
-        ArrayList<T> obj = null;
-        Type listType = new TypeToken<ArrayList<T>>(){}.getType();
-        obj = (ArrayList<T>) gson.fromJson(json, listType);
+        Object obj = null;
+
+        obj = (Object) gson.fromJson(json, type);
         return obj;
     }
 
