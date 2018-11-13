@@ -13,6 +13,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import static com.silversnowsoftware.vc.utils.SharedPref.getData;
+import static com.silversnowsoftware.vc.utils.SharedPref.getDataList;
 import static com.silversnowsoftware.vc.utils.SharedPref.putData;
 import static com.silversnowsoftware.vc.utils.helpers.FileHelper.getBase64FromBitmap;
 
@@ -38,8 +39,8 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
 
             FileModel fileModel = createFileModel(path);
 
-            List<FileModel> list = getData("MyKey", ArrayList.class, getContext());
-
+            List<FileModel> list = getDataList("MyKey",FileModel.class, getContext());
+            if(list == null) list = new  ArrayList<FileModel>();
             if (!list.contains(fileModel)) list.add(fileModel);
 
             putData("MyKey", list, getContext());

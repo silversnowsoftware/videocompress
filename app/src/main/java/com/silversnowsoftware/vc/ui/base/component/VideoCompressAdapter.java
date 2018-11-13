@@ -39,7 +39,7 @@ public class VideoCompressAdapter extends ArrayAdapter {
             v = vi.inflate(R.layout.file_model_list, null);
 
         }
-        final FileModel model = (FileModel) getItem(position);
+        final FileModel model = (FileModel) getItem(position); //LinkedTreeMap cannot be cast to com.silversnowsoftware.vc.model.FileMod
         if (model != null) {
             TextView videoName, videoProgress;
             ImageView videoTumbnail;

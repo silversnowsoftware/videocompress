@@ -1,15 +1,11 @@
 package com.silversnowsoftware.vc.ui.list;
 
 
-import android.app.Activity;
-
-import android.app.FragmentTransaction;
-
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -18,19 +14,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
-import android.widget.Adapter;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.ui.base.component.VideoCompressAdapter;
-import com.silversnowsoftware.vc.utils.constants.Globals;
 
 import java.util.List;
+
+import static com.silversnowsoftware.vc.utils.SharedPref.getDataList;
 
 public class ListActivity extends AppCompatActivity implements ActionBar.TabListener {
 
@@ -172,10 +165,11 @@ public class ListActivity extends AppCompatActivity implements ActionBar.TabList
             View rootView = inflater.inflate(R.layout.fragment_list, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-            VideoCompressAdapter videoCompressAdapter = new VideoCompressAdapter(getActivity(), R.layout.file_model_list, Globals.FileModelList);
+            List<FileModel> files = getDataList("MyKey",FileModel.class, getActivity());
+            VideoCompressAdapter videoCompressAdapter = new VideoCompressAdapter(getActivity(), R.layout.file_model_list, files);
             lvFileModel = (ListView) rootView.findViewById(R.id.lvFileModel);
             lvFileModel.setAdapter(videoCompressAdapter);
-            return rootView;
+            return  rootView;
         }
     }
 
