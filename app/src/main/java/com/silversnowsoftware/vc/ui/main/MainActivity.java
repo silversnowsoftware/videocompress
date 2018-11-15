@@ -1,29 +1,21 @@
 package com.silversnowsoftware.vc.ui.main;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
+
 import com.silversnowsoftware.vc.R;
-import com.silversnowsoftware.vc.model.FileModel;
-import com.silversnowsoftware.vc.model.listener.ICustomListener;
 import com.silversnowsoftware.vc.ui.base.BaseActivity;
 import com.silversnowsoftware.vc.ui.compression.permission.PermissionsActivity;
 import com.silversnowsoftware.vc.ui.compression.permission.PermissionsChecker;
-import com.silversnowsoftware.vc.ui.compression.videorecord.CameraActivity;
-import com.silversnowsoftware.vc.ui.editor.EditorActivity;
 import com.silversnowsoftware.vc.ui.list.ListActivity;
 import com.silversnowsoftware.vc.utils.ManifestUtil;
 import com.silversnowsoftware.vc.utils.constants.Constants;
-import com.silversnowsoftware.vc.utils.constants.Globals;
-import com.silversnowsoftware.vc.utils.helpers.FileHelper;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -68,6 +60,7 @@ public class MainActivity extends BaseActivity implements IMainView {
             PermissionsActivity.startActivityForResult(this, Constants.REQUEST_CODE_FOR_PERMISSIONS, ManifestUtil.PERMISSIONS);
         }
         ButterKnife.bind(this);
+
     }
 
     @Override

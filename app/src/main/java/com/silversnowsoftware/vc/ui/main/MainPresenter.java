@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import com.google.gson.reflect.TypeToken;
 import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.ui.base.BasePresenter;
+import com.silversnowsoftware.vc.utils.constants.Keys;
 import com.silversnowsoftware.vc.utils.helpers.FileHelper;
 
 import java.lang.reflect.Type;
@@ -17,6 +18,7 @@ import javax.inject.Inject;
 import static com.silversnowsoftware.vc.utils.SharedPref.getData;
 import static com.silversnowsoftware.vc.utils.SharedPref.putData;
 import static com.silversnowsoftware.vc.utils.helpers.FileHelper.getBase64FromBitmap;
+import static com.silversnowsoftware.vc.utils.helpers.FileHelper.getFileNameFromPath;
 
 
 /**
@@ -40,18 +42,21 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
 
             FileModel fileModel = createFileModel(path);
 
-            List<FileModel> list = (List<FileModel>) getData("MyKey",new TypeToken<ArrayList<FileModel>>(){}.getType(), getContext());
+            List<FileModel> list = (List<FileModel>) getData(Keys.FILE_LIST_KEY,new TypeToken<ArrayList<FileModel>>(){}.getType(), getContext());
             if(list == null) list = new  ArrayList<FileModel>();
-            if (!list.contains(fileModel)) list.add(fileModel);
+            if (!list.contains(fileModel))
+                list.add(fileModel);
 
-            putData("MyKey", list, getContext());
+            putData(Keys.FILE_LIST_KEY, list, getContext());
         }
     }
 
     public FileModel createFileModel(String path) {
 
         FileModel fileModel = new FileModel();
-        fileModel.setName(path);
+
+        fileModel.setPath(path);
+        fileModel.setName(getFileNameFromPath(path));
 
         Bitmap bitmap = null;
         try {
@@ -66,6 +71,8 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
         }
         return fileModel;
     }
+
+
 
 
 }

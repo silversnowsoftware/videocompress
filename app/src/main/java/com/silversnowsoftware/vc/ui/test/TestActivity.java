@@ -1,25 +1,28 @@
 package com.silversnowsoftware.vc.ui.test;
 
-import android.support.v7.app.AppCompatActivity;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.widget.Button;
 
+
+import com.google.gson.reflect.TypeToken;
 import com.silversnowsoftware.vc.R;
+import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.ui.base.BaseActivity;
+import com.silversnowsoftware.vc.ui.base.component.VideoCompressAdapter;
+import com.silversnowsoftware.vc.utils.constants.Keys;
 
-import butterknife.BindView;
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.ButterKnife;
-import butterknife.OnClick;
+
+import static com.silversnowsoftware.vc.utils.SharedPref.getData;
 
 public class TestActivity extends BaseActivity {
 
-    @BindView(R.id.firstBtn)
-    Button first_Button;
 
-    @OnClick(R.id.firstBtn)
-    void Selam() {
-        showToastMethod("Selam");
-    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,6 +34,9 @@ public class TestActivity extends BaseActivity {
         //startActivity(homepage);
 
         ButterKnife.bind(this);
+
+
+
     }
 
     @Override

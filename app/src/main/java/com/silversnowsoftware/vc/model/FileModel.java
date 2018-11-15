@@ -162,4 +162,11 @@ public class FileModel implements Serializable {
     public void setProgress(Double progress) {
         Progress = progress;
     }
+
+
+
+    @Override
+    public boolean equals(Object obj) {
+        return this.Name.equals(((FileModel) obj).Name);
+    }
 }

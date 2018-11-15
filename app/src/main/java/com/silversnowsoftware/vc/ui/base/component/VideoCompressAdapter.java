@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.silversnowsoftware.vc.R;
@@ -43,23 +44,27 @@ public class VideoCompressAdapter extends ArrayAdapter {
         if (model != null) {
             TextView videoName, videoProgress;
             ImageView videoTumbnail;
+            ProgressBar pbProgress;
 
-            videoName = v.findViewById(R.id.videoName);
-            videoProgress =  v.findViewById(R.id.videoProgress);
+            videoName = v.findViewById(R.id.tvVideoName);
+
             videoTumbnail = v.findViewById(R.id.videoTumbnail);
+            pbProgress = v.findViewById(R.id.pbProgress);
 
             videoName.setText(model.getName());
-            videoProgress.setText(String.valueOf(model.getProgress()));
-            videoTumbnail.setImageBitmap(FileHelper.getBitmapFromBase64(model.getThumbnail()));
 
-            v.setOnClickListener(new View.OnClickListener() {
+            pbProgress.setProgress(55);
+            //videoTumbnail.setImageBitmap(FileHelper.getBitmapFromBase64(model.getThumbnail()));
+
+         /*   v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent editorActivity = new Intent(getContext(),EditorActivity.class);
+                    Intent editorActivity = new Intent(getContext(), EditorActivity.class);
                     putData("SelectedFile", model, getContext());
                     getContext().startActivity(editorActivity);
                 }
-            });
+            });*/
+
             /*Intent intent = new Intent(context,EditorActivity.class);
             intent.pu*/
         }

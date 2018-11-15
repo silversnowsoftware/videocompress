@@ -322,4 +322,9 @@ public class FileHelper {
         return encoded;
     }
 
+    public static String getFileNameFromPath(String path)
+    {
+        String filename=path.substring(path.lastIndexOf("/")+1);
+        return filename;
+    }
 }

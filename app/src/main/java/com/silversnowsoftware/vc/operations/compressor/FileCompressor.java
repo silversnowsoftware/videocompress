@@ -47,7 +47,7 @@ public class FileCompressor implements IFileCompressor {
             return;
 
         final FileModel fileModel = FileModelList.get(0);
-        File mFile = new File(Globals.currentOutputVideoPath + fileModel.getName());
+        File mFile = new File(Globals.currentOutputVideoPath + fileModel.getPath());
         if (mFile.exists()) {
             mFile.delete();
         }
