@@ -1,7 +1,6 @@
 package com.silversnowsoftware.vc.ui.base.component;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -14,12 +13,13 @@ import android.widget.TextView;
 
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.model.FileModel;
-import com.silversnowsoftware.vc.ui.editor.EditorActivity;
+import com.silversnowsoftware.vc.utils.constants.Keys;
 import com.silversnowsoftware.vc.utils.helpers.FileHelper;
 
 import java.util.List;
 
-import static com.silversnowsoftware.vc.utils.SharedPref.putData;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by burak on 10/29/2018.
@@ -33,42 +33,34 @@ public class VideoCompressAdapter extends ArrayAdapter {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        View v = convertView;
-        if (v == null) {
-            LayoutInflater vi;
-            vi = LayoutInflater.from(getContext());
-            v = vi.inflate(R.layout.file_model_list, null);
+        View view = convertView;
+        ViewHolder viewHolder = null;
 
+        if (view == null) {
+            LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+            view = layoutInflater.inflate(R.layout.file_model_list, null);
+            viewHolder = new ViewHolder(view);
         }
-        final FileModel model = (FileModel) getItem(position); //LinkedTreeMap cannot be cast to com.silversnowsoftware.vc.model.FileMod
+        final FileModel model = (FileModel) getItem(position);
         if (model != null) {
-            TextView videoName, videoProgress;
-            ImageView videoTumbnail;
-            ProgressBar pbProgress;
-
-            videoName = v.findViewById(R.id.tvVideoName);
-
-            videoTumbnail = v.findViewById(R.id.videoTumbnail);
-            pbProgress = v.findViewById(R.id.pbProgress);
-
-            videoName.setText(model.getName());
-
-            pbProgress.setProgress(55);
-            //videoTumbnail.setImageBitmap(FileHelper.getBitmapFromBase64(model.getThumbnail()));
-
-         /*   v.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent editorActivity = new Intent(getContext(), EditorActivity.class);
-                    putData("SelectedFile", model, getContext());
-                    getContext().startActivity(editorActivity);
-                }
-            });*/
-
-            /*Intent intent = new Intent(context,EditorActivity.class);
-            intent.pu*/
+            viewHolder.tvVideoName.setText(model.getName());
+            viewHolder.pbProgress.setProgress(55);
+            viewHolder.ivVideoTumbnail.setImageBitmap(FileHelper.getBitmapFromBase64(model.getThumbnail()));
         }
-        return v;
+        return view;
 
+    }
+
+    static class ViewHolder {
+        @BindView(R.id.tvVideoName)
+        TextView tvVideoName;
+        @BindView(R.id.pbProgress)
+        ProgressBar pbProgress;
+        @BindView(R.id.ivVideoTumbnail)
+        ImageView ivVideoTumbnail;
+
+        public ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
     }
 }

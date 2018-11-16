@@ -7,12 +7,18 @@
     tools:context="com.silversnowsoftware.vc.ui.list.ListActivity">
 
 
-
     <ListView
+        android:id="@+id/lvFileModel"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/lvFileModel"
         android:divider="@android:color/transparent"
         android:dividerHeight="5dp"></ListView>
 
+    <TextView
+        android:id="@+id/tvNoDataFound"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="No Data"
+        android:textSize="25dp" />
 </android.support.constraint.ConstraintLayout>

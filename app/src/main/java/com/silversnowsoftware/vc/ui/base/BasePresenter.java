@@ -18,6 +18,7 @@ public class BasePresenter<V extends IBaseView> implements IBasePresenter<V> {
 
     private V mView;
 
+
     @Override
     public void onAttach(V view) {
         mView = view;
@@ -32,6 +33,8 @@ public class BasePresenter<V extends IBaseView> implements IBasePresenter<V> {
     public V getView() {
         return mView;
     }
+
+
 
     protected Context getContext() {
         return ((Activity) getView()).getApplicationContext();
