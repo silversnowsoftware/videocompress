@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import com.google.gson.reflect.TypeToken;
 import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.ui.base.BasePresenter;
+import com.silversnowsoftware.vc.ui.list.ListViewHolder;
 import com.silversnowsoftware.vc.utils.constants.Keys;
 import com.silversnowsoftware.vc.utils.helpers.FileHelper;
 
@@ -28,14 +29,17 @@ import static com.silversnowsoftware.vc.utils.helpers.FileHelper.getFileNameFrom
 public class MainPresenter<V extends IMainView> extends BasePresenter<V>
         implements IMainPresenter<V> {
 
+    MainViewHolder viewHolder;
     private Double videoLength = 0.00;
 
     @Inject
     public MainPresenter() {
         super();
-
     }
 
+    public void setViewHolder() {
+        viewHolder = new MainViewHolder(getView());
+    }
     public void collectFiles(Intent data) {
         ArrayList<String> tempfilepath = FileHelper.GetAllPath(getContext(), data);
         for (String path : tempfilepath) {

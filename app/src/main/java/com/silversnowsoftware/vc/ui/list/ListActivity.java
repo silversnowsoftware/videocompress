@@ -22,7 +22,7 @@ public class ListActivity extends BaseActivity implements IListView {
         ButterKnife.bind(this);
 
         mPresenter.onAttach(this);
-        mPresenter.setViewHolder(this);
+        mPresenter.setViewHolder();
         mPresenter.fillListView();
 
     }

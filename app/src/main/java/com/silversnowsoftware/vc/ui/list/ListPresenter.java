@@ -36,8 +36,8 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
         super();
 
     }
-    public void setViewHolder(Activity activity) {
-        viewHolder = new ListViewHolder(activity);
+    public void setViewHolder() {
+        viewHolder = new ListViewHolder(getView());
     }
 
     public void fillListView() {

@@ -14,4 +14,6 @@ public interface IMainPresenter<V extends IMainView> extends IBasePresenter<V> {
     void collectFiles(Intent data);
 
     FileModel createFileModel(String path);
+
+    public void setViewHolder();
 }

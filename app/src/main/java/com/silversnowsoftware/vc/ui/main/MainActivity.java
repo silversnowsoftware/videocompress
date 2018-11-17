@@ -29,20 +29,9 @@ import static com.silversnowsoftware.vc.utils.constants.Globals.handler;
 public class MainActivity extends BaseActivity implements IMainView {
 
 
-    @BindView(R.id.btnRecord)
-    Button btnRecord;
-    @BindView(R.id.btnRun)
-    Button btnRun;
-    @BindView(R.id.btnChoose)
-    Button btnChoose;
-    @BindView(R.id.btnListFile)
-    Button btnListFile;
-    @BindView(R.id.progressBar)
-    ProgressBar progressBar;
+
 
     static ArrayList<String> MediasPaths = new ArrayList<>();
-
-
 
     @Inject
     IMainPresenter<IMainView> mPresenter;
@@ -53,6 +42,7 @@ public class MainActivity extends BaseActivity implements IMainView {
         super.onCreate(savedInstanceState);
         getActivityComponent().inject(this);
         mPresenter.onAttach(this);
+        mPresenter.setViewHolder();
         //progressBar.setMax(100);
 
         PermissionsChecker mChecker = new PermissionsChecker(getApplicationContext());
@@ -82,22 +72,5 @@ public class MainActivity extends BaseActivity implements IMainView {
 
 
 
-    @OnClick(R.id.btnChoose)
-    void btnChoose_onClick() {
-        Intent mediaIntent = new Intent(
-                Intent.ACTION_GET_CONTENT
-                //,Uri.parse(Environment.DIRECTORY_DCIM)
-        );
-        // mediaIntent.setType("*/*");
-        mediaIntent.setType("video/*");
-        mediaIntent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"video/*"});
-        mediaIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        startActivityForResult(mediaIntent, 1);
-    }
 
-    @OnClick(R.id.btnListFile)
-    void btnListFile_onClick() {
-        Intent listActivity = new Intent(getApplicationContext(),ListActivity.class);
-        startActivity(listActivity);
-    }
 }

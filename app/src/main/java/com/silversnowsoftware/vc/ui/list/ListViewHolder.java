@@ -13,14 +13,17 @@ import butterknife.ButterKnife;
  * Created by burak on 11/16/2018.
  */
 
-public class ListViewHolder {
+public class ListViewHolder<V extends IListView> {
+    Activity activity;
+
     @BindView(R.id.tvNoDataFound)
     public TextView tvNoDataFound;
 
     @BindView(R.id.lvFileModel)
     public ListView lvFileModel;
 
-    public ListViewHolder(Activity activity) {
-        ButterKnife.bind(this, activity);
+    public ListViewHolder(V activity) {
+        this.activity = (Activity) activity;
+        ButterKnife.bind(this, this.activity);
     }
 }
