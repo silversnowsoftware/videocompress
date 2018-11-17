@@ -11,5 +11,7 @@ import com.silversnowsoftware.vc.ui.base.IBasePresenter;
 public interface IEditorPresenter<V extends IEditorView> extends IBasePresenter<V> {
     void ActivityResult(int requestCode, int resultCode, Intent data);
 
-    void VideoCompress();
+    void videoCompress();
+    void setViewHolder();
+    void setVideoToVideoView();
 }

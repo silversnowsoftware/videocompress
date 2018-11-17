@@ -6,7 +6,9 @@ import android.graphics.Bitmap;
 import com.google.gson.reflect.TypeToken;
 import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.ui.base.BasePresenter;
+import com.silversnowsoftware.vc.ui.base.IBaseViewHolder;
 import com.silversnowsoftware.vc.ui.list.ListViewHolder;
+import com.silversnowsoftware.vc.utils.Types;
 import com.silversnowsoftware.vc.utils.constants.Keys;
 import com.silversnowsoftware.vc.utils.helpers.FileHelper;
 
@@ -28,8 +30,7 @@ import static com.silversnowsoftware.vc.utils.helpers.FileHelper.getFileNameFrom
 
 public class MainPresenter<V extends IMainView> extends BasePresenter<V>
         implements IMainPresenter<V> {
-
-    MainViewHolder viewHolder;
+    MainViewHolder mViewHolder;
     private Double videoLength = 0.00;
 
     @Inject
@@ -38,7 +39,7 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
     }
 
     public void setViewHolder() {
-        viewHolder = new MainViewHolder(getView());
+        mViewHolder = new MainViewHolder(getView());
     }
     public void collectFiles(Intent data) {
         ArrayList<String> tempfilepath = FileHelper.GetAllPath(getContext(), data);
@@ -46,7 +47,7 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
 
             FileModel fileModel = createFileModel(path);
 
-            List<FileModel> list = (List<FileModel>) getData(Keys.FILE_LIST_KEY,new TypeToken<ArrayList<FileModel>>(){}.getType(), getContext());
+            List<FileModel> list = (List<FileModel>) getData(Keys.FILE_LIST_KEY, Types.getFileModelListType(), getContext());
             if(list == null) list = new  ArrayList<FileModel>();
             if (!list.contains(fileModel))
                 list.add(fileModel);

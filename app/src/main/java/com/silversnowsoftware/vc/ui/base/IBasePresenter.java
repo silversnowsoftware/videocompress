@@ -13,5 +13,6 @@ public interface IBasePresenter<V extends IBaseView> {
 
     public V getView();
 
+     
 
 }

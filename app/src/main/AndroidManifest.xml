@@ -39,9 +39,7 @@
         </activity>
         <activity android:name=".ui.compression.permission.PermissionsActivity" />
         <activity android:name=".ui.compression.videorecord.CameraActivity" />
-        <activity android:name=".ui.test.TestActivity">
-
-        </activity>
+        <activity android:name=".ui.test.TestActivity"></activity>
         <activity
             android:name=".ui.list.ListActivity"
             android:label="@string/title_activity_list" />
@@ -51,12 +49,8 @@
             android:value="26.1.0"
             tools:replace="android:value" />
 
-        <activity
-            android:name=".ui.editor.EditorActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="@string/title_activity_editor"
-            android:theme="@style/FullscreenTheme" />
-        <activity android:name=".ui.splash.SplashActivity"></activity>
+        <activity android:name=".ui.splash.SplashActivity" />
+        <activity android:name=".ui.editor.EditorActivity"></activity>
     </application>
 
 </manifest>

@@ -6,6 +6,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.silversnowsoftware.vc.R;
+import com.silversnowsoftware.vc.ui.base.IBaseViewHolder;
 import com.silversnowsoftware.vc.ui.list.ListActivity;
 
 import butterknife.BindView;
@@ -16,7 +17,7 @@ import butterknife.OnClick;
  * Created by Hakan on 17.11.2018.
  */
 
-public class MainViewHolder<V extends IMainView> {
+public class MainViewHolder<V extends IMainView> implements IBaseViewHolder {
     Activity mView;
 
     @BindView(R.id.btnRecord)

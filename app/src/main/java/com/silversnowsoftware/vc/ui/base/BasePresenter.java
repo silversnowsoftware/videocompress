@@ -6,9 +6,12 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.silversnowsoftware.vc.data.db.DbFileModel;
 import com.silversnowsoftware.vc.data.db.IRepository;
 import com.silversnowsoftware.vc.model.FileModel;
+
+import java.util.ArrayList;
 
 /**
  * Created by burak on 10/14/2018.
@@ -17,7 +20,6 @@ import com.silversnowsoftware.vc.model.FileModel;
 public class BasePresenter<V extends IBaseView> implements IBasePresenter<V> {
 
     private V mView;
-
 
     @Override
     public void onAttach(V view) {

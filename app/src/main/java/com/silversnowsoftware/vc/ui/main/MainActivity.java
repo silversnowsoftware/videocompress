@@ -3,15 +3,12 @@ package com.silversnowsoftware.vc.ui.main;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.widget.Button;
-import android.widget.ProgressBar;
-
 
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.ui.base.BaseActivity;
 import com.silversnowsoftware.vc.ui.compression.permission.PermissionsActivity;
 import com.silversnowsoftware.vc.ui.compression.permission.PermissionsChecker;
-import com.silversnowsoftware.vc.ui.list.ListActivity;
+import com.silversnowsoftware.vc.ui.editor.EditorActivity;
 import com.silversnowsoftware.vc.utils.ManifestUtil;
 import com.silversnowsoftware.vc.utils.constants.Constants;
 
@@ -19,9 +16,7 @@ import java.util.ArrayList;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 import static com.silversnowsoftware.vc.utils.constants.Globals.handler;
 
@@ -65,7 +60,7 @@ public class MainActivity extends BaseActivity implements IMainView {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             mPresenter.collectFiles(data);
-            //startActivity(new Intent(getApplicationContext(), ListActivity.class));
+            startActivity(new Intent(getApplicationContext(), EditorActivity.class));
         }
     }
 
