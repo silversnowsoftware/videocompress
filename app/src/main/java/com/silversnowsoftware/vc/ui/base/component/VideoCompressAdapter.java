@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,11 +34,14 @@ public class VideoCompressAdapter extends ArrayAdapter {
     public VideoCompressAdapter(@NonNull Context context, int resource, @NonNull List<FileModel> files) {
         super(context, resource, files);
     }
+
     Activity mActivity;
-    public void setActivity(Activity activity)
-    {
+
+    public void setActivity(Activity activity) {
         mActivity = activity;
+
     }
+
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -47,33 +51,42 @@ public class VideoCompressAdapter extends ArrayAdapter {
         if (view == null) {
             LayoutInflater layoutInflater = LayoutInflater.from(getContext());
             view = layoutInflater.inflate(R.layout.file_model_list, null);
-            viewHolder = new ViewHolder(view);
+
         }
+        viewHolder = new ViewHolder(view);
         final FileModel model = (FileModel) getItem(position);
         if (model != null) {
             viewHolder.tvVideoName.setText(model.getName());
             viewHolder.ivVideoTumbnail.setImageBitmap(FileHelper.getBitmapFromBase64(model.getThumbnail()));
         }
 
-        if(model.getFileStatus() == FileStatusEnum.PREPEARING) {
+        if (model.getFileStatus() == FileStatusEnum.PREPEARING) {
+            model.setFileStatus(FileStatusEnum.PROGRESSING);
             final ViewHolder finalViewHolder = viewHolder;
             FileCompressor fc = new FileCompressor(mActivity);
+
             model.getCustomListener(new ICustomListener() {
                 @Override
                 public void onSuccess(Double rate) {
-                    finalViewHolder.pbProgress.setProgress(rate.intValue());
+                    Log.i("Success Rate: ", String.valueOf(rate.intValue()));
+                    finalViewHolder.pbProgress.setProgress(100);
+                    model.setFileStatus(FileStatusEnum.SUCCESS);
                     notifyDataSetChanged();
                 }
 
                 @Override
                 public void onProgress(Double rate) {
-                    finalViewHolder.pbProgress.setProgress(rate.intValue());
+
+                    if (rate.intValue() > 0) {
+                        Log.i("Rate: ", String.valueOf(rate.intValue()));
+                        finalViewHolder.pbProgress.setProgress(rate.intValue());
+                    }
                     notifyDataSetChanged();
                 }
 
                 @Override
                 public void onFailure(String error) {
-
+                    model.setFileStatus(FileStatusEnum.ERROR);
                 }
             });
             fc.Compress(model);

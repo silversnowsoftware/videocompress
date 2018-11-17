@@ -47,8 +47,7 @@
                 android:theme="@style/AppTheme.MainProgressBar"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:max="100"
-                android:progress="50"/>
+                android:max="100"/>
 
 
         </LinearLayout>

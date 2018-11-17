@@ -2,6 +2,7 @@ package com.silversnowsoftware.vc.ui.main;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.MediaMetadataRetriever;
 
 import com.google.gson.reflect.TypeToken;
 import com.silversnowsoftware.vc.model.FileModel;
@@ -9,6 +10,7 @@ import com.silversnowsoftware.vc.ui.base.BasePresenter;
 import com.silversnowsoftware.vc.ui.base.IBaseViewHolder;
 import com.silversnowsoftware.vc.ui.list.ListViewHolder;
 import com.silversnowsoftware.vc.utils.Types;
+import com.silversnowsoftware.vc.utils.constants.Globals;
 import com.silversnowsoftware.vc.utils.constants.Keys;
 import com.silversnowsoftware.vc.utils.helpers.FileHelper;
 
@@ -74,6 +76,20 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
             String byteThumb = getBase64FromBitmap(bitmap);
             fileModel.setThumbnail(byteThumb);
         }
+        fileModel.setResolutionX("480");
+        fileModel.setResolutionY("720");
+
+        MediaMetadataRetriever retr = new MediaMetadataRetriever();
+        retr.setDataSource(fileModel.getPath());
+        String time = retr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+
+        try {
+            videoLength = Double.parseDouble(time) / 1000.00;
+        } catch (Exception e) {
+            e.printStackTrace();
+            videoLength = 0.00;
+        }
+        fileModel.setVideoLength(videoLength);
         return fileModel;
     }
 

@@ -53,10 +53,11 @@ public class FileCompressor implements IFileCompressor {
         }
         Log.i("Progress " , fileModel.getName() + "--" +  fileModel.getVideoLength());
         mCompressor.execCommand(fileModel.getCompressCmd(), new CompressListener() {
+            int counter=0;
             @Override
             public void onExecSuccess(String message) {
                 Toast.makeText(context, "Video Compressed", Toast.LENGTH_SHORT).show();
-                fileModel.setProgress(100.0);
+                fileModel.listener.onSuccess(100.0);
                 Log.i(TAG,"--->" + 100);
             }
 
@@ -67,10 +68,13 @@ public class FileCompressor implements IFileCompressor {
 
             @Override
             public void onExecProgress(String message) {
-                fileModel.setProgress(getProgress(message, fileModel.getVideoLength()) * 100);
-                fileModel.listener.onProgress(getProgress(message, fileModel.getVideoLength()) * 100);
 
-                Log.i(TAG,"--->" + getProgress(message, fileModel.getVideoLength()) * 100);
+                    Double progress = getProgress(message, fileModel.getVideoLength()) * 100;
+                    fileModel.setProgress(progress);
+                    fileModel.listener.onProgress(progress);
+
+
+                counter++;
 
             }
         });
@@ -116,8 +120,12 @@ public class FileCompressor implements IFileCompressor {
             String temp[] = result.split(":");
             Double seconds = Double.parseDouble(temp[1]) * 60 + Double.parseDouble(temp[2]);
 
-            if (0 != videoLength) {
-                return (seconds / videoLength);
+           /*  if (seconds.intValue() == videoLength.intValue()){
+                 return 0.0;
+             }*/
+             if (0.0 != videoLength) {
+                Log.i("VideoLen" , String.valueOf(seconds) + "/" + String.valueOf(videoLength));
+                return seconds / videoLength;
             }
             return 0.0;
         }
