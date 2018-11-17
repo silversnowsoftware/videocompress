@@ -40,7 +40,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
     @Override
     public void videoCompress() {
         FileCompressor fileCompressor = new FileCompressor(((Activity) getView()));
-        fileCompressor.Compress();
+       // fileCompressor.Compress();
     }
     public void setVideoToVideoView(){
         List<FileModel> fileModelList =(List<FileModel>)getData(Keys.FILE_LIST_KEY, Types.getFileModelListType(),getContext());

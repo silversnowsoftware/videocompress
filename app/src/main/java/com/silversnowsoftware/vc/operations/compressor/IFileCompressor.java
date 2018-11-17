@@ -15,7 +15,7 @@ import java.io.File;
 
 public interface IFileCompressor {
 
-    void Compress();
+    void Compress(FileModel fileModel);
 
     void loadBinary(final InitListener mListener);
 

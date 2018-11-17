@@ -42,11 +42,11 @@ public class FileCompressor implements IFileCompressor {
     }
 
 
-    public void Compress() {
-        if (FileModelList.size() < 1)
+    public void Compress(final FileModel fileModel) {
+        if (fileModel == null)
             return;
 
-        final FileModel fileModel = FileModelList.get(0);
+
         File mFile = new File(Globals.currentOutputVideoPath + fileModel.getPath());
         if (mFile.exists()) {
             mFile.delete();
@@ -58,26 +58,25 @@ public class FileCompressor implements IFileCompressor {
                 Toast.makeText(context, "Video Compressed", Toast.LENGTH_SHORT).show();
                 fileModel.setProgress(100.0);
                 Log.i(TAG,"--->" + 100);
-                FileModelList.remove(0);
-                Compress();
-
             }
 
             @Override
             public void onExecFail(String reason) {
                 Toast.makeText(context, reason, Toast.LENGTH_SHORT).show();
-                Compress();
             }
 
             @Override
             public void onExecProgress(String message) {
                 fileModel.setProgress(getProgress(message, fileModel.getVideoLength()) * 100);
                 fileModel.listener.onProgress(getProgress(message, fileModel.getVideoLength()) * 100);
+
                 Log.i(TAG,"--->" + getProgress(message, fileModel.getVideoLength()) * 100);
+
             }
         });
 
     }
+
 
     public void loadBinary(final InitListener mListener) {
         try {

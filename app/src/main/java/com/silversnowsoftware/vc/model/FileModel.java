@@ -21,7 +21,7 @@ public class FileModel implements Serializable {
     public ICustomListener listener;
 
     public FileModel() {
-
+        FileStatus = FileStatusEnum.NONE;
     }
 
     public void getCustomListener(ICustomListener listener) {
