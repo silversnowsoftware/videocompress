@@ -1,5 +1,6 @@
 package com.silversnowsoftware.vc.ui.base.component;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.model.listener.ICustomListener;
+import com.silversnowsoftware.vc.operations.compressor.FileCompressor;
 import com.silversnowsoftware.vc.utils.constants.Keys;
 import com.silversnowsoftware.vc.utils.enums.FileStatusEnum;
 import com.silversnowsoftware.vc.utils.helpers.FileHelper;
@@ -31,6 +33,11 @@ public class VideoCompressAdapter extends ArrayAdapter {
     public VideoCompressAdapter(@NonNull Context context, int resource, @NonNull List<FileModel> files) {
         super(context, resource, files);
     }
+    Activity mActivity;
+    public void setActivity(Activity activity)
+    {
+        mActivity = activity;
+    }
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
@@ -45,12 +52,12 @@ public class VideoCompressAdapter extends ArrayAdapter {
         final FileModel model = (FileModel) getItem(position);
         if (model != null) {
             viewHolder.tvVideoName.setText(model.getName());
-            viewHolder.pbProgress.setProgress(6);
             viewHolder.ivVideoTumbnail.setImageBitmap(FileHelper.getBitmapFromBase64(model.getThumbnail()));
         }
 
         if(model.getFileStatus() == FileStatusEnum.PREPEARING) {
             final ViewHolder finalViewHolder = viewHolder;
+            FileCompressor fc = new FileCompressor(mActivity);
             model.getCustomListener(new ICustomListener() {
                 @Override
                 public void onSuccess(Double rate) {
@@ -69,6 +76,9 @@ public class VideoCompressAdapter extends ArrayAdapter {
 
                 }
             });
+            fc.Compress(model);
+
+
         }
 
         return view;
