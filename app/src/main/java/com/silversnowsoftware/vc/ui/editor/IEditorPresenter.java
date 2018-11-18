@@ -14,4 +14,5 @@ public interface IEditorPresenter<V extends IEditorView> extends IBasePresenter<
     void videoCompress();
     void setViewHolder();
     void setVideoToVideoView();
+    void fillResolutionsSpinner();
 }

@@ -1,12 +1,15 @@
 package com.silversnowsoftware.vc.utils.constants;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by burak on 10/15/2018.
  */
 
 public class Arrays {
     public static final String[][] MIME_MapTable = {
-            //{后缀名，MIME类型}
             {".3gp", "video/3gpp"},
             {".apk", "application/vnd.android.package-archive"},
             {".asf", "video/x-ms-asf"},
@@ -74,4 +77,17 @@ public class Arrays {
             {".zip", "application/x-zip-compressed"},
             {"", "*/*"}
     };
+
+
+
+public static final Map<String,String> VideoResolutions;
+static {
+        Map<String, String> aMap = new HashMap<String,String>();
+        aMap.put("720p", "1280x720");
+        aMap.put("480p", "858x480");
+        aMap.put("360p", "480x360");
+        aMap.put("240p", "352x240");
+        aMap.put("144p", "256x144");
+        VideoResolutions = Collections.unmodifiableMap(aMap);
+        }
 }

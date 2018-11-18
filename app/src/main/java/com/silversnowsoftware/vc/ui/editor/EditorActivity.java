@@ -2,6 +2,7 @@ package com.silversnowsoftware.vc.ui.editor;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ArrayAdapter;
 
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.ui.base.BaseActivity;
@@ -22,6 +23,9 @@ public class EditorActivity extends BaseActivity implements IEditorView {
         mPresenter.onAttach(this);
         mPresenter.setViewHolder();
         mPresenter.setVideoToVideoView();
+        mPresenter.fillResolutionsSpinner();
+
+
     }
 
     @Override

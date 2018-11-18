@@ -3,6 +3,7 @@ package com.silversnowsoftware.vc.ui.editor;
 import android.app.Activity;
 import android.content.Intent;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.VideoView;
 
 import com.silversnowsoftware.vc.R;
@@ -34,6 +35,8 @@ public class EditorViewHolder<V extends IEditorView> implements IBaseViewHolder 
     public Button btnCompress;
     @BindView(R.id.vvVideoPlayer)
     public VideoView vvVideoPlayer;
+    @BindView(R.id.spResolution)
+    public Spinner spResolution;
 
 
     public EditorViewHolder(V activity) {
@@ -47,6 +50,8 @@ public class EditorViewHolder<V extends IEditorView> implements IBaseViewHolder 
     {
         List<FileModel> fileModelList =(List<FileModel>)getData(Keys.FILE_LIST_KEY, Types.getFileModelListType(),mView);
         FileModel fileModel = fileModelList.get(fileModelList.size()-1);
+        fileModel.setResolutionX("480");
+        fileModel.setResolutionY("720");
         fileModel.setFileStatus(FileStatusEnum.PREPEARING);
         fileModelList.set(fileModelList.indexOf(fileModel),fileModel);
         putData(Keys.FILE_LIST_KEY,fileModelList,mView);
@@ -55,5 +60,7 @@ public class EditorViewHolder<V extends IEditorView> implements IBaseViewHolder 
         mView.startActivity(listActivity);
 
     }
+
+
 
 }
