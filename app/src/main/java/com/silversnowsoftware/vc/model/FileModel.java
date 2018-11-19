@@ -46,8 +46,7 @@ public class FileModel implements Serializable {
     private FileStatusEnum FileStatus;
     @DatabaseField(columnName = "MediaType")
     private MediaTypeEnum MediaType;
-    private String ResolutionX;
-    private String ResolutionY;
+    private String Resolution;
     private Double VideoLength;
     private Double Progress;
 
@@ -120,7 +119,7 @@ public class FileModel implements Serializable {
 
     public String getCompressCmd() {
         return "-y -i " + this.Path + " -strict -2 -vcodec libx264 -preset ultrafast " +
-                "-crf 24 -acodec aac -ar 44100 -ac 2 -b:a 96k -s " + getResolutionX() + "x" + getResolutionY() + " -aspect 16:9 " + Globals.currentOutputVideoPath + this.Name;
+                "-crf 24 -acodec aac -ar 44100 -ac 2 -b:a 96k -s " + getResolution() + " -aspect 16:9 " + Globals.currentOutputVideoPath + this.Name;
     }
 
     public Double getVideoLength() {
@@ -139,21 +138,14 @@ public class FileModel implements Serializable {
         this.id = id;
     }
 
-    public String getResolutionX() {
-        return ResolutionX;
+    public String getResolution() {
+        return Resolution;
     }
 
-    public void setResolutionX(String resolutionX) {
-        ResolutionX = resolutionX;
+    public void setResolution(String resolution) {
+        Resolution = resolution;
     }
 
-    public String getResolutionY() {
-        return ResolutionY;
-    }
-
-    public void setResolutionY(String resolutionY) {
-        ResolutionY = resolutionY;
-    }
 
     public Double getProgress() {
         return Progress;

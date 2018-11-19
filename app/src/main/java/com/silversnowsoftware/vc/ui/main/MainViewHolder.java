@@ -22,14 +22,10 @@ public class MainViewHolder<V extends IMainView> implements IBaseViewHolder {
 
     @BindView(R.id.btnRecord)
     Button btnRecord;
-    @BindView(R.id.btnRun)
-    Button btnRun;
     @BindView(R.id.btnChoose)
     Button btnChoose;
     @BindView(R.id.btnListFile)
     Button btnListFile;
-    @BindView(R.id.progressBar)
-    ProgressBar progressBar;
 
     public MainViewHolder(V activity) {
         mView = (Activity) activity;

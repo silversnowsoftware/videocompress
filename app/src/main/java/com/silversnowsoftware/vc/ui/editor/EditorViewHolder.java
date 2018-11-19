@@ -23,14 +23,14 @@ import butterknife.OnClick;
 
 import static com.silversnowsoftware.vc.utils.SharedPref.getData;
 import static com.silversnowsoftware.vc.utils.SharedPref.putData;
+import static com.silversnowsoftware.vc.utils.constants.Arrays.VideoResolutions;
 
 /**
  * Created by burak on 11/17/2018.
  */
 
-public class EditorViewHolder<V extends IEditorView> implements IBaseViewHolder {
+public  class EditorViewHolder<V extends IEditorView> implements IBaseViewHolder {
     Activity mView;
-
     @BindView(R.id.btnCompress)
     public Button btnCompress;
     @BindView(R.id.vvVideoPlayer)
@@ -50,8 +50,8 @@ public class EditorViewHolder<V extends IEditorView> implements IBaseViewHolder 
     {
         List<FileModel> fileModelList =(List<FileModel>)getData(Keys.FILE_LIST_KEY, Types.getFileModelListType(),mView);
         FileModel fileModel = fileModelList.get(fileModelList.size()-1);
-        fileModel.setResolutionX("480");
-        fileModel.setResolutionY("720");
+        String resolution = VideoResolutions.get(spResolution.getSelectedItem());
+        fileModel.setResolution(resolution);
         fileModel.setFileStatus(FileStatusEnum.PREPEARING);
         fileModelList.set(fileModelList.indexOf(fileModel),fileModel);
         putData(Keys.FILE_LIST_KEY,fileModelList,mView);

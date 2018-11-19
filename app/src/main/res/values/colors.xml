@@ -7,6 +7,12 @@
 
     <color name="primaryDarkColor">#007c91</color>
 
+    <color name="primaryDangerColor">#ef5350</color>
+
+    <color name="primaryDangerLightColor">#ff867c</color>
+
+    <color name="primaryDangerDarkColor">#b61827</color>
+
     <color name="primaryTextColor">#FFFFFF</color>
     <!--appTheme-->
 
