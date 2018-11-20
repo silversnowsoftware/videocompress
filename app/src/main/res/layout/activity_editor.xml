@@ -10,7 +10,13 @@
     <VideoView
         android:id="@+id/vvVideoPlayer"
         android:layout_width="match_parent"
-        android:layout_height="300dp" />
+        android:layout_height="300dp"
+        android:visibility="invisible"/>
+
+    <life.knowledge4.videotrimmer.K4LVideoTrimmer
+        android:id="@+id/timeLine"
+        android:layout_height="300dp"
+        android:layout_width="match_parent" />
 
     <Spinner
         android:id="@+id/spResolution"

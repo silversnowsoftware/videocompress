@@ -6,5 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark"
     tools:context="com.silversnowsoftware.vc.ui.splash.SplashActivity">
-    
+
 </android.support.constraint.ConstraintLayout>
+
