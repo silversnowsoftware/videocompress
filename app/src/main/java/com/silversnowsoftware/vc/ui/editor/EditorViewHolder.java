@@ -20,7 +20,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import life.knowledge4.videotrimmer.K4LVideoTrimmer;
+
 
 import static com.silversnowsoftware.vc.utils.SharedPref.getData;
 import static com.silversnowsoftware.vc.utils.SharedPref.putData;
@@ -38,8 +38,6 @@ public  class EditorViewHolder<V extends IEditorView> implements IBaseViewHolder
     public VideoView vvVideoPlayer;
     @BindView(R.id.spResolution)
     public Spinner spResolution;
-    @BindView(R.id.timeLine)
-    public K4LVideoTrimmer timeLine;
 
 
     public EditorViewHolder(V activity) {

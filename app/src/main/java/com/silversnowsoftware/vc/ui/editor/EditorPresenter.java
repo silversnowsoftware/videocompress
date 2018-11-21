@@ -2,8 +2,6 @@ package com.silversnowsoftware.vc.ui.editor;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
-import android.util.Pair;
 import android.widget.ArrayAdapter;
 import android.widget.MediaController;
 
@@ -13,15 +11,11 @@ import com.silversnowsoftware.vc.ui.base.BasePresenter;
 import com.silversnowsoftware.vc.utils.Types;
 import com.silversnowsoftware.vc.utils.constants.Keys;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
-
-import butterknife.internal.Utils;
-import life.knowledge4.videotrimmer.interfaces.OnTrimVideoListener;
 
 import static com.silversnowsoftware.vc.utils.SharedPref.getData;
 import static com.silversnowsoftware.vc.utils.constants.Arrays.VideoResolutions;
@@ -66,24 +60,6 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
         mViewHolder.vvVideoPlayer.setVideoPath(fileModelList.get(0).getPath());
         mViewHolder.vvVideoPlayer.requestFocus();
         mViewHolder.vvVideoPlayer.start();
-
-
-
-        if (mViewHolder.timeLine != null) {
-            mViewHolder.timeLine.setVideoURI(Uri.parse(fileModelList.get(0).getPath()));
-        }
-        mViewHolder.timeLine.setDestinationPath("/storage/emulated/0/DCIM/CameraCustom/");
-        mViewHolder.timeLine.setOnTrimVideoListener(new OnTrimVideoListener() {
-            @Override
-            public void getResult(Uri uri) {
-
-            }
-
-            @Override
-            public void cancelAction() {
-
-            }
-        });
     }
 
     public void fillResolutionsSpinner() {
