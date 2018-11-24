@@ -6,6 +6,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.VideoView;
 
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.ui.base.IBaseViewHolder;
@@ -35,7 +36,7 @@ public  class EditorViewHolder<V extends IEditorView> implements IBaseViewHolder
     @BindView(R.id.btnCompress)
     public Button btnCompress;
     @BindView(R.id.vvVideoPlayer)
-    public VideoView vvVideoPlayer;
+    public SimpleExoPlayerView vvVideoPlayer;
     @BindView(R.id.spResolution)
     public Spinner spResolution;
 

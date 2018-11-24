@@ -1,9 +1,24 @@
 package com.silversnowsoftware.vc.ui.main;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 
+import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.extractor.ExtractorsFactory;
+import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.MediaSource;
+import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
+import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.upstream.BandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.ui.base.BaseActivity;
 import com.silversnowsoftware.vc.ui.compression.permission.PermissionsActivity;
@@ -24,8 +39,9 @@ import static com.silversnowsoftware.vc.utils.constants.Globals.handler;
 public class MainActivity extends BaseActivity implements IMainView {
 
 
-
-
+    SimpleExoPlayerView exoPlayerView;
+    SimpleExoPlayer exoPlayer;
+    String videoURL = "http://blueappsoftware.in/layout_design_android_blog.mp4";
     static ArrayList<String> MediasPaths = new ArrayList<>();
 
     @Inject
@@ -46,13 +62,36 @@ public class MainActivity extends BaseActivity implements IMainView {
         }
         ButterKnife.bind(this);
 
+
+        exoPlayerView = (SimpleExoPlayerView) findViewById(R.id.vvVideoPlayer);
+        try {
+
+
+            BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+            TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(bandwidthMeter));
+            exoPlayer = ExoPlayerFactory.newSimpleInstance(this, trackSelector);
+
+            Uri videoURI = Uri.parse(videoURL);
+
+            DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory("exoplayer_video");
+            ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+            MediaSource mediaSource = new ExtractorMediaSource(videoURI, dataSourceFactory, extractorsFactory, null, null);
+
+            exoPlayerView.setPlayer(exoPlayer);
+            exoPlayer.prepare(mediaSource);
+            exoPlayer.setPlayWhenReady(true);
+
+        } catch (Exception e) {
+            Log.e("MainAcvtivity", " exoplayer error " + e.toString());
+        }
+
+
     }
 
     @Override
     protected int getLayoutResourceId() {
         return R.layout.activity_main;
     }
-
 
 
     @Override
@@ -63,9 +102,6 @@ public class MainActivity extends BaseActivity implements IMainView {
             startActivity(new Intent(getApplicationContext(), EditorActivity.class));
         }
     }
-
-
-
 
 
 }
