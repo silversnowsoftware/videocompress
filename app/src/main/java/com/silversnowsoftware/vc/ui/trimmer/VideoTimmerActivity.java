@@ -85,7 +85,6 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
     private ProgressDialog mProgressDialog;
     String srcFile;
     String dstFile;
-    VideoView mvideoView;
     OnVideoTrimListener mOnVideoTrimListener = new OnVideoTrimListener() {
         @Override
         public void onTrimStarted() {
@@ -137,7 +136,6 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
         seekBarVideo = (SeekBar) findViewById(R.id.seekBarVideo);
         txtVideoLength = (TextView) findViewById(R.id.txtVideoLength);
         exoPlayerView = (SimpleExoPlayerView) findViewById(R.id.exoVideoView);
-        mvideoView = (VideoView)findViewById(R.id.videoView);
 
         srcFile = fileModelList.get(0).getPath();
 
@@ -150,7 +148,6 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
             public void run() {
 
                 setBitmap(Uri.parse(srcFile));
-                mvideoView.setVideoURI(Uri.parse(srcFile));
                 setExoPlayer();
             }
         });
@@ -158,20 +155,7 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
         txtVideoCancel.setOnClickListener(this);
         txtVideoUpload.setOnClickListener(this);
 
-//THREAD
-        mvideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                onVideoPrepared();
-            }
-        });
 
-        mvideoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-            @Override
-            public void onCompletion(MediaPlayer mp) {
-                onVideoCompleted();
-            }
-        });
 
         // handle your range seekbar changes
         mCustomRangeSeekBarNew.addOnRangeSeekBarListener(new OnRangeSeekBarChangeListener() {
@@ -229,6 +213,8 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
                 exoPlayer.seekTo((mStartPosition * 1000) - seekBarVideo.getProgress());
             }
         });
+
+
     }
 
     public void setExoPlayer() {
