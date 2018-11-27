@@ -57,6 +57,7 @@ import java.util.List;
 import java.util.Locale;
 
 import static com.silversnowsoftware.vc.utils.SharedPref.getData;
+import static com.silversnowsoftware.vc.utils.helpers.FileHelper.getVideoDuration;
 
 
 public class VideoTimmerActivity extends AppCompatActivity implements View.OnClickListener {
@@ -299,7 +300,8 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
 
     private void onVideoPrepared() {
 
-        mDuration = (int) (14000 / 1000);
+        int duration = getVideoDuration(this,srcFile);
+        mDuration = (int) (duration/ 1000);
         setSeekBarPosition();
     }
 

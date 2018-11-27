@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -66,7 +67,7 @@ public class FileHelper {
         }
     }
 
-    public static Intent openFile( File file) throws Exception {
+    public static Intent openFile(File file) throws Exception {
         Intent intent = null;
         try {
             intent = new Intent();
@@ -290,7 +291,7 @@ public class FileHelper {
            /* if (Build.VERSION.SDK_INT >= 14)
                 mediaMetadataRetriever.setDataSource(videoPath, new HashMap<String, String>());*/
          /*   else*/
-                mediaMetadataRetriever.setDataSource(videoPath);
+            mediaMetadataRetriever.setDataSource(videoPath);
 
             bitmap = mediaMetadataRetriever.getFrameAtTime(25000000, MediaMetadataRetriever.OPTION_CLOSEST);
         } catch (Exception e) {
@@ -307,24 +308,29 @@ public class FileHelper {
         return bitmap;
     }
 
-    public static Bitmap getBitmapFromBase64(String encodedImage){
+    public static Bitmap getBitmapFromBase64(String encodedImage) {
         byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
         return decodedByte;
     }
 
-    public static String getBase64FromBitmap(Bitmap bitmap)
-    {
+    public static String getBase64FromBitmap(Bitmap bitmap) {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-        byte[] byteArray = byteArrayOutputStream .toByteArray();
-        String encoded = Base64.encodeToString(byteArray,Base64.DEFAULT);
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
         return encoded;
     }
 
-    public static String getFileNameFromPath(String path)
-    {
-        String filename=path.substring(path.lastIndexOf("/")+1);
+    public static String getFileNameFromPath(String path) {
+        String filename = path.substring(path.lastIndexOf("/") + 1);
         return filename;
+    }
+
+    public static int getVideoDuration(Activity activity, String path) {
+
+        MediaPlayer mp = MediaPlayer.create(activity, Uri.parse(path));
+        int duration = mp.getDuration();
+        return duration;
     }
 }
