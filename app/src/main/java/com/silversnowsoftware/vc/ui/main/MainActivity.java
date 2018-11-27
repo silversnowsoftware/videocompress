@@ -63,7 +63,7 @@ public class MainActivity extends BaseActivity implements IMainView {
         ButterKnife.bind(this);
 
 
-        exoPlayerView = (SimpleExoPlayerView) findViewById(R.id.vvVideoPlayer);
+
         try {
 
 

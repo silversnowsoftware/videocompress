@@ -330,7 +330,7 @@ public class FileHelper {
     public static int getVideoDuration(Activity activity, String path) {
 
         MediaPlayer mp = MediaPlayer.create(activity, Uri.parse(path));
-        int duration = mp.getDuration();
+        int duration = mp.getDuration() / 1000;
         return duration;
     }
 }

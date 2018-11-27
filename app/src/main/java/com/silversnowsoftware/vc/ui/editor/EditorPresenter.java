@@ -3,9 +3,12 @@ package com.silversnowsoftware.vc.ui.editor;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.MediaController;
+import android.widget.SeekBar;
 
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -24,6 +27,9 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.model.FileModel;
+import com.silversnowsoftware.vc.model.customvideoviews.BarThumb;
+import com.silversnowsoftware.vc.model.customvideoviews.CustomRangeSeekBar;
+import com.silversnowsoftware.vc.model.listener.OnRangeSeekBarChangeListener;
 import com.silversnowsoftware.vc.operations.compressor.FileCompressor;
 import com.silversnowsoftware.vc.ui.base.BasePresenter;
 import com.silversnowsoftware.vc.utils.Types;
@@ -31,12 +37,14 @@ import com.silversnowsoftware.vc.utils.constants.Keys;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.inject.Inject;
 
 import static com.silversnowsoftware.vc.utils.SharedPref.getData;
 import static com.silversnowsoftware.vc.utils.constants.Arrays.VideoResolutions;
+import static com.silversnowsoftware.vc.utils.helpers.FileHelper.getVideoDuration;
 
 /**
  * Created by burak on 11/1/2018.
@@ -46,6 +54,14 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
         implements IEditorPresenter<V> {
 
     EditorViewHolder mViewHolder;
+    String srcFile;
+    private int mDuration = 0;
+    private int mTimeVideo = 0;
+    private int mStartPosition = 0;
+    private int mEndPosition = 0;
+    // set your max video trim seconds
+    private int mMaxDuration = 60;
+    private Handler mHandler = new Handler();
 
     @Inject
     public EditorPresenter() {
@@ -69,61 +85,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
         // fileCompressor.Compress();
     }
 
-    public void setVideoToVideoView() {
-        List<FileModel> fileModelList = (List<FileModel>) getData(Keys.FILE_LIST_KEY, Types.getFileModelListType(), getContext());
-    /*    MediaController mediaController= new MediaController((Activity) getView());
-        mediaController.setAnchorView(mViewHolder.vvVideoPlayer);*/
-/*
-        mViewHolder.vvVideoPlayer.setMediaController(mediaController);
-        mViewHolder.vvVideoPlayer.setVideoPath(fileModelList.get(0).getPath());
-        mViewHolder.vvVideoPlayer.requestFocus();
-        mViewHolder.vvVideoPlayer.start();*/
-
-
-        SimpleExoPlayerView exoPlayerView;
-        SimpleExoPlayer exoPlayer;
-        String videoURL = "http://blueappsoftware.in/layout_design_android_blog.mp4";
-
-
-
-
-        exoPlayerView =  mViewHolder.vvVideoPlayer;
-        try {
-
-
-            BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-            TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(bandwidthMeter));
-            exoPlayer = ExoPlayerFactory.newSimpleInstance((Activity)getView(), trackSelector);
-
-            Uri videoURI = Uri.parse(videoURL);
-
-            DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(getContext(),"exoplayer_video");
-            ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-            MediaSource mediaSource =
-
-                    new ExtractorMediaSource(
-                            Uri.parse(fileModelList.get(0).getPath()),
-                            dataSourceFactory,
-                            new DefaultExtractorsFactory(),
-                            null,
-                            null);
-
-
-
-
-            exoPlayerView.setPlayer(exoPlayer);
-            exoPlayer.prepare(mediaSource);
-            exoPlayer.seekTo(5000);
-            exoPlayer.setPlayWhenReady(true);
-
-
-        } catch (Exception e) {
-            Log.e("MainAcvtivity", " exoplayer error " + e.toString());
-        }
-
-
-    }
-
+    @Override
     public void fillResolutionsSpinner() {
         int index = 0;
         String[] spinnerArray = new String[VideoResolutions.size()];
@@ -136,4 +98,295 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mViewHolder.spResolution.setAdapter(adapter);
     }
+
+    @Override
+    public void setVideoToVideoView() {
+        List<FileModel> fileModelList = (List<FileModel>) getData(Keys.FILE_LIST_KEY, Types.getFileModelListType(), getContext());
+        srcFile = fileModelList.get(0).getPath();
+        mMaxDuration = getVideoDuration((Activity)getView(),srcFile);
+        mViewHolder.tileView.post(new Runnable() {
+            @Override
+            public void run() {
+
+                setBitmap(Uri.parse(srcFile));
+                setExoPlayer();
+            }
+        });
+
+        mViewHolder.mCustomRangeSeekBarNew.addOnRangeSeekBarListener(new OnRangeSeekBarChangeListener() {
+            @Override
+            public void onCreate(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
+                // Do nothing
+            }
+
+            @Override
+            public void onSeek(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
+                onSeekThumbs(index, value);
+            }
+
+            @Override
+            public void onSeekStart(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
+                if (mViewHolder.exoPlayer != null) {
+                    mHandler.removeCallbacks(mUpdateTimeTask);
+                    mViewHolder.seekBarVideo.setProgress(0);
+                    mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
+                    mViewHolder.exoPlayer.setPlayWhenReady(false);
+                    mViewHolder.imgPlay.setBackgroundResource(R.drawable.ic_white_play);
+                }
+            }
+
+            @Override
+            public void onSeekStop(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
+
+            }
+        });
+
+        mViewHolder.imgPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mViewHolder.exoPlayer.getPlayWhenReady()) {
+                    if (mViewHolder.exoPlayer != null) {
+                        mViewHolder.exoPlayer.setPlayWhenReady(false);
+                        mViewHolder.imgPlay.setBackgroundResource(R.drawable.ic_white_play);
+                    }
+                } else {
+                    if (mViewHolder.exoPlayer != null) {
+                        mViewHolder.exoPlayer.setPlayWhenReady(true);
+                        mViewHolder.imgPlay.setBackgroundResource(R.drawable.ic_white_pause);
+                        int progress = mViewHolder.seekBarVideo.getProgress();
+                        if (progress >= 0) {
+                            mViewHolder.txtVideoLength.setText("00:0" + (progress / 1000));
+                            mHandler.postDelayed(mUpdateTimeTask, 100);
+                        }
+                    }
+                }
+            }
+        });
+
+
+        mViewHolder.mCustomRangeSeekBarNew.addOnRangeSeekBarListener(new OnRangeSeekBarChangeListener() {
+            @Override
+            public void onCreate(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
+                // Do nothing
+            }
+
+            @Override
+            public void onSeek(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
+                onSeekThumbs(index, value);
+            }
+
+            @Override
+            public void onSeekStart(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
+                if (mViewHolder.exoPlayer != null) {
+                    mHandler.removeCallbacks(mUpdateTimeTask);
+                    mViewHolder.seekBarVideo.setProgress(0);
+                    mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
+                    mViewHolder.exoPlayer.setPlayWhenReady(false);
+                    mViewHolder.imgPlay.setBackgroundResource(R.drawable.ic_white_play);
+                }
+            }
+
+            @Override
+            public void onSeekStop(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
+
+            }
+        });
+
+
+
+
+        mViewHolder.seekBarVideo.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                if (mViewHolder.exoPlayer != null) {
+                    mHandler.removeCallbacks(mUpdateTimeTask);
+                    mViewHolder.seekBarVideo.setMax(mTimeVideo * 1000);
+                    mViewHolder.seekBarVideo.setProgress(0);
+                    mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
+                    mViewHolder.exoPlayer.setPlayWhenReady(false);
+                    mViewHolder.imgPlay.setBackgroundResource(R.drawable.ic_white_play);
+                }
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                mHandler.removeCallbacks(mUpdateTimeTask);
+                mViewHolder.exoPlayer.seekTo((mStartPosition * 1000) - mViewHolder.seekBarVideo.getProgress());
+            }
+        });
+
+    }
+
+    @Override
+    public void onVideoPrepared() {
+
+        int duration = getVideoDuration((Activity) getView(), srcFile);
+        mDuration =  (duration);
+        setSeekBarPosition();
+    }
+
+    @Override
+    public void setSeekBarPosition() {
+
+        if (mDuration >= mMaxDuration) {
+            mStartPosition = 0;
+            mEndPosition = mMaxDuration;
+
+            mViewHolder.mCustomRangeSeekBarNew.setThumbValue(0, (mStartPosition * 100) / mDuration);
+            mViewHolder.mCustomRangeSeekBarNew.setThumbValue(1, (mEndPosition * 100) / mDuration);
+
+        } else {
+            mStartPosition = 0;
+            mEndPosition = mDuration;
+        }
+
+
+        mTimeVideo = mDuration;
+        mViewHolder.mCustomRangeSeekBarNew.initMaxWidth();
+        mViewHolder.seekBarVideo.setMax(mMaxDuration * 1000);
+        mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
+
+        String mStart = mStartPosition + "";
+        if (mStartPosition < 10)
+            mStart = "0" + mStartPosition;
+
+        int startMin = Integer.parseInt(mStart) / 60;
+        int startSec = Integer.parseInt(mStart) % 60;
+
+        String mEnd = mEndPosition + "";
+        if (mEndPosition < 10)
+            mEnd = "0" + mEndPosition;
+
+        int endMin = Integer.parseInt(mEnd) / 60;
+        int endSec = Integer.parseInt(mEnd) % 60;
+
+        mViewHolder.txtVideoTrimSeconds.setText(String.format(Locale.US, "%02d:%02d - %02d:%02d", startMin, startSec, endMin, endSec));
+    }
+
+    @Override
+    public void setExoPlayer() {
+
+        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+        TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(bandwidthMeter));
+        mViewHolder.exoPlayer = ExoPlayerFactory.newSimpleInstance((Activity) getView(), trackSelector);
+
+        DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(getContext(), "exoplayer_video");
+        ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+        MediaSource mediaSource = new ExtractorMediaSource(
+                Uri.parse(srcFile),
+                dataSourceFactory,
+                new DefaultExtractorsFactory(),
+                null,
+                null);
+
+        mViewHolder.exoPlayerView.setPlayer(mViewHolder.exoPlayer);
+        mViewHolder.exoPlayer.prepare(mediaSource);
+        onVideoPrepared();
+        //  exoPlayer.setPlayWhenReady(true);
+
+
+    }
+
+    @Override
+    public void updateProgressBar() {
+        mHandler.postDelayed(mUpdateTimeTask, 100);
+    }
+
+    public Runnable mUpdateTimeTask = new Runnable() {
+        public void run() {
+            if (mViewHolder.seekBarVideo.getProgress() >= mViewHolder.seekBarVideo.getMax()) {
+                mViewHolder.seekBarVideo.setProgress((int) (mViewHolder.exoPlayer.getCurrentPosition() - mStartPosition * 1000));
+                mViewHolder.txtVideoLength.setText(milliSecondsToTimer(mViewHolder.seekBarVideo.getProgress()) + "");
+                mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
+                mViewHolder.exoPlayer.setPlayWhenReady(false);
+                mViewHolder.seekBarVideo.setProgress(0);
+                mViewHolder.txtVideoLength.setText("00:00");
+                mViewHolder.imgPlay.setBackgroundResource(R.drawable.ic_white_play);
+            } else {
+                mViewHolder.seekBarVideo.setProgress((int) (mViewHolder.exoPlayer.getCurrentPosition() - mStartPosition * 1000));
+                mViewHolder.txtVideoLength.setText(milliSecondsToTimer(mViewHolder.seekBarVideo.getProgress()) + "");
+                mHandler.postDelayed(this, 100);
+            }
+        }
+    };
+
+    @Override
+    public void setBitmap(Uri mVideoUri) {
+        mViewHolder.tileView.setVideo(mVideoUri);
+    }
+
+    @Override
+    public String milliSecondsToTimer(long milliseconds) {
+        String finalTimerString = "";
+        String secondsString;
+        String minutesString;
+
+
+        int hours = (int) (milliseconds / (1000 * 60 * 60));
+        int minutes = (int) (milliseconds % (1000 * 60 * 60)) / (1000 * 60);
+        int seconds = (int) ((milliseconds % (1000 * 60 * 60)) % (1000 * 60) / 1000);
+        // Add hours if there
+        if (hours > 0) {
+            finalTimerString = hours + ":";
+        }
+
+        // Prepending 0 to seconds if it is one digit
+        if (seconds < 10) {
+            secondsString = "0" + seconds;
+        } else {
+            secondsString = "" + seconds;
+        }
+
+        if (minutes < 10) {
+            minutesString = "0" + minutes;
+        } else {
+            minutesString = "" + minutes;
+        }
+
+        finalTimerString = finalTimerString + minutesString + ":" + secondsString;
+
+        // return timer string
+        return finalTimerString;
+    }
+
+    @Override
+    public void onSeekThumbs(int index, float value) {
+        switch (index) {
+            case BarThumb.LEFT: {
+                mStartPosition = (int) ((mDuration * value) / 100L);
+                mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
+                break;
+            }
+            case BarThumb.RIGHT: {
+                mEndPosition = (int) ((mDuration * value) / 100L);
+                break;
+            }
+        }
+        mTimeVideo = (mEndPosition - mStartPosition);
+        mViewHolder.seekBarVideo.setMax(mTimeVideo * 1000);
+        mViewHolder.seekBarVideo.setProgress(0);
+        mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
+
+        String mStart = mStartPosition + "";
+        if (mStartPosition < 10)
+            mStart = "0" + mStartPosition;
+
+        int startMin = Integer.parseInt(mStart) / 60;
+        int startSec = Integer.parseInt(mStart) % 60;
+
+        String mEnd = mEndPosition + "";
+        if (mEndPosition < 10)
+            mEnd = "0" + mEndPosition;
+        int endMin = Integer.parseInt(mEnd) / 60;
+        int endSec = Integer.parseInt(mEnd) % 60;
+
+        mViewHolder.txtVideoTrimSeconds.setText(String.format(Locale.US, "%02d:%02d - %02d:%02d", startMin, startSec, endMin, endSec));
+
+    }
+
 }

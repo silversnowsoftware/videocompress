@@ -1,6 +1,7 @@
 package com.silversnowsoftware.vc.ui.editor;
 
 import android.content.Intent;
+import android.net.Uri;
 
 import com.silversnowsoftware.vc.ui.base.IBasePresenter;
 
@@ -15,4 +16,11 @@ public interface IEditorPresenter<V extends IEditorView> extends IBasePresenter<
     void setViewHolder();
     void setVideoToVideoView();
     void fillResolutionsSpinner();
+    void onVideoPrepared();
+    void setSeekBarPosition();
+    void setExoPlayer();
+    void updateProgressBar();
+    void setBitmap(Uri mVideoUri);
+    String milliSecondsToTimer(long milliseconds);
+    void onSeekThumbs(int index, float value);
 }
