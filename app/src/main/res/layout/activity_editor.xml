@@ -1,121 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.silversnowsoftware.vc.ui.editor.EditorActivity">
 
-<!--
-    <VideoView
-    android:id="@+id/vvVideoPlayer"
-    android:layout_width="match_parent"
-    android:layout_height="300dp"
-    android:visibility="invisible"/>
--->
 
+    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+        android:id="@+id/exoVideoView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        app:resize_mode="fit"
+        app:use_controller="false">
 
+    </com.google.android.exoplayer2.ui.SimpleExoPlayerView>
 
     <LinearLayout
-        android:id="@+id/videoViewLayout"
+        android:id="@+id/seekBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="370dp"
-        android:background="@color/white"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/exoVideoView"
+        android:background="@color/app_blue"
+        android:orientation="horizontal">
 
         <RelativeLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/seekbar_color"
-            android:padding="5dp"
-            android:orientation="horizontal">
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp">
 
+            <ImageView
+                android:id="@+id/imgPlay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_white_play" />
         </RelativeLayout>
 
 
-
-        <RelativeLayout
-            android:id="@+id/llVideoView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+        <SeekBar
+            android:id="@+id/seekBarVideo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="5dp"
-            android:gravity="center">
+            android:layout_weight="1"
+            android:progress="0"
+            android:progressDrawable="@drawable/seekbar_drawable_video"
+            android:thumb="@drawable/circle_thumb" />
+
+        <TextView
+            android:id="@+id/txtVideoLength"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginRight="10dp"
+            android:text="00:00"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
 
 
-            <com.google.android.exoplayer2.ui.SimpleExoPlayerView
-                android:layout_marginLeft="10dp"
-                android:layout_marginBottom="15dp"
-                android:id="@+id/exoVideoView"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                app:use_controller="false"
-                app:resize_mode="fit">
+    </LinearLayout>
 
-            </com.google.android.exoplayer2.ui.SimpleExoPlayerView>
+    <LinearLayout
 
-            <LinearLayout
-                android:id="@+id/seekBarLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/exoVideoView"
-                android:background="@color/app_blue"
-                android:orientation="horizontal">
-
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingBottom="10dp"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:paddingTop="10dp">
-
-                    <ImageView
-                        android:id="@+id/imgPlay"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/ic_white_play" />
-                </RelativeLayout>
-
-
-                <SeekBar
-                    android:id="@+id/seekBarVideo"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:progress="0"
-                    android:progressDrawable="@drawable/seekbar_drawable_video"
-                    android:thumb="@drawable/circle_thumb" />
-
-                <TextView
-                    android:id="@+id/txtVideoLength"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginRight="10dp"
-                    android:text="00:00"
-                    android:textColor="@color/white"
-                    android:textSize="14sp" />
-
-
-            </LinearLayout>
-
-            <com.silversnowsoftware.vc.model.customvideoviews.TileView
-                android:id="@+id/timeLineView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/seekBarLayout"
-                android:orientation="horizontal" />
-
-            <com.silversnowsoftware.vc.model.customvideoviews.CustomRangeSeekBar
-                android:id="@+id/timeLineBar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_below="@+id/seekBarLayout"/>
-        </RelativeLayout>
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/seekBarLayout"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/txtVideoTrimSeconds"
@@ -127,35 +83,39 @@
             android:textColor="@color/text_color"
             android:textSize="12sp" />
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.silversnowsoftware.vc.model.customvideoviews.TileView
+                android:id="@+id/timeLineView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+
+            <com.silversnowsoftware.vc.model.customvideoviews.CustomRangeSeekBar
+                android:id="@+id/timeLineBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true" />
+        </RelativeLayout>
 
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp"
-            android:text="@string/select_video_text"
-            android:textColor="@color/text_color"
-            android:textSize="14sp" />
-
+        <Spinner
+            android:id="@+id/spResolution"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/timeLineView"
+            android:theme="@style/AppTheme.MainSpinnerTheme"
+            android:visibility="invisible"/>
     </LinearLayout>
 
-
-
-    <Spinner
-        android:id="@+id/spResolution"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/videoViewLayout"
-        android:theme="@style/AppTheme.MainSpinnerTheme" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_below="@+id/videoViewLayout"
         android:layout_marginBottom="15dp"
         android:gravity="center|bottom"
         android:orientation="horizontal">

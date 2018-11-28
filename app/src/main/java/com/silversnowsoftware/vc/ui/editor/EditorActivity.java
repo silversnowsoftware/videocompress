@@ -1,5 +1,6 @@
 package com.silversnowsoftware.vc.ui.editor;
 
+import android.content.pm.ActivityInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;

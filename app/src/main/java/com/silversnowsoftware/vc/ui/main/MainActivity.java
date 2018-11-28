@@ -100,7 +100,7 @@ public class MainActivity extends BaseActivity implements IMainView {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             mPresenter.collectFiles(data);
-            startActivity(new Intent(getApplicationContext(), TestActivity.class));
+            startActivity(new Intent(getApplicationContext(), EditorActivity.class));
         }
     }
 

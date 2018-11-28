@@ -32,7 +32,7 @@
         <activity
             android:name=".ui.main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="behind">
+            >
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -54,7 +54,8 @@
             tools:replace="android:value" />
 
         <activity android:name=".ui.splash.SplashActivity" />
-        <activity android:name=".ui.editor.EditorActivity" >
+        <activity
+            android:name=".ui.editor.EditorActivity">
 
         </activity>
         <activity android:name=".ui.trimmer.MainTrimmerActivity" >
