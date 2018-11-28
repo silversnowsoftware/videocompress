@@ -31,12 +31,14 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".ui.main.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="behind">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
 
         </activity>
         <activity android:name=".ui.compression.permission.PermissionsActivity" />
@@ -56,8 +58,7 @@
 
         </activity>
         <activity android:name=".ui.trimmer.MainTrimmerActivity" >
-
-        </activity>
+            </activity>
         <activity android:name=".ui.trimmer.VideoTimmerActivity"></activity>
     </application>
 

@@ -44,10 +44,6 @@ public class EditorViewHolder<V extends IEditorView> implements IBaseViewHolder 
     public Button btnCompress;
     @BindView(R.id.spResolution)
     public Spinner spResolution;
-    @BindView(R.id.txtVideoCancel)
-    public TextView txtVideoCancel;
-    @BindView(R.id.txtVideoUpload)
-    public TextView txtVideoUpload;
     @BindView(R.id.txtVideoTrimSeconds)
     public TextView txtVideoTrimSeconds;
     @BindView(R.id.timeLineView)

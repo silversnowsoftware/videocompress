@@ -102,7 +102,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
     @Override
     public void setVideoToVideoView() {
         List<FileModel> fileModelList = (List<FileModel>) getData(Keys.FILE_LIST_KEY, Types.getFileModelListType(), getContext());
-        srcFile = fileModelList.get(0).getPath();
+        srcFile = fileModelList.get(fileModelList.size()-1).getPath();
         mMaxDuration = getVideoDuration((Activity)getView(),srcFile);
         mViewHolder.tileView.post(new Runnable() {
             @Override

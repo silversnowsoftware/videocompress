@@ -24,6 +24,7 @@ import com.silversnowsoftware.vc.ui.base.BaseActivity;
 import com.silversnowsoftware.vc.ui.compression.permission.PermissionsActivity;
 import com.silversnowsoftware.vc.ui.compression.permission.PermissionsChecker;
 import com.silversnowsoftware.vc.ui.editor.EditorActivity;
+import com.silversnowsoftware.vc.ui.test.TestActivity;
 import com.silversnowsoftware.vc.utils.ManifestUtil;
 import com.silversnowsoftware.vc.utils.constants.Constants;
 
@@ -99,7 +100,7 @@ public class MainActivity extends BaseActivity implements IMainView {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             mPresenter.collectFiles(data);
-            startActivity(new Intent(getApplicationContext(), EditorActivity.class));
+            startActivity(new Intent(getApplicationContext(), TestActivity.class));
         }
     }
 
