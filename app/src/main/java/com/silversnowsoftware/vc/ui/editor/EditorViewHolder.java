@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -58,6 +59,8 @@ public class EditorViewHolder<V extends IEditorView> implements IBaseViewHolder 
     public TextView txtVideoLength;
     @BindView(R.id.exoVideoView)
     public SimpleExoPlayerView exoPlayerView;
+    @BindView(R.id.seekBarLayout)
+    public LinearLayout seekBarLayout;
 
     public SimpleExoPlayer exoPlayer;
 
