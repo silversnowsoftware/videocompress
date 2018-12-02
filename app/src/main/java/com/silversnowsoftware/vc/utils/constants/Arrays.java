@@ -79,15 +79,15 @@ public class Arrays {
     };
 
 
+    public static final Map<String, int[]> VideoResolutions;
 
-public static final Map<String,String> VideoResolutions;
-static {
-        Map<String, String> aMap = new HashMap<String,String>();
-        aMap.put("720p", "1280x720");
-        aMap.put("480p", "858x480");
-        aMap.put("360p", "480x360");
-        aMap.put("240p", "352x240");
-        aMap.put("144p", "256x144");
+    static {
+        Map<String, int[]> aMap = new HashMap<String, int[]>();
+        aMap.put("720p", new int[]{1280, 720});
+        aMap.put("480p", new int[]{858, 480});
+        aMap.put("360p", new int[]{480, 360});
+        aMap.put("240p", new int[]{352, 240});
+        aMap.put("144p", new int[]{256, 144});
         VideoResolutions = Collections.unmodifiableMap(aMap);
-        }
+    }
 }

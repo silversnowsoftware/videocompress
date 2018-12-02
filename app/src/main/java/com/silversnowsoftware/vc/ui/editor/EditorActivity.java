@@ -24,7 +24,6 @@ public class EditorActivity extends BaseActivity implements IEditorView {
         mPresenter.onAttach(this);
         mPresenter.setViewHolder();
         mPresenter.setVideoToVideoView();
-        mPresenter.fillResolutionsSpinner();
 
 
     }

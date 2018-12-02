@@ -46,7 +46,6 @@ import java.util.TimerTask;
 import javax.inject.Inject;
 
 import static com.silversnowsoftware.vc.utils.SharedPref.getData;
-import static com.silversnowsoftware.vc.utils.constants.Arrays.VideoResolutions;
 import static com.silversnowsoftware.vc.utils.helpers.FileHelper.getVideoDuration;
 
 /**
@@ -88,19 +87,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
         // fileCompressor.Compress();
     }
 
-    @Override
-    public void fillResolutionsSpinner() {
-        int index = 0;
-        String[] spinnerArray = new String[VideoResolutions.size()];
-        for (Map.Entry<String, String> entry : VideoResolutions.entrySet()) {
-            spinnerArray[index] = entry.getKey();
-            index++;
-        }
-        Arrays.sort(spinnerArray);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, spinnerArray);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        mViewHolder.spResolution.setAdapter(adapter);
-    }
+
 
     @Override
     public void setVideoToVideoView() {

@@ -101,14 +101,6 @@
         </RelativeLayout>
 
 
-        <Spinner
-            android:id="@+id/spResolution"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/timeLineView"
-            android:theme="@style/AppTheme.MainSpinnerTheme"
-            android:visibility="invisible" />
     </LinearLayout>
 
     <RadioGroup
@@ -161,14 +153,6 @@
         android:gravity="center|bottom"
         android:orientation="horizontal"
         android:id="@+id/linearLayout">
-
-        <Button
-            android:id="@+id/btnCancel"
-            style="@style/AppTheme.MainDangerButton"
-            android:layout_width="150dp"
-            android:layout_height="50dp"
-            android:layout_marginRight="10dp"
-            android:text="Cancel" />
 
         <Button
             android:id="@+id/btnCompress"

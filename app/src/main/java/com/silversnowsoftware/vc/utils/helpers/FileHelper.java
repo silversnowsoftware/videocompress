@@ -28,6 +28,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import static com.silversnowsoftware.vc.utils.constants.Arrays.MIME_MapTable;
 
@@ -333,4 +334,18 @@ public class FileHelper {
         int duration = mp.getDuration() / 1000;
         return duration;
     }
+
+
+    public static Map<String,Integer> getVideoResoution(String path){
+        Map<String, Integer> values = new HashMap<String, Integer>();
+        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+        retriever.setDataSource(path);
+        int width = Integer.valueOf(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH));
+        int height = Integer.valueOf(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT));
+        values.put("width",width);
+        values.put("height",height);
+        retriever.release();
+        return values;
+    }
+
 }
