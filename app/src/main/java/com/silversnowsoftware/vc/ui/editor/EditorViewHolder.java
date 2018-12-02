@@ -6,6 +6,8 @@ import android.os.Handler;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -61,6 +63,18 @@ public class EditorViewHolder<V extends IEditorView> implements IBaseViewHolder 
     public SimpleExoPlayerView exoPlayerView;
     @BindView(R.id.seekBarLayout)
     public LinearLayout seekBarLayout;
+    @BindView(R.id.rb144p)
+    public RadioButton rb144p;
+    @BindView(R.id.rb240p)
+    public RadioButton rb240p;
+    @BindView(R.id.rb360p)
+    public RadioButton rb360p;
+    @BindView(R.id.rb480p)
+    public RadioButton rb480p;
+    @BindView(R.id.rb720p)
+    public RadioButton rb720p;
+    @BindView(R.id.rgResolution)
+    public RadioGroup rgResolution;
 
     public SimpleExoPlayer exoPlayer;
 
@@ -75,7 +89,8 @@ public class EditorViewHolder<V extends IEditorView> implements IBaseViewHolder 
     void btnCompress_onClick() {
         List<FileModel> fileModelList = (List<FileModel>) getData(Keys.FILE_LIST_KEY, Types.getFileModelListType(), mView);
         FileModel fileModel = fileModelList.get(fileModelList.size() - 1);
-        String resolution = VideoResolutions.get(spResolution.getSelectedItem());
+
+        String resolution = VideoResolutions.get(getSelectedResolution());
         fileModel.setResolution(resolution);
         fileModel.setFileStatus(FileStatusEnum.PREPEARING);
         fileModelList.set(fileModelList.indexOf(fileModel), fileModel);
@@ -86,6 +101,24 @@ public class EditorViewHolder<V extends IEditorView> implements IBaseViewHolder 
 
     }
 
+    String getSelectedResolution() {
+        int id = rgResolution.getCheckedRadioButtonId();
+        switch (id) {
+            case R.id.rb144p:
+                return (String) rb144p.getText();
+            case R.id.rb240p:
+                return (String) rb240p.getText();
+            case R.id.rb360p:
+                return (String) rb360p.getText();
+            case R.id.rb480p:
+                return (String) rb480p.getText();
+            case R.id.rb720p:
+                return (String) rb720p.getText();
+            default:
+                return "";
+        }
+
+    }
 
 
 /*

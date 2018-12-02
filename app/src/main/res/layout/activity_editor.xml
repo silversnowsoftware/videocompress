@@ -68,7 +68,7 @@
 
 
     <LinearLayout
-
+        android:id="@+id/trimmerLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/exoVideoView"
@@ -110,6 +110,47 @@
             android:theme="@style/AppTheme.MainSpinnerTheme"
             android:visibility="invisible" />
     </LinearLayout>
+
+    <RadioGroup
+        android:id="@+id/rgResolution"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/trimmerLayout"
+        android:layout_marginTop="5dp"
+        android:weightSum="100">
+
+        <RadioButton
+            android:id="@+id/rb144p"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"
+            android:text="@string/resolution_144p"/>
+        <RadioButton
+            android:id="@+id/rb240p"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"
+            android:text="@string/resolution_240p"/>
+        <RadioButton
+            android:id="@+id/rb360p"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"
+            android:text="@string/resolution_360p"/>
+        <RadioButton
+            android:id="@+id/rb480p"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"
+            android:text="@string/resolution_480p"/>
+        <RadioButton
+            android:id="@+id/rb720p"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"
+            android:text="@string/resolution_720p"/>
+    </RadioGroup>
 
 
     <LinearLayout
