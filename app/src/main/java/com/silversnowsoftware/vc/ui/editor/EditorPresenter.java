@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.MediaController;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -39,10 +40,12 @@ import com.silversnowsoftware.vc.model.listener.OnRangeSeekBarChangeListener;
 import com.silversnowsoftware.vc.model.listener.OnVideoTrimListener;
 import com.silversnowsoftware.vc.operations.compressor.FileCompressor;
 import com.silversnowsoftware.vc.ui.base.BasePresenter;
+import com.silversnowsoftware.vc.ui.list.ListActivity;
 import com.silversnowsoftware.vc.ui.trimmer.VideoTimmerActivity;
 import com.silversnowsoftware.vc.utils.Types;
 import com.silversnowsoftware.vc.utils.Utility;
 import com.silversnowsoftware.vc.utils.constants.Keys;
+import com.silversnowsoftware.vc.utils.enums.FileStatusEnum;
 
 import java.io.File;
 import java.util.Arrays;
@@ -57,7 +60,10 @@ import javax.inject.Inject;
 
 import static android.app.Activity.RESULT_OK;
 import static com.silversnowsoftware.vc.utils.SharedPref.getData;
+import static com.silversnowsoftware.vc.utils.SharedPref.putData;
+import static com.silversnowsoftware.vc.utils.constants.Arrays.VideoResolutions;
 import static com.silversnowsoftware.vc.utils.helpers.FileHelper.getVideoDuration;
+import static com.silversnowsoftware.vc.utils.helpers.FileHelper.getVideoResoution;
 
 /**
  * Created by burak on 11/1/2018.
@@ -98,6 +104,9 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             intent.putExtras(conData);
             activity.setResult(RESULT_OK, intent);
             activity.finish();
+
+            Intent listActivity = new Intent(activity, ListActivity.class);
+         //   activity.startActivity(listActivity);
         }
 
         @Override
@@ -115,12 +124,11 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
     @Inject
     public EditorPresenter() {
         super();
-         dstFile = Environment.getExternalStorageDirectory() + "/" + getContext().getString(R.string.app_name) + new Date().getTime()
-                + Utility.VIDEO_FORMAT;
+
     }
 
     public void setViewHolder() {
-        mViewHolder = new EditorViewHolder(getView());
+        mViewHolder = new EditorViewHolder((Activity)getView());
 
     }
 
@@ -422,6 +430,8 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
 
     @Override
     public void TrimVideo() {
+        dstFile = Environment.getExternalStorageDirectory() + "/" + getContext().getString(R.string.app_name) + new Date().getTime()
+                + Utility.VIDEO_FORMAT;
 
         MediaMetadataRetriever
                 mediaMetadataRetriever = new MediaMetadataRetriever();
@@ -446,6 +456,77 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
         );
     }
 
+    @Override
+    public void AddFileData() {
+        List<FileModel> fileModelList = (List<FileModel>) getData(Keys.FILE_LIST_KEY, Types.getFileModelListType(), getContext());
+        FileModel fileModel = fileModelList.get(fileModelList.size() - 1);
+
+        Map<String, Integer> videoResolutions = getVideoResoution(fileModel.getPath());
+        int width = videoResolutions.get("width");
+        int height = videoResolutions.get("height");
+
+        String videoResolution = getSelectedResolution();
+        if(!videoResolution.isEmpty()) {
+            String resolution = getFitResolution(width, height, videoResolution);
+            fileModel.setResolution(resolution);
+            fileModel.setFileStatus(FileStatusEnum.PREPEARING);
+            fileModelList.clear();
+            fileModelList.add(fileModel);
+            putData(Keys.FILE_LIST_KEY, fileModelList, getContext());
+
+
+        }
+        else{
+            Toast.makeText(getContext(),"Çözünürlük seçsene ilk", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+    String getSelectedResolution() {
+        int id = mViewHolder.rgResolution.getCheckedRadioButtonId();
+        switch (id) {
+            case R.id.rb144p:
+                return (String) mViewHolder.rb144p.getText();
+            case R.id.rb240p:
+                return (String) mViewHolder.rb240p.getText();
+            case R.id.rb360p:
+                return (String) mViewHolder.rb360p.getText();
+            case R.id.rb480p:
+                return (String) mViewHolder.rb480p.getText();
+            case R.id.rb720p:
+                return (String) mViewHolder.rb720p.getText();
+            default:
+                return "";
+        }
+
+    }
+
+    String getFitResolution(int width, int height, String videoResolution) {
+        int[] resolutions = VideoResolutions.get(videoResolution);
+
+        int orientation = 0;
+        int minValue = height;
+        int maxValue = width;
+        if (height > width) {
+            orientation = 1;
+            maxValue = height;
+            minValue = width;
+        }
+
+        double minRate = (double) resolutions[1] / (double) minValue;
+        double maxRate = (double) resolutions[0] / (double) maxValue ;
+
+        int minResult = (int) (minValue * minRate);
+        int maxResult = (int) (maxValue * maxRate);
+
+        String resolution = "";
+
+        if (orientation == 0) {
+            resolution = minResult + "x" + maxResult;
+        } else {
+            resolution = maxResult + "x" + minResult;
+        }
+        return resolution;
+    }
     void playPauseVideo() {
         if (mViewHolder.exoPlayer.getPlayWhenReady()) {
             if (mViewHolder.exoPlayer != null) {

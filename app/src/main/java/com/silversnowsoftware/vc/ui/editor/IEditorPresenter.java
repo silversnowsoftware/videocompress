@@ -23,4 +23,5 @@ public interface IEditorPresenter<V extends IEditorView> extends IBasePresenter<
     String milliSecondsToTimer(long milliseconds);
     void onSeekThumbs(int index, float value);
     void TrimVideo();
+    void AddFileData();
 }

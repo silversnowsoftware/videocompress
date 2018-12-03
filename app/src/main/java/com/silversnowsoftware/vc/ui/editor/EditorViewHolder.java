@@ -44,7 +44,7 @@ import static com.silversnowsoftware.vc.utils.helpers.FileHelper.getVideoResouti
  * Created by burak on 11/17/2018.
  */
 
-public class EditorViewHolder<V extends IEditorView> implements IBaseViewHolder {
+public final class EditorViewHolder {
     Activity mView;
     @BindView(R.id.btnCompress)
     public Button btnCompress;
@@ -80,95 +80,9 @@ public class EditorViewHolder<V extends IEditorView> implements IBaseViewHolder 
     public SimpleExoPlayer exoPlayer;
 
 
-    public EditorViewHolder(V activity) {
+    public EditorViewHolder(Activity activity) {
         mView = (Activity) activity;
         ButterKnife.bind(this, mView);
     }
-
-
-    @OnClick(R.id.btnCompress)
-    void btnCompress_onClick() {
-        List<FileModel> fileModelList = (List<FileModel>) getData(Keys.FILE_LIST_KEY, Types.getFileModelListType(), mView);
-        FileModel fileModel = fileModelList.get(fileModelList.size() - 1);
-
-        Map<String, Integer> videoResolutions = getVideoResoution(fileModel.getPath());
-        int width = videoResolutions.get("width");
-        int height = videoResolutions.get("height");
-
-        String videoResolution = getSelectedResolution();
-        if(!videoResolution.isEmpty()) {
-            String resolution = getFitResolution(width, height, videoResolution);
-            fileModel.setResolution(resolution);
-            fileModel.setFileStatus(FileStatusEnum.PREPEARING);
-            fileModelList.clear();
-            fileModelList.add(fileModel);
-            putData(Keys.FILE_LIST_KEY, fileModelList, mView);
-
-            Intent listActivity = new Intent(mView, ListActivity.class);
-            mView.startActivity(listActivity);
-        }
-        else{
-            Toast.makeText(mView,"Çözünürlük seçsene ilk", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-
-
-    String getSelectedResolution() {
-        int id = rgResolution.getCheckedRadioButtonId();
-        switch (id) {
-            case R.id.rb144p:
-                return (String) rb144p.getText();
-            case R.id.rb240p:
-                return (String) rb240p.getText();
-            case R.id.rb360p:
-                return (String) rb360p.getText();
-            case R.id.rb480p:
-                return (String) rb480p.getText();
-            case R.id.rb720p:
-                return (String) rb720p.getText();
-            default:
-                return "";
-        }
-
-    }
-
-    String getFitResolution(int width, int height, String videoResolution) {
-        int[] resolutions = VideoResolutions.get(videoResolution);
-
-        int orientation = 0;
-        int minValue = height;
-        int maxValue = width;
-        if (height > width) {
-            orientation = 1;
-            maxValue = height;
-            minValue = width;
-        }
-
-        double minRate = (double) resolutions[1] / (double) minValue;
-        double maxRate = (double) resolutions[0] / (double) maxValue ;
-
-        int minResult = (int) (minValue * minRate);
-        int maxResult = (int) (maxValue * maxRate);
-
-        String resolution = "";
-
-        if (orientation == 0) {
-            resolution = minResult + "x" + maxResult;
-        } else {
-            resolution = maxResult + "x" + minResult;
-        }
-        return resolution;
-    }
-
-/*
-    @OnClick(R.id.btnCompress)
-    void btnCompress_onClick() {
-    }
-
-    @OnClick(R.id.btnCompress)
-    void btnCompress_onClick() {
-    }*/
-
 
 }
