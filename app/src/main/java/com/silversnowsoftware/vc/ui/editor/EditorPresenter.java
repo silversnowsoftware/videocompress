@@ -1,8 +1,12 @@
 package com.silversnowsoftware.vc.ui.editor;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -28,15 +32,21 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.model.FileModel;
+import com.silversnowsoftware.vc.model.customvideoviews.BackgroundTask;
 import com.silversnowsoftware.vc.model.customvideoviews.BarThumb;
 import com.silversnowsoftware.vc.model.customvideoviews.CustomRangeSeekBar;
 import com.silversnowsoftware.vc.model.listener.OnRangeSeekBarChangeListener;
+import com.silversnowsoftware.vc.model.listener.OnVideoTrimListener;
 import com.silversnowsoftware.vc.operations.compressor.FileCompressor;
 import com.silversnowsoftware.vc.ui.base.BasePresenter;
+import com.silversnowsoftware.vc.ui.trimmer.VideoTimmerActivity;
 import com.silversnowsoftware.vc.utils.Types;
+import com.silversnowsoftware.vc.utils.Utility;
 import com.silversnowsoftware.vc.utils.constants.Keys;
 
+import java.io.File;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -45,6 +55,7 @@ import java.util.TimerTask;
 
 import javax.inject.Inject;
 
+import static android.app.Activity.RESULT_OK;
 import static com.silversnowsoftware.vc.utils.SharedPref.getData;
 import static com.silversnowsoftware.vc.utils.helpers.FileHelper.getVideoDuration;
 
@@ -64,11 +75,48 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
     // set your max video trim seconds
     private int mMaxDuration = 60;
     private Handler mHandler = new Handler();
+    private ProgressDialog mProgressDialog;
+    OnVideoTrimListener mOnVideoTrimListener = new OnVideoTrimListener() {
+        @Override
+        public void onTrimStarted() {
+            // Create an indeterminate progress dialog
+            mProgressDialog = new ProgressDialog((Activity) getView());
+            mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            mProgressDialog.setTitle("Saving....");
+            mProgressDialog.setIndeterminate(true);
+            mProgressDialog.setCancelable(false);
+            mProgressDialog.show();
+        }
+
+        @Override
+        public void getResult(Uri uri) {
+            Activity activity = (Activity) getView();
+            mProgressDialog.dismiss();
+            Bundle conData = new Bundle();
+            conData.putString("INTENT_VIDEO_FILE", uri.getPath());
+            Intent intent = new Intent();
+            intent.putExtras(conData);
+            activity.setResult(RESULT_OK, intent);
+            activity.finish();
+        }
+
+        @Override
+        public void cancelAction() {
+            mProgressDialog.dismiss();
+        }
+
+        @Override
+        public void onError(String message) {
+            mProgressDialog.dismiss();
+        }
+    };
+    String dstFile = null;
 
     @Inject
     public EditorPresenter() {
         super();
-
+         dstFile = Environment.getExternalStorageDirectory() + "/" + getContext().getString(R.string.app_name) + new Date().getTime()
+                + Utility.VIDEO_FORMAT;
     }
 
     public void setViewHolder() {
@@ -86,7 +134,6 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
         FileCompressor fileCompressor = new FileCompressor(((Activity) getView()));
         // fileCompressor.Compress();
     }
-
 
 
     @Override
@@ -148,65 +195,63 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
 
         mViewHolder.mCustomRangeSeekBarNew.addOnRangeSeekBarListener(new
 
-    OnRangeSeekBarChangeListener() {
-        @Override
-        public void onCreate (CustomRangeSeekBar customRangeSeekBarNew,int index, float value){
-            // Do nothing
-        }
+                                                                             OnRangeSeekBarChangeListener() {
+                                                                                 @Override
+                                                                                 public void onCreate(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
+                                                                                     // Do nothing
+                                                                                 }
 
-        @Override
-        public void onSeek (CustomRangeSeekBar customRangeSeekBarNew,int index, float value){
-            onSeekThumbs(index, value);
-        }
+                                                                                 @Override
+                                                                                 public void onSeek(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
+                                                                                     onSeekThumbs(index, value);
+                                                                                 }
 
-        @Override
-        public void onSeekStart (CustomRangeSeekBar customRangeSeekBarNew,int index, float value){
-            if (mViewHolder.exoPlayer != null) {
-                mHandler.removeCallbacks(mUpdateTimeTask);
-                mViewHolder.seekBarVideo.setProgress(0);
-                mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
-                mViewHolder.exoPlayer.setPlayWhenReady(false);
-                mViewHolder.imgPlay.setBackgroundResource(R.drawable.ic_white_play);
-            }
-        }
+                                                                                 @Override
+                                                                                 public void onSeekStart(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
+                                                                                     if (mViewHolder.exoPlayer != null) {
+                                                                                         mHandler.removeCallbacks(mUpdateTimeTask);
+                                                                                         mViewHolder.seekBarVideo.setProgress(0);
+                                                                                         mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
+                                                                                         mViewHolder.exoPlayer.setPlayWhenReady(false);
+                                                                                         mViewHolder.imgPlay.setBackgroundResource(R.drawable.ic_white_play);
+                                                                                     }
+                                                                                 }
 
-        @Override
-        public void onSeekStop (CustomRangeSeekBar customRangeSeekBarNew,int index, float value){
+                                                                                 @Override
+                                                                                 public void onSeekStop(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
 
-        }
-    });
-
-
+                                                                                 }
+                                                                             });
 
 
         mViewHolder.seekBarVideo.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
 
-    {
-        @Override
-        public void onProgressChanged (SeekBar seekBar,int i, boolean b){
+        {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                if (mViewHolder.exoPlayer != null) {
+                    mHandler.removeCallbacks(mUpdateTimeTask);
+                    mViewHolder.seekBarVideo.setMax(mTimeVideo * 1000);
+                    mViewHolder.seekBarVideo.setProgress(0);
+                    mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
+                    mViewHolder.exoPlayer.setPlayWhenReady(false);
+                    mViewHolder.imgPlay.setBackgroundResource(R.drawable.ic_white_play);
+                }
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                mHandler.removeCallbacks(mUpdateTimeTask);
+                mViewHolder.exoPlayer.seekTo((mStartPosition * 1000) - mViewHolder.seekBarVideo.getProgress());
+            }
+        });
 
     }
-
-        @Override
-        public void onStartTrackingTouch (SeekBar seekBar){
-        if (mViewHolder.exoPlayer != null) {
-            mHandler.removeCallbacks(mUpdateTimeTask);
-            mViewHolder.seekBarVideo.setMax(mTimeVideo * 1000);
-            mViewHolder.seekBarVideo.setProgress(0);
-            mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
-            mViewHolder.exoPlayer.setPlayWhenReady(false);
-            mViewHolder.imgPlay.setBackgroundResource(R.drawable.ic_white_play);
-        }
-    }
-
-        @Override
-        public void onStopTrackingTouch (SeekBar seekBar){
-        mHandler.removeCallbacks(mUpdateTimeTask);
-        mViewHolder.exoPlayer.seekTo((mStartPosition * 1000) - mViewHolder.seekBarVideo.getProgress());
-    }
-    });
-
-}
 
     @Override
     public void onVideoPrepared() {
@@ -375,6 +420,32 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
 
     }
 
+    @Override
+    public void TrimVideo() {
+
+        MediaMetadataRetriever
+                mediaMetadataRetriever = new MediaMetadataRetriever();
+        mediaMetadataRetriever.setDataSource((Activity) getView(), Uri.parse(srcFile));
+        final File file = new File(srcFile);
+
+        //notify that video trimming started
+        if (mOnVideoTrimListener != null)
+            mOnVideoTrimListener.onTrimStarted();
+
+        BackgroundTask.execute(
+                new BackgroundTask.Task("", 0L, "") {
+                    @Override
+                    public void execute() {
+                        try {
+                            Utility.startTrim(file, dstFile, mStartPosition * 1000, mEndPosition * 1000, mOnVideoTrimListener);
+                        } catch (final Throwable e) {
+                            Thread.getDefaultUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), e);
+                        }
+                    }
+                }
+        );
+    }
+
     void playPauseVideo() {
         if (mViewHolder.exoPlayer.getPlayWhenReady()) {
             if (mViewHolder.exoPlayer != null) {
@@ -393,7 +464,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
                     mHandler.postDelayed(mUpdateTimeTask, 100);
                 }
 
-                mViewHolder.seekBarLayout.animate().setStartDelay(3000).translationY( mViewHolder.seekBarLayout.getHeight()).setDuration(1000);
+                mViewHolder.seekBarLayout.animate().setStartDelay(3000).translationY(mViewHolder.seekBarLayout.getHeight()).setDuration(1000);
 
             }
         }

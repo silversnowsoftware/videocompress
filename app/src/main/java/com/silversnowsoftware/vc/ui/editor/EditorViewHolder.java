@@ -11,6 +11,7 @@ import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -94,16 +95,21 @@ public class EditorViewHolder<V extends IEditorView> implements IBaseViewHolder 
         int width = videoResolutions.get("width");
         int height = videoResolutions.get("height");
 
-        String resolution = getFitResolution(width, height);
-        fileModel.setResolution(resolution);
-        fileModel.setFileStatus(FileStatusEnum.PREPEARING);
-        fileModelList.clear();
-        fileModelList.add( fileModel);
-        putData(Keys.FILE_LIST_KEY, fileModelList, mView);
+        String videoResolution = getSelectedResolution();
+        if(!videoResolution.isEmpty()) {
+            String resolution = getFitResolution(width, height, videoResolution);
+            fileModel.setResolution(resolution);
+            fileModel.setFileStatus(FileStatusEnum.PREPEARING);
+            fileModelList.clear();
+            fileModelList.add(fileModel);
+            putData(Keys.FILE_LIST_KEY, fileModelList, mView);
 
-        Intent listActivity = new Intent(mView, ListActivity.class);
-        mView.startActivity(listActivity);
-
+            Intent listActivity = new Intent(mView, ListActivity.class);
+            mView.startActivity(listActivity);
+        }
+        else{
+            Toast.makeText(mView,"Çözünürlük seçsene ilk", Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -127,8 +133,8 @@ public class EditorViewHolder<V extends IEditorView> implements IBaseViewHolder 
 
     }
 
-    String getFitResolution(int width, int height) {
-        int[] resolutions = VideoResolutions.get(getSelectedResolution());
+    String getFitResolution(int width, int height, String videoResolution) {
+        int[] resolutions = VideoResolutions.get(videoResolution);
 
         int orientation = 0;
         int minValue = height;
