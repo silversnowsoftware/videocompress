@@ -34,10 +34,7 @@
             android:theme="@style/AppTheme.NoActionBar"
             >
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
 
 
         </activity>
@@ -53,7 +50,14 @@
             android:value="26.1.0"
             tools:replace="android:value" />
 
-        <activity android:name=".ui.splash.SplashActivity" />
+        <activity
+            android:theme="@style/AppTheme.NoActionBar"
+            android:name=".ui.splash.SplashActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".ui.editor.EditorActivity">
 

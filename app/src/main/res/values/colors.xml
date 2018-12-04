@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+
     <!--appTheme-->
-    <color name="primaryColor">#00acc1</color>
+    <color name="primaryColor">#398e3c</color>
 
-    <color name="primaryLightColor">#5ddef4</color>
+    <color name="primaryLightColor">#6bbf69</color>
 
-    <color name="primaryDarkColor">#007c91</color>
+    <color name="primaryDarkColor">#00600f</color>
 
     <color name="primaryDangerColor">#ef5350</color>
 
@@ -28,9 +30,9 @@
 
 
 
-    <color name="colorPrimary">#00acc1</color>
-    <color name="colorPrimaryDark">#007c91</color>
-    <color name="colorAccent">#5ddef4</color>
+    <color name="colorPrimary">#398e3c</color>
+    <color name="colorPrimaryDark">#00600f</color>
+    <color name="colorAccent">#6bbf69</color>
 
 
 
