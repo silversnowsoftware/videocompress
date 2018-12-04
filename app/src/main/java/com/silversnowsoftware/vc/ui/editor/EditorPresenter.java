@@ -64,6 +64,7 @@ import static com.silversnowsoftware.vc.utils.SharedPref.putData;
 import static com.silversnowsoftware.vc.utils.constants.Arrays.VideoResolutions;
 import static com.silversnowsoftware.vc.utils.helpers.FileHelper.getVideoDuration;
 import static com.silversnowsoftware.vc.utils.helpers.FileHelper.getVideoResoution;
+import static com.silversnowsoftware.vc.utils.helpers.FileHelper.retriveVideoFrameFromVideo;
 
 /**
  * Created by burak on 11/1/2018.
@@ -106,7 +107,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             activity.finish();
 
             Intent listActivity = new Intent(activity, ListActivity.class);
-         //   activity.startActivity(listActivity);
+            activity.startActivity(listActivity);
         }
 
         @Override
@@ -128,7 +129,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
     }
 
     public void setViewHolder() {
-        mViewHolder = new EditorViewHolder((Activity)getView());
+        mViewHolder = new EditorViewHolder((Activity) getView());
 
     }
 
@@ -457,7 +458,8 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
     }
 
     @Override
-    public void AddFileData() {
+    public String AddFileData() {
+
         List<FileModel> fileModelList = (List<FileModel>) getData(Keys.FILE_LIST_KEY, Types.getFileModelListType(), getContext());
         FileModel fileModel = fileModelList.get(fileModelList.size() - 1);
 
@@ -466,7 +468,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
         int height = videoResolutions.get("height");
 
         String videoResolution = getSelectedResolution();
-        if(!videoResolution.isEmpty()) {
+        if (!videoResolution.isEmpty()) {
             String resolution = getFitResolution(width, height, videoResolution);
             fileModel.setResolution(resolution);
             fileModel.setFileStatus(FileStatusEnum.PREPEARING);
@@ -474,13 +476,15 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             fileModelList.add(fileModel);
             putData(Keys.FILE_LIST_KEY, fileModelList, getContext());
 
+            TrimVideo();
+            return "";
+        } else {
 
-        }
-        else{
-            Toast.makeText(getContext(),"Çözünürlük seçsene ilk", Toast.LENGTH_SHORT).show();
+            return getContext().getString(R.string.choose_format);
         }
 
     }
+
     String getSelectedResolution() {
         int id = mViewHolder.rgResolution.getCheckedRadioButtonId();
         switch (id) {
@@ -496,6 +500,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
                 return (String) mViewHolder.rb720p.getText();
             default:
                 return "";
+
         }
 
     }
@@ -513,7 +518,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
         }
 
         double minRate = (double) resolutions[1] / (double) minValue;
-        double maxRate = (double) resolutions[0] / (double) maxValue ;
+        double maxRate = (double) resolutions[0] / (double) maxValue;
 
         int minResult = (int) (minValue * minRate);
         int maxResult = (int) (maxValue * maxRate);
@@ -527,6 +532,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
         }
         return resolution;
     }
+
     void playPauseVideo() {
         if (mViewHolder.exoPlayer.getPlayWhenReady()) {
             if (mViewHolder.exoPlayer != null) {

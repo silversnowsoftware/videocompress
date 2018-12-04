@@ -31,7 +31,10 @@ public class EditorActivity extends BaseActivity implements IEditorView {
         meditorViewHolder.btnCompress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPresenter.TrimVideo();
+                String result = mPresenter.AddFileData();
+                if (!result.isEmpty()) {
+                    showToastMethod(result);
+                }
             }
         });
 
