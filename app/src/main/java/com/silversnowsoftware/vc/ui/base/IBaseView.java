@@ -1,5 +1,7 @@
 package com.silversnowsoftware.vc.ui.base;
 
+import android.app.Activity;
+import android.content.Context;
 import android.support.annotation.StringRes;
 
 /**
@@ -24,4 +26,8 @@ public interface IBaseView {
     boolean isNetworkConnected();
 
     void hideKeyboard();
+
+    void RedirectToActivity(Class<?> activityClass);
+
+
 }
