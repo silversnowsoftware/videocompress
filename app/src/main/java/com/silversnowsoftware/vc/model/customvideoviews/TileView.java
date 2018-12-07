@@ -30,9 +30,12 @@ import android.view.View;
 
 
 import com.silversnowsoftware.vc.R;
+import com.silversnowsoftware.vc.utils.helpers.FileHelper;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import wseemann.media.FFmpegMediaMetadataRetriever;
 
 public class TileView extends View {
 
@@ -83,13 +86,16 @@ public class TileView extends View {
                              @Override
                              public void execute() {
                                  try {
+
+                                     FFmpegMediaMetadataRetriever mediaMetadataRetriever = new FFmpegMediaMetadataRetriever();
+                                     mediaMetadataRetriever.setDataSource(String.valueOf(mVideoUri));
+
+
                                      LongSparseArray<Bitmap> thumbnailList = new LongSparseArray<>();
 
-                                     MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
-                                     mediaMetadataRetriever.setDataSource(getContext(), mVideoUri);
 
                                      // Retrieve media data
-                                     long videoLengthInMs = Integer.parseInt(mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)) * 1000;
+                                     long videoLengthInMs = Integer.parseInt(mediaMetadataRetriever.extractMetadata(mediaMetadataRetriever.METADATA_KEY_DURATION)) * 1000;
 
                                      // Set thumbnail properties (Thumbs are squares)
                                      final int thumbWidth = mHeightView;
@@ -100,8 +106,12 @@ public class TileView extends View {
                                      final long interval = videoLengthInMs / numThumbs;
 
                                      for (int i = 0; i < numThumbs; ++i) {
-                                         Bitmap bitmap = mediaMetadataRetriever.getFrameAtTime(i * interval, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
-                                         // TODO: bitmap might be null here, hence throwing NullPointerException. You were right
+                                         long frame = i * interval;
+
+                                         Bitmap bitmap = mediaMetadataRetriever.getFrameAtTime(frame, FFmpegMediaMetadataRetriever.OPTION_CLOSEST); // frame at 2 seconds
+
+
+                                         String xy = FileHelper.getBase64FromBitmap(bitmap);
                                          try {
                                              bitmap = Bitmap.createScaledBitmap(bitmap, thumbWidth, thumbHeight, false);
                                          } catch (Exception e) {
@@ -141,7 +151,6 @@ public class TileView extends View {
 
             for (int i = 0; i < mBitmapList.size(); i++) {
                 Bitmap bitmap = mBitmapList.get(i);
-
                 if (bitmap != null) {
                     canvas.drawBitmap(bitmap, x, 0, null);
                     x = x + bitmap.getWidth();
