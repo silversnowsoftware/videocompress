@@ -1,5 +1,6 @@
 package com.silversnowsoftware.vc.ui.main;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
@@ -27,7 +28,7 @@ import static com.silversnowsoftware.vc.utils.helpers.FileHelper.getFileNameFrom
 
 public class MainPresenter<V extends IMainView> extends BasePresenter<V>
         implements IMainPresenter<V> {
-    MainViewHolder mViewHolder;
+
     private Double videoLength = 0.00;
 
     @Inject
@@ -35,9 +36,20 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
         super();
     }
 
-    public void setViewHolder() {
-        mViewHolder = new MainViewHolder(getView());
+    @Override
+    public void chooseFile() {
+        Activity activity = (Activity) getView();
+        Intent mediaIntent = new Intent(
+                Intent.ACTION_GET_CONTENT
+                //,Uri.parse(Environment.DIRECTORY_DCIM)
+        );
+        // mediaIntent.setType("*/*");
+        mediaIntent.setType("video/*");
+        mediaIntent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"video/*"});
+        mediaIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        activity.startActivityForResult(mediaIntent, 1);
     }
+
     public void collectFiles(Intent data) {
         ArrayList<String> tempfilepath = FileHelper.GetAllPath(getContext(), data);
         for (String path : tempfilepath) {
@@ -45,7 +57,7 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
             FileModel fileModel = createFileModel(path);
 
             List<FileModel> list = (List<FileModel>) getData(Keys.FILE_LIST_KEY, Types.getFileModelListType(), getContext());
-            if(list == null) list = new  ArrayList<FileModel>();
+            if (list == null) list = new ArrayList<FileModel>();
             if (!list.contains(fileModel))
                 list.add(fileModel);
 
@@ -86,8 +98,6 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
         fileModel.setVideoLength(videoLength);
         return fileModel;
     }
-
-
 
 
 }

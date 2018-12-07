@@ -15,5 +15,5 @@ public interface IMainPresenter<V extends IMainView> extends IBasePresenter<V> {
 
     FileModel createFileModel(String path);
 
-    void setViewHolder();
+    void chooseFile();
 }

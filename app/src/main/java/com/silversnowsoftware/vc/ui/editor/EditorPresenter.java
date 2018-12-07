@@ -89,7 +89,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             // Create an indeterminate progress dialog
             mProgressDialog = new ProgressDialog((Activity) getView());
             mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            mProgressDialog.setTitle("Saving....");
+            mProgressDialog.setTitle("Trimming...");
             mProgressDialog.setIndeterminate(true);
             mProgressDialog.setCancelable(false);
             mProgressDialog.show();

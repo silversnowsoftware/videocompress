@@ -110,7 +110,7 @@
         android:orientation="horizontal"
         android:layout_below="@+id/trimmerLayout"
         android:layout_marginTop="5dp"
-        android:weightSum="100">
+        android:weightSum="120">
 
         <RadioButton
             android:id="@+id/rb144p"
@@ -142,6 +142,12 @@
             android:layout_height="wrap_content"
             android:layout_weight="20"
             android:text="@string/resolution_720p"/>
+        <RadioButton
+            android:id="@+id/rb1080p"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="20"
+            android:text="@string/resolution_1080p"/>
     </RadioGroup>
 
 

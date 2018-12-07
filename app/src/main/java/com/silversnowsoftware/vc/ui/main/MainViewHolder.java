@@ -17,7 +17,7 @@ import butterknife.OnClick;
  * Created by Hakan on 17.11.2018.
  */
 
-public class MainViewHolder<V extends IMainView> implements IBaseViewHolder {
+public class MainViewHolder {
     Activity mView;
 
     @BindView(R.id.btnRecord)
@@ -27,7 +27,7 @@ public class MainViewHolder<V extends IMainView> implements IBaseViewHolder {
     @BindView(R.id.btnListFile)
     Button btnListFile;
 
-    public MainViewHolder(V activity) {
+    public MainViewHolder(Activity activity) {
         mView = (Activity) activity;
         ButterKnife.bind(this,  mView);
     }

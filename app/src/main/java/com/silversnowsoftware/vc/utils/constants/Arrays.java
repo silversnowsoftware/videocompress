@@ -83,6 +83,7 @@ public class Arrays {
 
     static {
         Map<String, int[]> aMap = new HashMap<String, int[]>();
+        aMap.put("1080p", new int[]{1920, 1080});
         aMap.put("720p", new int[]{1280, 720});
         aMap.put("480p", new int[]{858, 480});
         aMap.put("360p", new int[]{480, 360});

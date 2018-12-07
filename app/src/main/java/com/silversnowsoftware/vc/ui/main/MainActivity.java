@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
 
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
@@ -24,6 +25,7 @@ import com.silversnowsoftware.vc.ui.base.BaseActivity;
 import com.silversnowsoftware.vc.ui.compression.permission.PermissionsActivity;
 import com.silversnowsoftware.vc.ui.compression.permission.PermissionsChecker;
 import com.silversnowsoftware.vc.ui.editor.EditorActivity;
+import com.silversnowsoftware.vc.ui.list.ListActivity;
 import com.silversnowsoftware.vc.ui.test.TestActivity;
 import com.silversnowsoftware.vc.utils.ManifestUtil;
 import com.silversnowsoftware.vc.utils.constants.Constants;
@@ -47,22 +49,22 @@ public class MainActivity extends BaseActivity implements IMainView {
 
     @Inject
     IMainPresenter<IMainView> mPresenter;
+    MainViewHolder mainViewHolder;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         handler = new Handler();
         super.onCreate(savedInstanceState);
+        mainViewHolder = new MainViewHolder(this);
         getActivityComponent().inject(this);
         mPresenter.onAttach(this);
-        mPresenter.setViewHolder();
-        //progressBar.setMax(100);
+
 
         PermissionsChecker mChecker = new PermissionsChecker(getApplicationContext());
         if (mChecker.lacksPermissions(ManifestUtil.PERMISSIONS)) {
             PermissionsActivity.startActivityForResult(this, Constants.REQUEST_CODE_FOR_PERMISSIONS, ManifestUtil.PERMISSIONS);
         }
         ButterKnife.bind(this);
-
 
 
         try {
@@ -82,10 +84,26 @@ public class MainActivity extends BaseActivity implements IMainView {
             exoPlayer.prepare(mediaSource);
             exoPlayer.setPlayWhenReady(true);
 
+
         } catch (Exception e) {
             Log.e("MainAcvtivity", " exoplayer error " + e.toString());
         }
 
+        mainViewHolder.btnChoose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                mPresenter.chooseFile();
+            }
+        });
+
+        mainViewHolder.btnListFile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                RedirectToActivity(ListActivity.class);
+            }
+        });
 
     }
 
