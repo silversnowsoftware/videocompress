@@ -55,6 +55,8 @@ public final class EditorViewHolder {
     public RadioButton rb480p;
     @BindView(R.id.rb720p)
     public RadioButton rb720p;
+    @BindView(R.id.rb1080p)
+    public RadioButton rb1080p;
     @BindView(R.id.rgResolution)
     public RadioGroup rgResolution;
 

@@ -40,6 +40,7 @@ import com.silversnowsoftware.vc.model.listener.OnRangeSeekBarChangeListener;
 import com.silversnowsoftware.vc.model.listener.OnVideoTrimListener;
 import com.silversnowsoftware.vc.operations.compressor.FileCompressor;
 import com.silversnowsoftware.vc.ui.base.BasePresenter;
+import com.silversnowsoftware.vc.ui.base.BaseResponse;
 import com.silversnowsoftware.vc.ui.list.ListActivity;
 import com.silversnowsoftware.vc.ui.trimmer.VideoTimmerActivity;
 import com.silversnowsoftware.vc.utils.Types;
@@ -82,50 +83,15 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
     // set your max video trim seconds
     private int mMaxDuration = 60;
     private Handler mHandler = new Handler();
-    private ProgressDialog mProgressDialog;
-    OnVideoTrimListener mOnVideoTrimListener = new OnVideoTrimListener() {
-        @Override
-        public void onTrimStarted() {
-            // Create an indeterminate progress dialog
-            mProgressDialog = new ProgressDialog((Activity) getView());
-            mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            mProgressDialog.setTitle("Trimming...");
-            mProgressDialog.setIndeterminate(true);
-            mProgressDialog.setCancelable(false);
-            mProgressDialog.show();
-        }
 
-        @Override
-        public void getResult(Uri uri) {
-            Activity activity = (Activity) getView();
-            mProgressDialog.dismiss();
-            Bundle conData = new Bundle();
-            conData.putString("INTENT_VIDEO_FILE", uri.getPath());
-            Intent intent = new Intent();
-            intent.putExtras(conData);
-            activity.setResult(RESULT_OK, intent);
-            activity.finish();
 
-            Intent listActivity = new Intent(activity, ListActivity.class);
-            activity.startActivity(listActivity);
-        }
-
-        @Override
-        public void cancelAction() {
-            mProgressDialog.dismiss();
-        }
-
-        @Override
-        public void onError(String message) {
-            mProgressDialog.dismiss();
-        }
-    };
     String dstFile = null;
+    BaseResponse baseResponse;
 
     @Inject
     public EditorPresenter() {
         super();
-
+        baseResponse = new BaseResponse();
     }
 
     public void setViewHolder() {
@@ -430,7 +396,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
     }
 
     @Override
-    public void TrimVideo() {
+    public void trimVideo(final OnVideoTrimListener mOnVideoTrimListener) {
         dstFile = Environment.getExternalStorageDirectory() + "/" + getContext().getString(R.string.app_name) + new Date().getTime()
                 + Utility.VIDEO_FORMAT;
 
@@ -458,7 +424,9 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
     }
 
     @Override
-    public String AddFileData() {
+    public BaseResponse addSelectedFile() {
+
+        baseResponse.setSuccess(true);
 
         List<FileModel> fileModelList = (List<FileModel>) getData(Keys.FILE_LIST_KEY, Types.getFileModelListType(), getContext());
         FileModel fileModel = fileModelList.get(fileModelList.size() - 1);
@@ -475,14 +443,14 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             fileModelList.clear();
             fileModelList.add(fileModel);
             putData(Keys.FILE_LIST_KEY, fileModelList, getContext());
-
-            TrimVideo();
-            return "";
         } else {
 
-            return getContext().getString(R.string.choose_format);
+            baseResponse.setSuccess(false);
+            baseResponse.setMessage(getContext().getString(R.string.choose_format));
+
         }
 
+        return baseResponse;
     }
 
     String getSelectedResolution() {
@@ -498,6 +466,8 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
                 return (String) mViewHolder.rb480p.getText();
             case R.id.rb720p:
                 return (String) mViewHolder.rb720p.getText();
+            case R.id.rb1080p:
+                return (String) mViewHolder.rb1080p.getText();
             default:
                 return "";
 

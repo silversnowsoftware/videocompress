@@ -109,6 +109,7 @@ public class Utility {
 
         fc.close();
         fos.close();
+        
         if (callback != null)
             callback.getResult(Uri.parse(dst.toString()));
     }

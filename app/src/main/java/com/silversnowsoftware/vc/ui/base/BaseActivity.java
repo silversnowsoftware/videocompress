@@ -18,7 +18,7 @@ import com.silversnowsoftware.vc.ui.main.MainActivity;
  * Created by burak on 10/8/2018.
  */
 
-public abstract class BaseActivity extends AppCompatActivity implements IBaseView {
+public  class BaseActivity extends AppCompatActivity implements IBaseView {
 
     private ActivityComponent mActivityComponent;
 
@@ -38,7 +38,9 @@ public abstract class BaseActivity extends AppCompatActivity implements IBaseVie
         return mActivityComponent;
     }
 
-    protected abstract int getLayoutResourceId();
+    protected int getLayoutResourceId() {
+        return 0;
+    }
 
     public void showToastMethod(String message) {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
