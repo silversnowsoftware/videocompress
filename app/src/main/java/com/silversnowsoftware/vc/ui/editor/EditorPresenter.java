@@ -173,32 +173,32 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
         });
 
         mViewHolder.mCustomRangeSeekBarNew.addOnRangeSeekBarListener(new OnRangeSeekBarChangeListener() {
-                                                                                 @Override
-                                                                                 public void onCreate(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
-                                                                                     // Do nothing
-                                                                                 }
+            @Override
+            public void onCreate(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
+                // Do nothing
+            }
 
-                                                                                 @Override
-                                                                                 public void onSeek(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
-                                                                                     onSeekThumbs(index, value);
-                                                                                 }
+            @Override
+            public void onSeek(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
+                onSeekThumbs(index, value);
+            }
 
-                                                                                 @Override
-                                                                                 public void onSeekStart(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
-                                                                                     if (mViewHolder.exoPlayer != null) {
-                                                                                         mHandler.removeCallbacks(mUpdateTimeTask);
-                                                                                         mViewHolder.seekBarVideo.setProgress(0);
-                                                                                         mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
-                                                                                         mViewHolder.exoPlayer.setPlayWhenReady(false);
-                                                                                         mViewHolder.imgPlay.setBackgroundResource(R.drawable.ic_white_play);
-                                                                                     }
-                                                                                 }
+            @Override
+            public void onSeekStart(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
+                if (mViewHolder.exoPlayer != null) {
+                    mHandler.removeCallbacks(mUpdateTimeTask);
+                    mViewHolder.seekBarVideo.setProgress(0);
+                    mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
+                    mViewHolder.exoPlayer.setPlayWhenReady(false);
+                    mViewHolder.imgPlay.setBackgroundResource(R.drawable.ic_white_play);
+                }
+            }
 
-                                                                                 @Override
-                                                                                 public void onSeekStop(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
+            @Override
+            public void onSeekStop(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
 
-                                                                                 }
-                                                                             });
+            }
+        });
 
 
         mViewHolder.seekBarVideo.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
@@ -458,16 +458,19 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
     @Override
     public void setDefaultEditor()
     {
+        mStartPosition = 0;
+        mEndPosition = mMaxDuration;
+        mViewHolder.mCustomRangeSeekBarNew.setThumbValue(0, (mStartPosition * 100) / mDuration);
+        mViewHolder.mCustomRangeSeekBarNew.setThumbValue(1, (mEndPosition * 100) / mDuration);
         mViewHolder.seekBarVideo.setProgress((int) (mViewHolder.exoPlayer.getCurrentPosition() - mStartPosition * 1000));
+        mViewHolder.seekBarVideo.setMax(mMaxDuration * 1000);
         mViewHolder.txtVideoLength.setText(milliSecondsToTimer(mViewHolder.seekBarVideo.getProgress()) + "");
         mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
         mViewHolder.exoPlayer.setPlayWhenReady(false);
         mViewHolder.seekBarVideo.setProgress(0);
         mViewHolder.txtVideoLength.setText("00:00");
-        mStartPosition = 0;
-        mEndPosition = mMaxDuration;
-        mViewHolder.mCustomRangeSeekBarNew.setThumbValue(0, (mStartPosition * 100) / mDuration);
-        mViewHolder.mCustomRangeSeekBarNew.setThumbValue(1, (mEndPosition * 100) / mDuration);
+        mViewHolder.imgPlay.setBackgroundResource(R.drawable.ic_white_play);
+
         setSelectedResolution(mDefaultResolutionId);
     }
 
