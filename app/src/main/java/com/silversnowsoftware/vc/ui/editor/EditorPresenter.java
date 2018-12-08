@@ -76,6 +76,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
 
     EditorViewHolder mViewHolder;
     String srcFile;
+    String mDefaultResolutionId;
     private int mDuration = 0;
     private int mTimeVideo = 0;
     private int mStartPosition = 0;
@@ -116,6 +117,9 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
         List<FileModel> fileModelList = (List<FileModel>) getData(Keys.FILE_LIST_KEY, Types.getFileModelListType(), getContext());
         srcFile = fileModelList.get(fileModelList.size() - 1).getPath();
         mMaxDuration = getVideoDuration((Activity) getView(), srcFile);
+         mDefaultResolutionId = findVideoResolution(srcFile);
+        setSelectedResolution(mDefaultResolutionId);
+
         mViewHolder.tileView.post(new Runnable() {
             @Override
             public void run() {
@@ -168,9 +172,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             }
         });
 
-        mViewHolder.mCustomRangeSeekBarNew.addOnRangeSeekBarListener(new
-
-                                                                             OnRangeSeekBarChangeListener() {
+        mViewHolder.mCustomRangeSeekBarNew.addOnRangeSeekBarListener(new OnRangeSeekBarChangeListener() {
                                                                                  @Override
                                                                                  public void onCreate(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
                                                                                      // Do nothing
@@ -453,6 +455,22 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
         return baseResponse;
     }
 
+    @Override
+    public void setDefaultEditor()
+    {
+        mViewHolder.seekBarVideo.setProgress((int) (mViewHolder.exoPlayer.getCurrentPosition() - mStartPosition * 1000));
+        mViewHolder.txtVideoLength.setText(milliSecondsToTimer(mViewHolder.seekBarVideo.getProgress()) + "");
+        mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
+        mViewHolder.exoPlayer.setPlayWhenReady(false);
+        mViewHolder.seekBarVideo.setProgress(0);
+        mViewHolder.txtVideoLength.setText("00:00");
+        mStartPosition = 0;
+        mEndPosition = mMaxDuration;
+        mViewHolder.mCustomRangeSeekBarNew.setThumbValue(0, (mStartPosition * 100) / mDuration);
+        mViewHolder.mCustomRangeSeekBarNew.setThumbValue(1, (mEndPosition * 100) / mDuration);
+        setSelectedResolution(mDefaultResolutionId);
+    }
+
     String getSelectedResolution() {
         int id = mViewHolder.rgResolution.getCheckedRadioButtonId();
         switch (id) {
@@ -472,6 +490,36 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
                 return "";
 
         }
+
+    }
+
+    void setSelectedResolution(String resolution) {
+        int id = -1;
+        switch (resolution) {
+            case "144p":
+                id = mViewHolder.rb144p.getId();
+                break;
+            case "240p":
+                id = mViewHolder.rb240p.getId();
+                break;
+            case "360p":
+                id = mViewHolder.rb360p.getId();
+                break;
+            case "480p":
+                id = mViewHolder.rb480p.getId();
+                break;
+            case "720p":
+                id = mViewHolder.rb720p.getId();
+                break;
+            case "1080p":
+                id = mViewHolder.rb1080p.getId();
+                break;
+            default:
+                id = -1;
+                break;
+        }
+        mViewHolder.rgResolution.clearCheck();
+        mViewHolder.rgResolution.check(id);
 
     }
 
@@ -499,6 +547,22 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             resolution = minResult + "x" + maxResult;
         } else {
             resolution = maxResult + "x" + minResult;
+        }
+        return resolution;
+    }
+
+    String findVideoResolution(String path) {
+        String resolution = "";
+        Map<String, Integer> videoResolutions = getVideoResoution(path);
+        int width = videoResolutions.get("width");
+        int height = videoResolutions.get("height");
+        int[] value = new int[]{width, height};
+
+        for (Map.Entry<String, int[]> item : VideoResolutions.entrySet()) {
+            int w = item.getValue()[1];
+            int h = item.getValue()[0];
+            if (width == w)
+                resolution = item.getKey();
         }
         return resolution;
     }

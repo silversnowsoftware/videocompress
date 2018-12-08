@@ -59,6 +59,8 @@ public final class EditorViewHolder {
     public RadioButton rb1080p;
     @BindView(R.id.rgResolution)
     public RadioGroup rgResolution;
+    @BindView(R.id.btnClear)
+    public Button btnClear;
 
     public SimpleExoPlayer exoPlayer;
 

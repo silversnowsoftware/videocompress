@@ -29,6 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="@string/load_from_gallery"
+            android:drawableLeft="@mipmap/gallery"
             android:layout_marginBottom="20dp"/>
 
         <Button

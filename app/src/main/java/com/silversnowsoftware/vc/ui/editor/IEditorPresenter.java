@@ -37,4 +37,6 @@ public interface IEditorPresenter<V extends IEditorView> extends IBasePresenter<
     void trimVideo(OnVideoTrimListener mOnVideoTrimListener);
 
     BaseResponse addSelectedFile();
+
+    void setDefaultEditor();
 }

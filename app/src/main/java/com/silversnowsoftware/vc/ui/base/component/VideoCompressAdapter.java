@@ -58,6 +58,7 @@ public class VideoCompressAdapter extends ArrayAdapter {
         if (model != null) {
             viewHolder.tvVideoName.setText(model.getName());
             viewHolder.ivVideoTumbnail.setImageBitmap(FileHelper.getBitmapFromBase64(model.getThumbnail()));
+            viewHolder.tvResolution.setText(model.getResolution());
         }
 
         if (model.getFileStatus() == FileStatusEnum.PREPEARING) {
@@ -105,6 +106,8 @@ public class VideoCompressAdapter extends ArrayAdapter {
         ProgressBar pbProgress;
         @BindView(R.id.ivVideoTumbnail)
         ImageView ivVideoTumbnail;
+        @BindView(R.id.tvResolution)
+        TextView tvResolution;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);

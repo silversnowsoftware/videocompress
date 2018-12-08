@@ -86,7 +86,12 @@ public class EditorActivity extends BaseActivity implements IEditorView {
 
             }
         });
-
+        meditorViewHolder.btnClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPresenter.setDefaultEditor();
+            }
+        });
     }
 
     @Override
