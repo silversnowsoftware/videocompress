@@ -20,18 +20,21 @@ public class SharedPref {
 
 
     public static void putData(String key, Object object, Context context) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        SharedPreferences.Editor editor = preferences.edit();
-        Gson gson = new Gson();
-        String value = gson.toJson(object);
-        editor.putString(key, value);
-        editor.commit();
+        try {
+
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+            SharedPreferences.Editor editor = preferences.edit();
+            Gson gson = new Gson();
+            String value = gson.toJson(object);
+            editor.putString(key, value);
+            editor.commit();
+        } catch (Exception ex) {
+
+        }
     }
 
 
-
-
-    public static  Object getData(String key,  Type type, Context context) {
+    public static Object getData(String key, Type type, Context context) {
         Gson gson = new Gson();
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
         String json = preferences.getString(key, "");
@@ -48,5 +51,13 @@ public class SharedPref {
         return value;
     }
 
+    public static void Clear(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        preferences.edit().clear().commit();
+    }
 
+    public static void RemoveKey(String key, Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        preferences.edit().remove(key).commit();
+    }
 }
