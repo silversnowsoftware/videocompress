@@ -99,4 +99,15 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
         }
         return file;
     }
+
+    @Override
+    public boolean exist(Integer id) {
+        boolean b = false;
+        try {
+            b = db.getFileModel().idExists(id);
+
+        } catch (Exception ex) {
+        }
+        return b;
+    }
 }

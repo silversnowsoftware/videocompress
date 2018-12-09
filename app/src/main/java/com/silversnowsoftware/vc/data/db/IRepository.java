@@ -26,4 +26,5 @@ public interface IRepository<T> {
 
     T getByObject(T item);
 
+    boolean exist(Integer id);
 }

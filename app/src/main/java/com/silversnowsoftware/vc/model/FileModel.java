@@ -46,6 +46,7 @@ public class FileModel implements Serializable {
     private FileStatusEnum FileStatus;
     @DatabaseField(columnName = "MediaType")
     private MediaTypeEnum MediaType;
+    @DatabaseField(columnName = "Resolution")
     private String Resolution;
     private Double VideoLength;
     private Double Progress;

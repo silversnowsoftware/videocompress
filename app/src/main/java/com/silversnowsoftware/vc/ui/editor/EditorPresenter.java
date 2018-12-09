@@ -115,9 +115,10 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
     @Override
     public void setVideoToVideoView() {
         List<FileModel> fileModelList = getRepositoryFileModel().getAll();
+
         srcFile = fileModelList.get(fileModelList.size() - 1).getPath();
         mMaxDuration = getVideoDuration((Activity) getView(), srcFile);
-         mDefaultResolutionId = findVideoResolution(srcFile);
+        mDefaultResolutionId = findVideoResolution(srcFile);
         setSelectedResolution(mDefaultResolutionId);
 
         mViewHolder.tileView.post(new Runnable() {
@@ -442,9 +443,15 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             String resolution = getFitResolution(width, height, videoResolution);
             fileModel.setResolution(resolution);
             fileModel.setFileStatus(FileStatusEnum.PREPEARING);
-            fileModelList.clear();
-            fileModelList.add(fileModel);
-            putData(Keys.FILE_LIST_KEY, fileModelList, getContext());
+
+            FileModel fm = getRepositoryFileModel().getByObject(fileModel);
+
+            if (fm != null) {
+                getRepositoryFileModel().update(fileModel);
+            } else {
+                getRepositoryFileModel().add(fileModel);
+            }
+
         } else {
 
             baseResponse.setSuccess(false);
@@ -456,8 +463,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
     }
 
     @Override
-    public void setDefaultEditor()
-    {
+    public void setDefaultEditor() {
         mStartPosition = 0;
         mEndPosition = mMaxDuration;
         mViewHolder.mCustomRangeSeekBarNew.setThumbValue(0, (mStartPosition * 100) / mDuration);
