@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.model.FileModel;
@@ -46,20 +47,34 @@ public class VideoCompressAdapter extends ArrayAdapter {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View view = convertView;
-        ViewHolder viewHolder = null;
 
         if (view == null) {
             LayoutInflater layoutInflater = LayoutInflater.from(getContext());
             view = layoutInflater.inflate(R.layout.file_model_list, null);
 
         }
-        viewHolder = new ViewHolder(view);
+        final ViewHolder  viewHolder = new ViewHolder(view);
+        viewHolder._view.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                Toast.makeText(getContext(), "Selam", Toast.LENGTH_LONG).show();
+                return true;
+            }
+        });
+        viewHolder.ivSelectRow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewHolder.ivSelectRow.setImageResource(R.drawable.circle_two);
+            }
+        });
+
         final FileModel model = (FileModel) getItem(position);
         if (model != null) {
             viewHolder.tvVideoName.setText(model.getName());
             viewHolder.ivVideoTumbnail.setImageBitmap(FileHelper.getBitmapFromBase64(model.getThumbnail()));
             viewHolder.tvResolution.setText(model.getResolution());
         }
+
 
         if (model.getFileStatus() == FileStatusEnum.PREPEARING) {
             model.setFileStatus(FileStatusEnum.PROGRESSING);
@@ -100,6 +115,8 @@ public class VideoCompressAdapter extends ArrayAdapter {
     }
 
     static class ViewHolder {
+        View _view;
+
         @BindView(R.id.tvVideoName)
         TextView tvVideoName;
         @BindView(R.id.pbProgress)
@@ -108,9 +125,12 @@ public class VideoCompressAdapter extends ArrayAdapter {
         ImageView ivVideoTumbnail;
         @BindView(R.id.tvResolution)
         TextView tvResolution;
+        @BindView(R.id.ivSelectRow)
+        ImageView ivSelectRow;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
+            _view = view;
         }
     }
 }
