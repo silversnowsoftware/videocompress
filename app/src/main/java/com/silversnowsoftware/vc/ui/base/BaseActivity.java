@@ -1,6 +1,7 @@
 package com.silversnowsoftware.vc.ui.base;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,15 +13,17 @@ import com.silversnowsoftware.vc.VideoCompressApplication;
 import com.silversnowsoftware.vc.di.component.ActivityComponent;
 import com.silversnowsoftware.vc.di.component.DaggerActivityComponent;
 import com.silversnowsoftware.vc.di.module.ActivityModule;
+import com.silversnowsoftware.vc.ui.editor.EditorActivity;
 import com.silversnowsoftware.vc.ui.main.MainActivity;
 
 /**
  * Created by burak on 10/8/2018.
  */
 
-public  class BaseActivity extends AppCompatActivity implements IBaseView {
+public class BaseActivity extends AppCompatActivity implements IBaseView {
 
     private ActivityComponent mActivityComponent;
+    private ProgressDialog mProgressDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,57 +49,27 @@ public  class BaseActivity extends AppCompatActivity implements IBaseView {
         Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
     }
 
-
     @Override
-    public void showLoading() {
-
-    }
-
-    @Override
-    public void hideLoading() {
-
-    }
-
-    @Override
-    public void openActivityOnTokenExpire() {
-
-    }
-
-    @Override
-    public void onError(int resId) {
-
-    }
-
-    @Override
-    public void onError(String message) {
-
-    }
-
-    @Override
-    public void showMessage(String message) {
-
-    }
-
-    @Override
-    public void showMessage(int resId) {
-
-    }
-
-    @Override
-    public boolean isNetworkConnected() {
-        return false;
-    }
-
-    @Override
-    public void hideKeyboard() {
-
-    }
-
-    @Override
-    public void RedirectToActivity(final Class<?> activityClass) {
+    public void redirectToActivity(final Class<?> activityClass) {
         Intent intent = new Intent(getApplicationContext(), activityClass);
         startActivity(intent);
 
+    }
+
+    @Override
+    public void showProgressDialog(Context context,String title) {
+        mProgressDialog = new ProgressDialog(context);
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.setTitle(title);
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.show();
+    }
+
+    @Override
+    public void dismissProgressDialog() {
+        if (mProgressDialog != null)
+        mProgressDialog.dismiss();
     }
 
 

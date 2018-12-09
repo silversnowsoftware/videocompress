@@ -18,7 +18,7 @@ public class SplashActivity extends BaseActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                RedirectToActivity(MainActivity.class);
+                redirectToActivity(MainActivity.class);
                 finish();
             }
         }, 3000);

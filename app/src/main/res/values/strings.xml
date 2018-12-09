@@ -16,7 +16,7 @@
     <string name="video_length_validation">Video should be of minimum 3 seconds</string>
     <string name="app_provider">com.demo.videotrimmer.provider</string>
     <string name="choose_format">Please choose format!</string>
-
+    <string name="video_trim">Trimming...</string>
     <string name="resolution_144p">144p</string>
     <string name="resolution_240p">240p</string>
     <string name="resolution_360p">360p</string>

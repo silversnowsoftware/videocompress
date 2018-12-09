@@ -1,6 +1,7 @@
 package com.silversnowsoftware.vc.ui.base;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.annotation.StringRes;
 
@@ -9,25 +10,14 @@ import android.support.annotation.StringRes;
  */
 
 public interface IBaseView {
-    void showLoading();
 
-    void hideLoading();
 
-    void openActivityOnTokenExpire();
+    void showToastMethod(String message);
 
-    void onError(@StringRes int resId);
+    void redirectToActivity(Class<?> activityClass);
 
-    void onError(String message);
+    void showProgressDialog(Context context, String title);
 
-    void showMessage(String message);
-
-    void showMessage(@StringRes int resId);
-
-    boolean isNetworkConnected();
-
-    void hideKeyboard();
-
-    void RedirectToActivity(Class<?> activityClass);
-
+    void dismissProgressDialog();
 
 }

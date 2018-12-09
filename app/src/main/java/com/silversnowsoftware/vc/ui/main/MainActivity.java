@@ -100,7 +100,7 @@ public class MainActivity extends BaseActivity implements IMainView {
             @Override
             public void onClick(View view) {
 
-                RedirectToActivity(ListActivity.class);
+                redirectToActivity(ListActivity.class);
             }
         });
 

@@ -2,6 +2,7 @@ package com.silversnowsoftware.vc.ui.editor;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
+import com.googlecode.mp4parser.authoring.Edit;
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.model.listener.OnVideoTrimListener;
 import com.silversnowsoftware.vc.ui.base.BaseActivity;
@@ -30,18 +32,14 @@ public class EditorActivity extends BaseActivity implements IEditorView {
     OnVideoTrimListener mOnVideoTrimListener = new OnVideoTrimListener() {
         @Override
         public void onTrimStarted() {
-            // Create an indeterminate progress dialog
-            mProgressDialog = new ProgressDialog(EditorActivity.this);
-            mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            mProgressDialog.setTitle("Trimming...");
-            mProgressDialog.setIndeterminate(true);
-            mProgressDialog.setCancelable(false);
-            mProgressDialog.show();
+            showProgressDialog(EditorActivity.this, getString(R.string.video_trim));
         }
 
         @Override
         public void getResult(Uri uri) {
-            mProgressDialog.dismiss();
+
+            dismissProgressDialog();
+
             Bundle conData = new Bundle();
             conData.putString("INTENT_VIDEO_FILE", uri.getPath());
             Intent intent = new Intent();
@@ -49,7 +47,7 @@ public class EditorActivity extends BaseActivity implements IEditorView {
             setResult(RESULT_OK, intent);
             finish();
 
-            RedirectToActivity(ListActivity.class);
+            redirectToActivity(ListActivity.class);
         }
 
         @Override
