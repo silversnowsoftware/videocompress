@@ -26,6 +26,8 @@ public class MainViewHolder {
     Button btnChoose;
     @BindView(R.id.btnListFile)
     Button btnListFile;
+    @BindView(R.id.btnRemoveAll)
+    public Button btnRemoveAll;
 
     public MainViewHolder(Activity activity) {
         mView = (Activity) activity;

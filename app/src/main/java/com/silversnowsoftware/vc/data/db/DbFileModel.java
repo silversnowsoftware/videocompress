@@ -59,7 +59,17 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
     }
 
     @Override
-    public FileModel getbyId(Integer id) {
+    public void removeAll() {
+        try {
+            List<FileModel> list = getAll();
+            db.getFileModel().delete(list);
+        } catch (Exception ex) {
+
+        }
+    }
+
+    @Override
+    public FileModel getById(Integer id) {
         try {
             return db.getFileModel().queryForId(id);
         } catch (SQLException e) {
@@ -77,5 +87,16 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    public FileModel getByObject(FileModel item) {
+        FileModel file = null;
+        try {
+            file = db.getFileModel().queryForSameId(item);
+        } catch (Exception ex) {
+
+        }
+        return file;
     }
 }

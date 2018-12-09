@@ -11,6 +11,6 @@ import com.silversnowsoftware.vc.ui.base.IBasePresenter;
 
 public interface IListPresenter<V extends IListView> extends IBasePresenter<V> {
     public void fillListView();
-
     public void setViewHolder();
+
 }

@@ -106,5 +106,15 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
         return fileModel;
     }
 
+    @Override
+    public void deleteAllFiles() {
+        try {
+            getRepositoryFileModel().removeAll();
+        }
+        catch (Exception ex){
+
+        }
+    }
+
 
 }

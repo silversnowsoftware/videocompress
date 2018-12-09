@@ -1,6 +1,7 @@
 package com.silversnowsoftware.vc.ui.list;
 
 import android.app.Activity;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -21,6 +22,7 @@ public class ListViewHolder<V extends IListView> {
 
     @BindView(R.id.lvFileModel)
     public ListView lvFileModel;
+
 
     public ListViewHolder(V activity) {
         this.activity = (Activity) activity;
