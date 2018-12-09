@@ -31,11 +31,13 @@ import static com.silversnowsoftware.vc.utils.Types.getFileModelListType;
 
 public class ListPresenter<V extends IListView> extends BasePresenter<V> implements IListPresenter<V> {
     ListViewHolder viewHolder;
+
     @Inject
     public ListPresenter() {
         super();
 
     }
+
     public void setViewHolder() {
         viewHolder = new ListViewHolder(getView());
     }
@@ -47,17 +49,31 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
         videoCompressAdapter.setActivity((Activity) getView());
 
         if (fileModelList != null)
-        viewHolder.lvFileModel.setAdapter(videoCompressAdapter);
+            viewHolder.lvFileModel.setAdapter(videoCompressAdapter);
 
         viewHolder.lvFileModel.setEmptyView(viewHolder.tvNoDataFound);
     }
 
     private List<FileModel> getFileModelList() {
-        return (List<FileModel>) getData(Keys.FILE_LIST_KEY, getFileModelListType(), getContext());
+        List<FileModel> list = null;
+        try {
+            list = getRepositoryFileModel().getAll();
+
+        } catch (Exception ex) {
+
+        }
+        return list;
     }
 
     private VideoCompressAdapter getVideoCompressAdapter(List<FileModel> fileModelList) {
-        return new VideoCompressAdapter(getContext(), R.layout.file_model_list, fileModelList);
+        VideoCompressAdapter adapter = null;
+        try {
+            adapter = new VideoCompressAdapter(getContext(), R.layout.file_model_list, fileModelList);
+
+        } catch (Exception ex) {
+
+        }
+        return adapter;
     }
 
 }

@@ -37,13 +37,12 @@ public class BasePresenter<V extends IBaseView> implements IBasePresenter<V> {
     }
 
 
-
     protected Context getContext() {
         return ((Activity) getView()).getApplicationContext();
     }
 
 
-    public IRepository<FileModel> DbFileModel() {
+    public IRepository<FileModel> getRepositoryFileModel() {
         return new DbFileModel(getContext());
     }
 }

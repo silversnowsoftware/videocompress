@@ -51,51 +51,58 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
     }
 
     public void collectFiles(Intent data) {
-        ArrayList<String> tempfilepath = FileHelper.GetAllPath(getContext(), data);
-        for (String path : tempfilepath) {
+        try {
+            ArrayList<String> tempfilepath = FileHelper.GetAllPath(getContext(), data);
+            for (String path : tempfilepath) {
 
-            FileModel fileModel = createFileModel(path);
+                FileModel file = createFileModel(path);
+                if (file != null) {
+                    getRepositoryFileModel().add(file);
+                }
+            }
+        } catch (Exception ex) {
 
-            List<FileModel> list = (List<FileModel>) getData(Keys.FILE_LIST_KEY, Types.getFileModelListType(), getContext());
-            if (list == null) list = new ArrayList<FileModel>();
-            if (!list.contains(fileModel))
-                list.add(fileModel);
-
-            putData(Keys.FILE_LIST_KEY, list, getContext());
         }
+
     }
 
     public FileModel createFileModel(String path) {
-
         FileModel fileModel = new FileModel();
 
-        fileModel.setPath(path);
-        fileModel.setName(getFileNameFromPath(path));
-
-        Bitmap bitmap = null;
         try {
-            bitmap = FileHelper.retriveVideoFrameFromVideo(path);
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-        }
-        if (bitmap != null) {
-            bitmap = Bitmap.createScaledBitmap(bitmap, 240, 240, false);
-            String byteThumb = getBase64FromBitmap(bitmap);
-            fileModel.setThumbnail(byteThumb);
+            fileModel.setPath(path);
+            fileModel.setName(getFileNameFromPath(path));
+
+            Bitmap bitmap = null;
+            try {
+                bitmap = FileHelper.retriveVideoFrameFromVideo(path);
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+            }
+            if (bitmap != null) {
+                bitmap = Bitmap.createScaledBitmap(bitmap, 240, 240, false);
+                String byteThumb = getBase64FromBitmap(bitmap);
+                fileModel.setThumbnail(byteThumb);
+            }
+
+
+            MediaMetadataRetriever retr = new MediaMetadataRetriever();
+            retr.setDataSource(fileModel.getPath());
+            String time = retr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+
+            try {
+                videoLength = Double.parseDouble(time) / 1000.00;
+            } catch (Exception e) {
+                e.printStackTrace();
+                videoLength = 0.00;
+            }
+            fileModel.setVideoLength(videoLength);
+
+        } catch (Exception ex) {
+
         }
 
 
-        MediaMetadataRetriever retr = new MediaMetadataRetriever();
-        retr.setDataSource(fileModel.getPath());
-        String time = retr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-
-        try {
-            videoLength = Double.parseDouble(time) / 1000.00;
-        } catch (Exception e) {
-            e.printStackTrace();
-            videoLength = 0.00;
-        }
-        fileModel.setVideoLength(videoLength);
         return fileModel;
     }
 

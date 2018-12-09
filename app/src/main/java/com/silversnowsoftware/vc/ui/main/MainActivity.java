@@ -45,7 +45,6 @@ public class MainActivity extends BaseActivity implements IMainView {
     SimpleExoPlayerView exoPlayerView;
     SimpleExoPlayer exoPlayer;
     String videoURL = "http://blueappsoftware.in/layout_design_android_blog.mp4";
-    static ArrayList<String> MediasPaths = new ArrayList<>();
 
     @Inject
     IMainPresenter<IMainView> mPresenter;
@@ -104,6 +103,7 @@ public class MainActivity extends BaseActivity implements IMainView {
                 RedirectToActivity(ListActivity.class);
             }
         });
+
 
     }
 

@@ -114,7 +114,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
 
     @Override
     public void setVideoToVideoView() {
-        List<FileModel> fileModelList = (List<FileModel>) getData(Keys.FILE_LIST_KEY, Types.getFileModelListType(), getContext());
+        List<FileModel> fileModelList = getRepositoryFileModel().getAll();
         srcFile = fileModelList.get(fileModelList.size() - 1).getPath();
         mMaxDuration = getVideoDuration((Activity) getView(), srcFile);
          mDefaultResolutionId = findVideoResolution(srcFile);
@@ -430,7 +430,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
 
         baseResponse.setSuccess(true);
 
-        List<FileModel> fileModelList = (List<FileModel>) getData(Keys.FILE_LIST_KEY, Types.getFileModelListType(), getContext());
+        List<FileModel> fileModelList = getRepositoryFileModel().getAll();
         FileModel fileModel = fileModelList.get(fileModelList.size() - 1);
 
         Map<String, Integer> videoResolutions = getVideoResoution(fileModel.getPath());

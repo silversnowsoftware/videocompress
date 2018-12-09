@@ -7,6 +7,7 @@ import com.silversnowsoftware.vc.di.component.ApplicationComponent;
 import com.silversnowsoftware.vc.di.component.DaggerApplicationComponent;
 import com.silversnowsoftware.vc.di.module.ApplicationModule;
 import com.silversnowsoftware.vc.model.FileModel;
+import com.silversnowsoftware.vc.utils.SharedPref;
 import com.silversnowsoftware.vc.utils.constants.Globals;
 
 import java.util.ArrayList;
@@ -27,9 +28,7 @@ public class VideoCompressApplication extends Application {
         Globals.FileModelList = new ArrayList<FileModel>();
         mApplicationComponent = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(this)).build();
-
         mApplicationComponent.inject(this);
-
     }
 
     public ApplicationComponent getComponent() {

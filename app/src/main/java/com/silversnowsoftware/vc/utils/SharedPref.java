@@ -35,29 +35,51 @@ public class SharedPref {
 
 
     public static Object getData(String key, Type type, Context context) {
-        Gson gson = new Gson();
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String json = preferences.getString(key, "");
         Object obj = null;
 
-        obj = (Object) gson.fromJson(json, type);
+        try {
+            Gson gson = new Gson();
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+            String json = preferences.getString(key, "");
+
+            obj = (Object) gson.fromJson(json, type);
+
+        } catch (Exception ex) {
+
+        }
         return obj;
     }
 
 
     public static String getData(String key, Context context) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        String value = preferences.getString(key, "");
+        String value = null;
+        try {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+            value = preferences.getString(key, "");
+
+        } catch (Exception ex) {
+
+        }
         return value;
     }
 
     public static void Clear(Context context) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        preferences.edit().clear().commit();
+        try {
+
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+            preferences.edit().clear().commit();
+        } catch (Exception ex) {
+
+        }
     }
 
     public static void RemoveKey(String key, Context context) {
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-        preferences.edit().remove(key).commit();
+        try {
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+            preferences.edit().remove(key).commit();
+
+        } catch (Exception ex) {
+
+        }
     }
 }
