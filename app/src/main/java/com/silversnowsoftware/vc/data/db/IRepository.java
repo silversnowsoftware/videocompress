@@ -20,6 +20,8 @@ public interface IRepository<T> {
 
     void removeAll();
 
+    int removeIds(List<Integer> ids);
+
     T getById(Integer id);
 
     List<T> getAll();

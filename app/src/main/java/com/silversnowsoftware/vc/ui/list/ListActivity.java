@@ -27,6 +27,7 @@ public class ListActivity extends BaseActivity implements IListView {
         ButterKnife.bind(this);
 
         SharedPref.RemoveKey(Keys.SELECTED_FILE_LIST, this);
+        SharedPref.RemoveKey(Keys.HAS_LONG_CLICK, this);
 
         mPresenter.onAttach(this);
         mPresenter.setViewHolder();
