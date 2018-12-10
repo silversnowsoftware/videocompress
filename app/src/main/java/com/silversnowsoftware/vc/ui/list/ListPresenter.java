@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.ui.base.BasePresenter;
+import com.silversnowsoftware.vc.ui.base.BaseResponse;
 import com.silversnowsoftware.vc.ui.base.component.VideoCompressAdapter;
 import com.silversnowsoftware.vc.ui.main.IMainPresenter;
 import com.silversnowsoftware.vc.utils.constants.Keys;
@@ -40,6 +41,18 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
 
     public void setViewHolder() {
         viewHolder = new ListViewHolder(getView());
+    }
+
+    @Override
+    public BaseResponse deleteSelectedFiles(List<Integer> ids) {
+        BaseResponse response = new BaseResponse();
+        try {
+            getRepositoryFileModel().removeIds(ids);
+            response.setSuccess(true);
+        } catch (Exception ex) {
+            response.setSuccess(false);
+        }
+        return response;
     }
 
 

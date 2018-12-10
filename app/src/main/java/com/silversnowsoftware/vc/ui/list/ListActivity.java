@@ -5,8 +5,11 @@ import android.view.View;
 
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.ui.base.BaseActivity;
+import com.silversnowsoftware.vc.ui.base.BaseResponse;
 import com.silversnowsoftware.vc.utils.SharedPref;
 import com.silversnowsoftware.vc.utils.constants.Keys;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -18,6 +21,7 @@ public class ListActivity extends BaseActivity implements IListView {
 
     @Inject
     IListPresenter<IListView> mPresenter;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,6 +36,12 @@ public class ListActivity extends BaseActivity implements IListView {
         mPresenter.onAttach(this);
         mPresenter.setViewHolder();
         mPresenter.fillListView();
+        BaseResponse response = mPresenter.deleteSelectedFiles(new ArrayList<Integer>());
+        if (response.getSuccess())
+        {
+            showProgressDialog(this,getString(R.string.deleting));
+            dismissProgressDialog();
+        }
     }
 
     @Override

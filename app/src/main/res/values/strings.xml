@@ -5,7 +5,7 @@
     <string name="take_video">Video Çek</string>
     <string name="load_from_gallery">Galeriden Yükle</string>
     <string name="list">Listele</string>
-
+    <string name="deleting">Siliniyor...</string>
 
     <string name="title_activity_list">ListActivity</string>
     <string name="action_settings">Settings</string>
