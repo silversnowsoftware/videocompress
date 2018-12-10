@@ -26,9 +26,6 @@ public class ListActivity extends BaseActivity implements IListView {
     @Inject
     IListPresenter<IListView> mPresenter;
 
-    private Context getContext() {
-        return this.getApplicationContext();
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,8 +41,8 @@ public class ListActivity extends BaseActivity implements IListView {
         mPresenter.setViewHolder();
         mPresenter.fillListView();
 
-       /* DeleteFilesOperation deleteFilesOperation = new DeleteFilesOperation();
-        deleteFilesOperation.execute();*/
+        DeleteFilesOperation deleteFilesOperation = new DeleteFilesOperation();
+        deleteFilesOperation.execute();
     }
 
     @Override
@@ -72,7 +69,7 @@ public class ListActivity extends BaseActivity implements IListView {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            showProgressDialog(getContext(), getString(R.string.deleting));
+            showProgressDialog(ListActivity.this, getString(R.string.deleting));
         }
 
         @Override
