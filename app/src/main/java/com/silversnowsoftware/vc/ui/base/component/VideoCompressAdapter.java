@@ -66,14 +66,15 @@ public class VideoCompressAdapter extends ArrayAdapter {
             @Override
             public boolean onLongClick(View view) {
                 viewHolder.ivSelectRow.setVisibility(View.VISIBLE);
-
+                viewHolder.selectRow.setBackgroundResource(R.color.selectedListItemColor);
+                Globals.selectedFiles.remove((Object)viewHolder.getId());
                 SharedPref.putData(Keys.HAS_LONG_CLICK, true, getContext());
                 notifyDataSetChanged();
 
                 return true;
             }
         });
-        viewHolder.ivSelectRow.setOnClickListener(new View.OnClickListener() {
+        viewHolder._view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -84,12 +85,12 @@ public class VideoCompressAdapter extends ArrayAdapter {
 
                 if (viewHolder.getSelected()) {
                     viewHolder.setSelected(false);
-                    viewHolder.ivSelectRow.setImageResource(R.drawable.circle_one);
+                    viewHolder.ivSelectRow.setVisibility(View.GONE);
                     viewHolder.selectRow.setBackgroundColor(Color.WHITE);
                     Globals.selectedFiles.remove((Object)viewHolder.getId());
                 } else {
                     viewHolder.setSelected(true);
-                    viewHolder.ivSelectRow.setImageResource(R.drawable.circle_two);
+                    viewHolder.ivSelectRow.setVisibility(View.VISIBLE);
                     viewHolder.selectRow.setBackgroundResource(R.color.selectedListItemColor);
                     Globals.selectedFiles.add(viewHolder.getId());
                 }
@@ -105,7 +106,7 @@ public class VideoCompressAdapter extends ArrayAdapter {
             viewHolder.ivVideoTumbnail.setImageBitmap(FileHelper.getBitmapFromBase64(model.getThumbnail()));
             viewHolder.tvResolution.setText(model.getResolution());
             Boolean hasLongClick = (Boolean) SharedPref.getData(Keys.HAS_LONG_CLICK, Types.getHasLongClickType(), getContext());
-            if (hasLongClick != null && hasLongClick != false) viewHolder.ivSelectRow.setVisibility(View.VISIBLE);
+           // if (hasLongClick != null && hasLongClick != false) viewHolder.ivSelectRow.setVisibility(View.VISIBLE);
         }
 
 

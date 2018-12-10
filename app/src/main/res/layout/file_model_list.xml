@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center|top"
-    App:cardBackgroundColor="#000"
-    App:cardCornerRadius="10dp">
+    App:cardCornerRadius="5dp">
 
     <LinearLayout
         android:id="@+id/selectRow"
@@ -14,20 +13,30 @@
         android:layout_height="match_parent"
         android:background="@color/card_background"
         android:orientation="horizontal">
-        <ImageView
-            android:id="@+id/ivSelectRow"
-            android:paddingLeft="5dp"
-            android:layout_gravity="center"
-            android:src="@drawable/circle_one"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:visibility="gone"/>
-        <ImageView
-            android:id="@+id/ivVideoTumbnail"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:padding="15dp"
-            android:src="@mipmap/ic_launcher" />
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+            <ImageView
+                android:id="@+id/ivVideoTumbnail"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:padding="15dp"
+                android:src="@mipmap/ic_launcher"
+                android:scaleType="center"/>
+
+            <ImageView
+                android:id="@+id/ivSelectRow"
+                android:paddingLeft="5dp"
+                android:layout_gravity="center"
+                android:src="@mipmap/selected"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignBottom="@id/ivVideoTumbnail"
+                android:layout_alignRight="@id/ivVideoTumbnail"
+                android:visibility="gone"/>
+        </RelativeLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
