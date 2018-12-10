@@ -1,5 +1,7 @@
 package com.silversnowsoftware.vc.ui.list;
 
+import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 
@@ -22,6 +24,9 @@ public class ListActivity extends BaseActivity implements IListView {
     @Inject
     IListPresenter<IListView> mPresenter;
 
+    private Context getContext() {
+        return this.getApplicationContext();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -36,12 +41,9 @@ public class ListActivity extends BaseActivity implements IListView {
         mPresenter.onAttach(this);
         mPresenter.setViewHolder();
         mPresenter.fillListView();
-        BaseResponse response = mPresenter.deleteSelectedFiles(new ArrayList<Integer>());
-        if (response.getSuccess())
-        {
-            showProgressDialog(this,getString(R.string.deleting));
-            dismissProgressDialog();
-        }
+
+        DeleteFilesOperation deleteFilesOperation = new DeleteFilesOperation();
+        deleteFilesOperation.execute();
     }
 
     @Override
@@ -49,5 +51,24 @@ public class ListActivity extends BaseActivity implements IListView {
         return R.layout.activity_list;
     }
 
+    private class DeleteFilesOperation extends AsyncTask<Void, Void, Void> {
 
+        @Override
+        protected Void doInBackground(Void... voids) {
+            mPresenter.deleteSelectedFiles(new ArrayList<Integer>());
+            return null;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            showProgressDialog(getContext(), getString(R.string.deleting));
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            dismissProgressDialog();
+        }
+    }
 }
