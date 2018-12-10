@@ -15,6 +15,11 @@ import com.silversnowsoftware.vc.di.component.DaggerActivityComponent;
 import com.silversnowsoftware.vc.di.module.ActivityModule;
 import com.silversnowsoftware.vc.ui.editor.EditorActivity;
 import com.silversnowsoftware.vc.ui.main.MainActivity;
+import com.silversnowsoftware.vc.utils.SharedPref;
+import com.silversnowsoftware.vc.utils.Types;
+import com.silversnowsoftware.vc.utils.constants.Keys;
+
+import java.util.List;
 
 /**
  * Created by burak on 10/8/2018.
@@ -24,6 +29,14 @@ public class BaseActivity extends AppCompatActivity implements IBaseView {
 
     private ActivityComponent mActivityComponent;
     private ProgressDialog mProgressDialog;
+
+    private Context getContext() {
+        return getApplicationContext();
+    }
+
+    protected  List<Integer> getSelectedFiles() {
+        return (List<Integer>) SharedPref.getData(Keys.SELECTED_FILE_LIST, Types.getSelectedFileModelListType(), getContext());
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,18 +59,18 @@ public class BaseActivity extends AppCompatActivity implements IBaseView {
     }
 
     public void showToastMethod(String message) {
-        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void redirectToActivity(final Class<?> activityClass) {
-        Intent intent = new Intent(getApplicationContext(), activityClass);
+        Intent intent = new Intent(getContext(), activityClass);
         startActivity(intent);
 
     }
 
     @Override
-    public void showProgressDialog(Context context,String title) {
+    public void showProgressDialog(Context context, String title) {
         mProgressDialog = new ProgressDialog(context);
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         mProgressDialog.setTitle(title);
@@ -69,7 +82,7 @@ public class BaseActivity extends AppCompatActivity implements IBaseView {
     @Override
     public void dismissProgressDialog() {
         if (mProgressDialog != null)
-        mProgressDialog.dismiss();
+            mProgressDialog.dismiss();
     }
 
 

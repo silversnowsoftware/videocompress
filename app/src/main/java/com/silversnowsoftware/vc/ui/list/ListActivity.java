@@ -66,6 +66,7 @@ public class ListActivity extends BaseActivity implements IListView {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         showToastMethod(String.valueOf(item.getItemId()));
+
         switch (item.getItemId()) {
             case R.id.action_delete:
                 DeleteFilesOperation deleteFilesOperation = new DeleteFilesOperation();
@@ -80,7 +81,7 @@ public class ListActivity extends BaseActivity implements IListView {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            List<Integer> selectedFiles = (List<Integer>) SharedPref.getData(Keys.SELECTED_FILE_LIST, Types.getSelectedFileModelListType(), getContext());
+            List<Integer> selectedFiles = getSelectedFiles();
             mPresenter.deleteSelectedFiles(selectedFiles);
             return null;
         }
@@ -89,7 +90,7 @@ public class ListActivity extends BaseActivity implements IListView {
         protected void onPreExecute() {
             super.onPreExecute();
             try {
-                Thread.sleep(1000);
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
