@@ -19,7 +19,6 @@ import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.silversnowsoftware.vc.utils.constants.Globals.FileModelList;
 
 /**
  * Created by burak on 10/15/2018.

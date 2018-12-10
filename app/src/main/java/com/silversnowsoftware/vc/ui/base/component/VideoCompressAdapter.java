@@ -20,10 +20,14 @@ import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.model.listener.ICustomListener;
 import com.silversnowsoftware.vc.operations.compressor.FileCompressor;
+import com.silversnowsoftware.vc.utils.SharedPref;
+import com.silversnowsoftware.vc.utils.Types;
+import com.silversnowsoftware.vc.utils.constants.Globals;
 import com.silversnowsoftware.vc.utils.constants.Keys;
 import com.silversnowsoftware.vc.utils.enums.FileStatusEnum;
 import com.silversnowsoftware.vc.utils.helpers.FileHelper;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 import butterknife.BindView;
@@ -67,6 +71,8 @@ public class VideoCompressAdapter extends ArrayAdapter {
         viewHolder.ivSelectRow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //Globals.selectedFiles = SharedPref.getData(Keys.SELECTED_FILE_LIST, Types.getSelectedFileModelListType(),getContext());
+
                 if (!viewHolder.getSelected()) {
                     viewHolder.setSelected(true);
                     viewHolder.ivSelectRow.setImageResource(R.drawable.circle_two);
@@ -75,6 +81,7 @@ public class VideoCompressAdapter extends ArrayAdapter {
                     viewHolder.setSelected(false);
                     viewHolder.ivSelectRow.setImageResource(R.drawable.circle_one);
                     viewHolder.selectRow.setBackgroundColor(Color.WHITE);
+
                 }
             }
         });

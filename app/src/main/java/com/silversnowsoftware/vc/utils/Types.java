@@ -15,4 +15,8 @@ public class Types {
         return new TypeToken<ArrayList<FileModel>>() {
         }.getType();
     }
+    public static Type getSelectedFileModelListType() {
+        return new TypeToken<ArrayList<Integer>>() {
+        }.getType();
+    }
 }

@@ -25,10 +25,13 @@ public class VideoCompressApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Globals.FileModelList = new ArrayList<FileModel>();
-        mApplicationComponent = DaggerApplicationComponent.builder()
+        Globals.fileModelList = new ArrayList<FileModel>();
+        Globals.selectedFiles = new ArrayList<Integer>();
+
+                mApplicationComponent = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(this)).build();
         mApplicationComponent.inject(this);
+        SharedPref.Clear(this);
     }
 
     public ApplicationComponent getComponent() {

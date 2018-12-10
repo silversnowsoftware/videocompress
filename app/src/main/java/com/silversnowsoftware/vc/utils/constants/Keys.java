@@ -7,4 +7,5 @@ package com.silversnowsoftware.vc.utils.constants;
 public class Keys {
 
     public static final String FILE_LIST_KEY = "FILELISTKEY";
+    public static final String SELECTED_FILE_LIST ="SELECTEDFILElIST";
 }
