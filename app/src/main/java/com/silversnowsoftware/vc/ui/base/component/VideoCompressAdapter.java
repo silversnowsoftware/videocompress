@@ -90,7 +90,7 @@ public class VideoCompressAdapter extends ArrayAdapter {
                 } else {
                     viewHolder.setSelected(true);
                     viewHolder.ivSelectRow.setImageResource(R.drawable.circle_two);
-                    viewHolder.selectRow.setBackgroundColor(Color.GRAY);
+                    viewHolder.selectRow.setBackgroundResource(R.color.selectedListItemColor);
                     Globals.selectedFiles.add(viewHolder.getId());
                 }
 

@@ -3,6 +3,7 @@ package com.silversnowsoftware.vc.ui.list;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
 
 import com.silversnowsoftware.vc.R;
@@ -50,7 +51,16 @@ public class ListActivity extends BaseActivity implements IListView {
     protected int getLayoutResourceId() {
         return R.layout.activity_list;
     }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_list, menu);
 
+        //  MenuItem item=menu.findItem(R.id.action_share);
+
+        //   share=(ShareActionProvider) MenuItemCompat.getActionProvider(item);
+
+        return(super.onCreateOptionsMenu(menu));
+    }
     private class DeleteFilesOperation extends AsyncTask<Void, Void, Void> {
 
         @Override
