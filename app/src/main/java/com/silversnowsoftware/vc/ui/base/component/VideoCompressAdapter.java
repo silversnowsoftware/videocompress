@@ -28,6 +28,7 @@ import com.silversnowsoftware.vc.utils.enums.FileStatusEnum;
 import com.silversnowsoftware.vc.utils.helpers.FileHelper;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -71,18 +72,25 @@ public class VideoCompressAdapter extends ArrayAdapter {
         viewHolder.ivSelectRow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Globals.selectedFiles = SharedPref.getData(Keys.SELECTED_FILE_LIST, Types.getSelectedFileModelListType(),getContext());
 
-                if (!viewHolder.getSelected()) {
-                    viewHolder.setSelected(true);
-                    viewHolder.ivSelectRow.setImageResource(R.drawable.circle_two);
-                    viewHolder.selectRow.setBackgroundColor(Color.GRAY);
-                } else {
+                Globals.selectedFiles = (ArrayList<Integer>) SharedPref.getData(Keys.SELECTED_FILE_LIST, Types.getSelectedFileModelListType(), getContext());
+
+                if (Globals.selectedFiles == null)
+                        Globals.selectedFiles = new ArrayList<Integer>();
+
+                if (viewHolder.getSelected()) {
                     viewHolder.setSelected(false);
                     viewHolder.ivSelectRow.setImageResource(R.drawable.circle_one);
                     viewHolder.selectRow.setBackgroundColor(Color.WHITE);
-
+                    Globals.selectedFiles.remove(viewHolder.getId());
+                } else {
+                    viewHolder.setSelected(true);
+                    viewHolder.ivSelectRow.setImageResource(R.drawable.circle_two);
+                    viewHolder.selectRow.setBackgroundColor(Color.GRAY);
+                    Globals.selectedFiles.add(viewHolder.getId());
                 }
+
+                SharedPref.putData(Keys.SELECTED_FILE_LIST,Globals.selectedFiles,getContext());
             }
         });
 
