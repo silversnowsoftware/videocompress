@@ -1,17 +1,19 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/action_share"
-        android:orderInCategory="150"
-        android:title="@string/action_share"
-        android:icon="@mipmap/share"
-        app:showAsAction="ifRoom"/>
+
     <item
         android:id="@+id/action_delete"
         android:orderInCategory="200"
         android:title="@string/action_delete"
         android:icon="@mipmap/clear2"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_share"
+        android:orderInCategory="150"
+        android:title="@string/action_share"
+        android:icon="@mipmap/share"
+        app:showAsAction="ifRoom"/>
 
 
 </menu>

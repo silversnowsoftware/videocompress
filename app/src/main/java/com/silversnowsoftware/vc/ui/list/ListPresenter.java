@@ -62,9 +62,11 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
         VideoCompressAdapter videoCompressAdapter = getVideoCompressAdapter(fileModelList);
         videoCompressAdapter.setActivity((Activity) getView());
 
-        if (fileModelList != null)
+        if (fileModelList != null) {
+            videoCompressAdapter.notifyDataSetChanged();
             viewHolder.lvFileModel.setAdapter(videoCompressAdapter);
 
+        }
         viewHolder.lvFileModel.setEmptyView(viewHolder.tvNoDataFound);
     }
 

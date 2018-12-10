@@ -5,15 +5,18 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.ui.base.BaseActivity;
 import com.silversnowsoftware.vc.ui.base.BaseResponse;
 import com.silversnowsoftware.vc.utils.SharedPref;
+import com.silversnowsoftware.vc.utils.Types;
 import com.silversnowsoftware.vc.utils.constants.Keys;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -26,6 +29,9 @@ public class ListActivity extends BaseActivity implements IListView {
     @Inject
     IListPresenter<IListView> mPresenter;
 
+    private Context getContext() {
+        return getApplicationContext();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,8 +47,7 @@ public class ListActivity extends BaseActivity implements IListView {
         mPresenter.setViewHolder();
         mPresenter.fillListView();
 
-        DeleteFilesOperation deleteFilesOperation = new DeleteFilesOperation();
-        deleteFilesOperation.execute();
+
     }
 
     @Override
@@ -58,17 +63,36 @@ public class ListActivity extends BaseActivity implements IListView {
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        showToastMethod(String.valueOf(item.getItemId()));
+        switch (item.getItemId()) {
+            case R.id.action_delete:
+                DeleteFilesOperation deleteFilesOperation = new DeleteFilesOperation();
+                deleteFilesOperation.execute();
+                mPresenter.fillListView();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private class DeleteFilesOperation extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            mPresenter.deleteSelectedFiles(new ArrayList<Integer>());
+            List<Integer> selectedFiles = (List<Integer>) SharedPref.getData(Keys.SELECTED_FILE_LIST, Types.getSelectedFileModelListType(), getContext());
+            mPresenter.deleteSelectedFiles(selectedFiles);
             return null;
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             showProgressDialog(ListActivity.this, getString(R.string.deleting));
         }
 
