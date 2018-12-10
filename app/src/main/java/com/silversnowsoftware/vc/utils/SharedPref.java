@@ -44,6 +44,7 @@ public class SharedPref {
 
             obj = (Object) gson.fromJson(json, type);
 
+
         } catch (Exception ex) {
 
         }

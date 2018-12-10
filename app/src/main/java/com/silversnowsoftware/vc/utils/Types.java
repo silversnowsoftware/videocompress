@@ -19,4 +19,9 @@ public class Types {
         return new TypeToken<ArrayList<Integer>>() {
         }.getType();
     }
+
+    public static Type getHasLongClickType() {
+        return new TypeToken<Boolean>() {
+        }.getType();
+    }
 }

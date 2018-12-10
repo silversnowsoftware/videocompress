@@ -28,6 +28,7 @@ import com.silversnowsoftware.vc.utils.enums.FileStatusEnum;
 import com.silversnowsoftware.vc.utils.helpers.FileHelper;
 
 import java.lang.reflect.Type;
+import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +66,10 @@ public class VideoCompressAdapter extends ArrayAdapter {
             @Override
             public boolean onLongClick(View view) {
                 viewHolder.ivSelectRow.setVisibility(View.VISIBLE);
-                Toast.makeText(getContext(), String.valueOf(viewHolder.getId()), Toast.LENGTH_LONG).show();
+
+                SharedPref.putData(Keys.HAS_LONG_CLICK, true, getContext());
+                notifyDataSetChanged();
+
                 return true;
             }
         });
@@ -76,7 +80,7 @@ public class VideoCompressAdapter extends ArrayAdapter {
                 Globals.selectedFiles = (ArrayList<Integer>) SharedPref.getData(Keys.SELECTED_FILE_LIST, Types.getSelectedFileModelListType(), getContext());
 
                 if (Globals.selectedFiles == null)
-                        Globals.selectedFiles = new ArrayList<Integer>();
+                    Globals.selectedFiles = new ArrayList<Integer>();
 
                 if (viewHolder.getSelected()) {
                     viewHolder.setSelected(false);
@@ -90,16 +94,18 @@ public class VideoCompressAdapter extends ArrayAdapter {
                     Globals.selectedFiles.add(viewHolder.getId());
                 }
 
-                SharedPref.putData(Keys.SELECTED_FILE_LIST,Globals.selectedFiles,getContext());
+                SharedPref.putData(Keys.SELECTED_FILE_LIST, Globals.selectedFiles, getContext());
             }
         });
 
         final FileModel model = (FileModel) getItem(position);
         if (model != null) {
+            viewHolder.setId(model.getId());
             viewHolder.tvVideoName.setText(model.getName());
             viewHolder.ivVideoTumbnail.setImageBitmap(FileHelper.getBitmapFromBase64(model.getThumbnail()));
             viewHolder.tvResolution.setText(model.getResolution());
-            viewHolder.setId(model.getId());
+            Boolean hasLongClick = (Boolean) SharedPref.getData(Keys.HAS_LONG_CLICK, Types.getHasLongClickType(), getContext());
+            if (hasLongClick != null && hasLongClick != false) viewHolder.ivSelectRow.setVisibility(View.VISIBLE);
         }
 
 
