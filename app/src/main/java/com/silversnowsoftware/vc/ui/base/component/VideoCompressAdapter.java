@@ -2,6 +2,7 @@ package com.silversnowsoftware.vc.ui.base.component;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -10,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,18 +55,27 @@ public class VideoCompressAdapter extends ArrayAdapter {
             view = layoutInflater.inflate(R.layout.file_model_list, null);
 
         }
-        final ViewHolder  viewHolder = new ViewHolder(view);
+        final ViewHolder viewHolder = new ViewHolder(view);
         viewHolder._view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                Toast.makeText(getContext(), "Selam", Toast.LENGTH_LONG).show();
+                viewHolder.ivSelectRow.setVisibility(View.VISIBLE);
+                Toast.makeText(getContext(), String.valueOf(viewHolder.getId()), Toast.LENGTH_LONG).show();
                 return true;
             }
         });
         viewHolder.ivSelectRow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewHolder.ivSelectRow.setImageResource(R.drawable.circle_two);
+                if (!viewHolder.getSelected()) {
+                    viewHolder.setSelected(true);
+                    viewHolder.ivSelectRow.setImageResource(R.drawable.circle_two);
+                    viewHolder.selectRow.setBackgroundColor(Color.GRAY);
+                } else {
+                    viewHolder.setSelected(false);
+                    viewHolder.ivSelectRow.setImageResource(R.drawable.circle_one);
+                    viewHolder.selectRow.setBackgroundColor(Color.WHITE);
+                }
             }
         });
 
@@ -73,6 +84,7 @@ public class VideoCompressAdapter extends ArrayAdapter {
             viewHolder.tvVideoName.setText(model.getName());
             viewHolder.ivVideoTumbnail.setImageBitmap(FileHelper.getBitmapFromBase64(model.getThumbnail()));
             viewHolder.tvResolution.setText(model.getResolution());
+            viewHolder.setId(model.getId());
         }
 
 
@@ -117,6 +129,8 @@ public class VideoCompressAdapter extends ArrayAdapter {
     static class ViewHolder {
         View _view;
 
+        private int _id;
+
         @BindView(R.id.tvVideoName)
         TextView tvVideoName;
         @BindView(R.id.pbProgress)
@@ -127,10 +141,30 @@ public class VideoCompressAdapter extends ArrayAdapter {
         TextView tvResolution;
         @BindView(R.id.ivSelectRow)
         ImageView ivSelectRow;
+        @BindView(R.id.selectRow)
+        LinearLayout selectRow;
+
+        private boolean isSelected;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
             _view = view;
+        }
+
+        public boolean getSelected() {
+            return isSelected;
+        }
+
+        public void setSelected(boolean selected) {
+            isSelected = selected;
+        }
+
+        public int getId() {
+            return _id;
+        }
+
+        public void setId(int id) {
+            this._id = id;
         }
     }
 }

@@ -9,6 +9,7 @@
     App:cardCornerRadius="10dp">
 
     <LinearLayout
+        android:id="@+id/selectRow"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/card_background"
@@ -19,7 +20,8 @@
             android:layout_gravity="center"
             android:src="@drawable/circle_one"
             android:layout_width="50dp"
-            android:layout_height="50dp" />
+            android:layout_height="50dp"
+            android:visibility="gone"/>
         <ImageView
             android:id="@+id/ivVideoTumbnail"
             android:layout_width="100dp"

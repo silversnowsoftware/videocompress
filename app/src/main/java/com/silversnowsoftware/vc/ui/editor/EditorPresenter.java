@@ -444,13 +444,10 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             fileModel.setResolution(resolution);
             fileModel.setFileStatus(FileStatusEnum.PREPEARING);
 
-            FileModel fm = getRepositoryFileModel().getByObject(fileModel);
+           // FileModel fm = getRepositoryFileModel().getByObject(fileModel);
 
-            if (fm != null) {
-                getRepositoryFileModel().update(fileModel);
-            } else {
-                getRepositoryFileModel().add(fileModel);
-            }
+             getRepositoryFileModel().add(fileModel);
+
 
         } else {
 
