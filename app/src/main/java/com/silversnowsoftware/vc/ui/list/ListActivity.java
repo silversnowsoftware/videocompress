@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 
 import com.silversnowsoftware.vc.R;
@@ -43,24 +44,23 @@ public class ListActivity extends BaseActivity implements IListView {
         mPresenter.setViewHolder();
         mPresenter.fillListView();
 
-        DeleteFilesOperation deleteFilesOperation = new DeleteFilesOperation();
-        deleteFilesOperation.execute();
+       /* DeleteFilesOperation deleteFilesOperation = new DeleteFilesOperation();
+        deleteFilesOperation.execute();*/
     }
 
     @Override
     protected int getLayoutResourceId() {
         return R.layout.activity_list;
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_list, menu);
-
-        //  MenuItem item=menu.findItem(R.id.action_share);
-
-        //   share=(ShareActionProvider) MenuItemCompat.getActionProvider(item);
-
-        return(super.onCreateOptionsMenu(menu));
+        menu.clear();
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_list, menu);
+        return true;
     }
+
     private class DeleteFilesOperation extends AsyncTask<Void, Void, Void> {
 
         @Override
