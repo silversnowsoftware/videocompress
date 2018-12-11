@@ -14,21 +14,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.model.listener.ICustomListener;
 import com.silversnowsoftware.vc.operations.compressor.FileCompressor;
-import com.silversnowsoftware.vc.utils.SharedPref;
-import com.silversnowsoftware.vc.utils.Types;
 import com.silversnowsoftware.vc.utils.constants.Globals;
-import com.silversnowsoftware.vc.utils.constants.Keys;
 import com.silversnowsoftware.vc.utils.enums.FileStatusEnum;
 import com.silversnowsoftware.vc.utils.helpers.FileHelper;
 
-import java.lang.reflect.Type;
-import java.security.Key;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -67,12 +61,10 @@ public class VideoCompressAdapter extends ArrayAdapter {
             public boolean onLongClick(View view) {
                 viewHolder.ivSelectRow.setVisibility(View.VISIBLE);
                 viewHolder.selectRow.setBackgroundResource(R.color.selectedListItemColor);
-                Globals.selectedFiles.remove((Object)viewHolder.getId());
                 FileModel model = (FileModel) getItem(position);
                 Globals.selectedFiles.add(model);
                 Globals.selectionMode = true;
                 viewHolder.setSelected(true);
-                notifyDataSetChanged();
 
                 return true;
             }
@@ -80,8 +72,9 @@ public class VideoCompressAdapter extends ArrayAdapter {
         viewHolder._view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 FileModel model = (FileModel) getItem(position);
-               if(Globals.selectionMode) {
+                if(Globals.selectionMode) {
 
                     if (Globals.selectedFiles == null)
                         Globals.selectedFiles = new ArrayList<FileModel>();
@@ -91,11 +84,10 @@ public class VideoCompressAdapter extends ArrayAdapter {
                         viewHolder.ivSelectRow.setVisibility(View.GONE);
                         viewHolder.selectRow.setBackgroundColor(Color.WHITE);
                         Globals.selectedFiles.remove(model);
+
                         if(Globals.selectedFiles.size()==0)
-                        {
                             Globals.selectionMode=false;
-                            notifyDataSetChanged();
-                        }
+
                     } else {
                         viewHolder.setSelected(true);
                         viewHolder.ivSelectRow.setVisibility(View.VISIBLE);
@@ -149,19 +141,14 @@ public class VideoCompressAdapter extends ArrayAdapter {
                 }
             });
             fc.Compress(model);
-
-
         }
-
         return view;
-
     }
 
     static class ViewHolder {
+
         View _view;
-
         private int _id;
-
         @BindView(R.id.tvVideoName)
         TextView tvVideoName;
         @BindView(R.id.pbProgress)
@@ -174,7 +161,6 @@ public class VideoCompressAdapter extends ArrayAdapter {
         ImageView ivSelectRow;
         @BindView(R.id.selectRow)
         LinearLayout selectRow;
-
         private boolean isSelected;
 
         public ViewHolder(View view) {

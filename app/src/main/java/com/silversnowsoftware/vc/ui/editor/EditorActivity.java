@@ -27,7 +27,6 @@ public class EditorActivity extends BaseActivity implements IEditorView {
     @Inject
     IEditorPresenter<IEditorView> mPresenter;
     EditorViewHolder meditorViewHolder;
-    private ProgressDialog mProgressDialog;
 
     OnVideoTrimListener mOnVideoTrimListener = new OnVideoTrimListener() {
         @Override
@@ -52,12 +51,12 @@ public class EditorActivity extends BaseActivity implements IEditorView {
 
         @Override
         public void cancelAction() {
-            mProgressDialog.dismiss();
+            dismissProgressDialog();
         }
 
         @Override
         public void onError(String message) {
-            mProgressDialog.dismiss();
+            dismissProgressDialog();
         }
     };
 

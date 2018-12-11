@@ -18,6 +18,7 @@ import com.silversnowsoftware.vc.ui.editor.EditorActivity;
 import com.silversnowsoftware.vc.ui.main.MainActivity;
 import com.silversnowsoftware.vc.utils.SharedPref;
 import com.silversnowsoftware.vc.utils.Types;
+import com.silversnowsoftware.vc.utils.constants.Globals;
 import com.silversnowsoftware.vc.utils.constants.Keys;
 
 import java.util.List;
@@ -36,7 +37,7 @@ public class BaseActivity extends AppCompatActivity implements IBaseView {
     }
 
     protected  List<FileModel> getSelectedFiles() {
-        return (List<FileModel>) SharedPref.getData(Keys.SELECTED_FILE_LIST, Types.getSelectedFileModelListType(), getContext());
+        return Globals.selectedFiles;
     }
 
     @Override

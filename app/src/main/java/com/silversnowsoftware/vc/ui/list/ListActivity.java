@@ -129,7 +129,6 @@ public class ListActivity extends BaseActivity implements IListView {
             } else {
                 mCallBack.onFailure(mException);
             }
-
         }
     }
 

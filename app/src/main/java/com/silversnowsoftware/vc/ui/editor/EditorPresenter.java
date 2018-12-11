@@ -443,17 +443,11 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             String resolution = getFitResolution(width, height, videoResolution);
             fileModel.setResolution(resolution);
             fileModel.setFileStatus(FileStatusEnum.PREPEARING);
-
-           // FileModel fm = getRepositoryFileModel().getByObject(fileModel);
-
-             getRepositoryFileModel().add(fileModel);
-
+            getRepositoryFileModel().add(fileModel);
 
         } else {
-
             baseResponse.setSuccess(false);
             baseResponse.setMessage(getContext().getString(R.string.choose_format));
-
         }
 
         return baseResponse;
