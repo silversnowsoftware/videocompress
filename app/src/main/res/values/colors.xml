@@ -7,8 +7,6 @@
 
     <color name="primaryLightColor">#6bbf69</color>
 
-    <color name="selectedListItemColor">#dfdfdf</color>
-
     <color name="primaryDarkColor">#00600f</color>
 
     <color name="primaryDangerColor">#ef5350</color>
@@ -24,6 +22,9 @@
     <color name="colorBackgroundLight">#b6b0cf</color>
     <!--Activity-->
 
+    <color name="list_qualities_bg">#88FFFFFF</color>
+    <color name="listItemTextColor">#000000</color>
+    <color name="selectedListItemColor">#e7e7e7</color>
 
 
     <color name="black_overlay">#66000000</color>
