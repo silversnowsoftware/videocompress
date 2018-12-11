@@ -310,9 +310,15 @@ public class FileHelper {
     }
 
     public static Bitmap getBitmapFromBase64(String encodedImage) {
-        byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
-        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        return decodedByte;
+
+        try {
+            byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            return decodedByte;
+
+        } catch (Exception ex) {
+        }
+        return null;
     }
 
     public static String getBase64FromBitmap(Bitmap bitmap) {
@@ -336,14 +342,14 @@ public class FileHelper {
     }
 
 
-    public static Map<String,Integer> getVideoResoution(String path){
+    public static Map<String, Integer> getVideoResoution(String path) {
         Map<String, Integer> values = new HashMap<String, Integer>();
         MediaMetadataRetriever retriever = new MediaMetadataRetriever();
         retriever.setDataSource(path);
         int width = Integer.valueOf(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH));
         int height = Integer.valueOf(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT));
-        values.put("width",width);
-        values.put("height",height);
+        values.put("width", width);
+        values.put("height", height);
         retriever.release();
         return values;
     }
