@@ -14,6 +14,7 @@ import com.silversnowsoftware.vc.ui.base.BasePresenter;
 import com.silversnowsoftware.vc.ui.base.BaseResponse;
 import com.silversnowsoftware.vc.ui.base.component.VideoCompressAdapter;
 import com.silversnowsoftware.vc.ui.main.IMainPresenter;
+import com.silversnowsoftware.vc.utils.constants.Globals;
 import com.silversnowsoftware.vc.utils.constants.Keys;
 
 import java.util.List;
@@ -61,7 +62,8 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
         List<FileModel> fileModelList = getFileModelList();
         VideoCompressAdapter videoCompressAdapter = getVideoCompressAdapter(fileModelList);
         videoCompressAdapter.setActivity((Activity) getView());
-
+        Globals.selectionMode = false;
+        Globals.selectedFiles.clear();
         if (fileModelList != null) {
             videoCompressAdapter.notifyDataSetChanged();
             viewHolder.lvFileModel.setAdapter(videoCompressAdapter);

@@ -68,7 +68,10 @@ public class VideoCompressAdapter extends ArrayAdapter {
                 viewHolder.ivSelectRow.setVisibility(View.VISIBLE);
                 viewHolder.selectRow.setBackgroundResource(R.color.selectedListItemColor);
                 Globals.selectedFiles.remove((Object)viewHolder.getId());
-                SharedPref.putData(Keys.SELECTION_MODE, true, getContext());
+                FileModel model = (FileModel) getItem(position);
+                Globals.selectedFiles.add(model);
+                Globals.selectionMode = true;
+                viewHolder.setSelected(true);
                 notifyDataSetChanged();
 
                 return true;
@@ -78,9 +81,7 @@ public class VideoCompressAdapter extends ArrayAdapter {
             @Override
             public void onClick(View view) {
                 FileModel model = (FileModel) getItem(position);
-                Boolean selectionMode = (Boolean) SharedPref.getData(Keys.SELECTION_MODE, Types.getHasLongClickType(), getContext());
-                if(selectionMode != null && selectionMode) {
-                    Globals.selectedFiles = (ArrayList<FileModel>) SharedPref.getData(Keys.SELECTED_FILE_LIST, Types.getSelectedFileModelListType(), getContext());
+               if(Globals.selectionMode) {
 
                     if (Globals.selectedFiles == null)
                         Globals.selectedFiles = new ArrayList<FileModel>();
@@ -89,8 +90,12 @@ public class VideoCompressAdapter extends ArrayAdapter {
                         viewHolder.setSelected(false);
                         viewHolder.ivSelectRow.setVisibility(View.GONE);
                         viewHolder.selectRow.setBackgroundColor(Color.WHITE);
-
                         Globals.selectedFiles.remove(model);
+                        if(Globals.selectedFiles.size()==0)
+                        {
+                            Globals.selectionMode=false;
+                            notifyDataSetChanged();
+                        }
                     } else {
                         viewHolder.setSelected(true);
                         viewHolder.ivSelectRow.setVisibility(View.VISIBLE);
@@ -99,7 +104,7 @@ public class VideoCompressAdapter extends ArrayAdapter {
                         Globals.selectedFiles.add(model);
                     }
 
-                    SharedPref.putData(Keys.SELECTED_FILE_LIST, Globals.selectedFiles, getContext());
+
                 }
             }
         });
