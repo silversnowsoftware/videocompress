@@ -13,6 +13,7 @@ import com.silversnowsoftware.vc.VideoCompressApplication;
 import com.silversnowsoftware.vc.di.component.ActivityComponent;
 import com.silversnowsoftware.vc.di.component.DaggerActivityComponent;
 import com.silversnowsoftware.vc.di.module.ActivityModule;
+import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.ui.editor.EditorActivity;
 import com.silversnowsoftware.vc.ui.main.MainActivity;
 import com.silversnowsoftware.vc.utils.SharedPref;
@@ -34,8 +35,8 @@ public class BaseActivity extends AppCompatActivity implements IBaseView {
         return getApplicationContext();
     }
 
-    protected  List<Integer> getSelectedFiles() {
-        return (List<Integer>) SharedPref.getData(Keys.SELECTED_FILE_LIST, Types.getSelectedFileModelListType(), getContext());
+    protected  List<FileModel> getSelectedFiles() {
+        return (List<FileModel>) SharedPref.getData(Keys.SELECTED_FILE_LIST, Types.getSelectedFileModelListType(), getContext());
     }
 
     @Override

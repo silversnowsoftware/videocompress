@@ -15,7 +15,6 @@ public class Globals {
 
     public static String currentInputVideoPath = Environment.getExternalStorageDirectory().getPath() + "/videoKit/in.mp4";
     public static String currentOutputVideoPath = Environment.getExternalStorageDirectory().getPath() + "/videoKit/";
-    public static ArrayList<FileModel> fileModelList;
     public static Handler handler;
-    public static ArrayList<Integer> selectedFiles;
+    public static ArrayList<FileModel> selectedFiles;
 }

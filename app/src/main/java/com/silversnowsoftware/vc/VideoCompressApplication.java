@@ -25,8 +25,7 @@ public class VideoCompressApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Globals.fileModelList = new ArrayList<FileModel>();
-        Globals.selectedFiles = new ArrayList<Integer>();
+        Globals.selectedFiles = new ArrayList<FileModel>();
 
                 mApplicationComponent = DaggerApplicationComponent.builder()
                 .applicationModule(new ApplicationModule(this)).build();
