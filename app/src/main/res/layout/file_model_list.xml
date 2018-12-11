@@ -30,8 +30,8 @@
                 android:paddingLeft="5dp"
                 android:layout_gravity="center"
                 android:src="@mipmap/selected"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_alignBottom="@id/ivVideoTumbnail"
                 android:layout_alignRight="@id/ivVideoTumbnail"
                 android:visibility="gone"/>
