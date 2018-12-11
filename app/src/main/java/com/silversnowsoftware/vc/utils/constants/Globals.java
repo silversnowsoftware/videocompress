@@ -17,4 +17,5 @@ public class Globals {
     public static String currentOutputVideoPath = Environment.getExternalStorageDirectory().getPath() + "/videoKit/";
     public static Handler handler;
     public static ArrayList<FileModel> selectedFiles;
+    public static Boolean selectionMode = false;
 }
