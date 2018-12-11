@@ -80,6 +80,17 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
     }
 
     @Override
+    public boolean removeItems(List<FileModel> items) {
+        boolean result = true;
+        try {
+            db.getFileModel().delete(items);
+        } catch (Exception ex) {
+            result = false;
+        }
+        return result;
+    }
+
+    @Override
     public FileModel getById(Integer id) {
         try {
             return db.getFileModel().queryForId(id);

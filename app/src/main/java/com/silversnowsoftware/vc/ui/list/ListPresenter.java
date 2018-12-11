@@ -44,10 +44,10 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
     }
 
     @Override
-    public BaseResponse deleteSelectedFiles(List<Integer> ids) {
+    public BaseResponse deleteSelectedFile(FileModel fileModel) {
         BaseResponse response = new BaseResponse();
         try {
-            getRepositoryFileModel().removeIds(ids);
+            getRepositoryFileModel().remove(fileModel);
             response.setSuccess(true);
         } catch (Exception ex) {
             response.setSuccess(false);

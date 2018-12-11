@@ -9,12 +9,17 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.silversnowsoftware.vc.R;
+import com.silversnowsoftware.vc.model.FileModel;
+import com.silversnowsoftware.vc.model.listener.OnEventListener;
 import com.silversnowsoftware.vc.ui.base.BaseActivity;
 import com.silversnowsoftware.vc.ui.base.BaseResponse;
 import com.silversnowsoftware.vc.utils.SharedPref;
 import com.silversnowsoftware.vc.utils.Types;
 import com.silversnowsoftware.vc.utils.constants.Keys;
+import com.silversnowsoftware.vc.utils.helpers.FileHelper;
 
+import java.io.File;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,38 +74,81 @@ public class ListActivity extends BaseActivity implements IListView {
 
         switch (item.getItemId()) {
             case R.id.action_delete:
-                DeleteFilesOperation deleteFilesOperation = new DeleteFilesOperation();
-                deleteFilesOperation.execute();
-                mPresenter.fillListView();
+                deleteFiles();
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private class DeleteFilesOperation extends AsyncTask<Void, Void, Void> {
+    private class DeleteFilesOperation extends AsyncTask<Void, Void, Boolean> {
+
+        private OnEventListener<String> mCallBack;
+        private Context mContext;
+        public Exception mException;
+
+        DeleteFilesOperation(Context context, OnEventListener callback) {
+            mCallBack = callback;
+            mContext = context;
+        }
 
         @Override
-        protected Void doInBackground(Void... voids) {
-            List<Integer> selectedFiles = getSelectedFiles();
-            mPresenter.deleteSelectedFiles(selectedFiles);
-            return null;
+        protected Boolean doInBackground(Void... voids) {
+            boolean result = true;
+            try {
+                for (FileModel fileModel : getSelectedFiles()) {
+                    File file = new File(fileModel.getPath());
+                    if (file.exists()) {
+                        //file.delete();
+
+                        mPresenter.deleteSelectedFile(fileModel);
+                    }
+                }
+
+            } catch (Exception ex) {
+                mException = ex;
+                result = false;
+            }
+            return result;
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
             showProgressDialog(ListActivity.this, getString(R.string.deleting));
         }
 
         @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+
             dismissProgressDialog();
+            if (mCallBack != null) {
+                if (mException == null) {
+                    mCallBack.onSuccess(result);
+                }
+            } else {
+                mCallBack.onFailure(mException);
+            }
+
+        }
+    }
+
+    private void deleteFiles() {
+
+        if (getSelectedFiles() != null) {
+            DeleteFilesOperation deleteFilesOperation = new DeleteFilesOperation(getContext(), new OnEventListener() {
+                @Override
+                public void onSuccess(Boolean object) {
+                    mPresenter.fillListView();
+                    SharedPref.RemoveKey(Keys.SELECTED_FILE_LIST, getContext());
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    showToastMethod(getString(R.string.error));
+                }
+            });
+            deleteFilesOperation.execute();
         }
     }
 }

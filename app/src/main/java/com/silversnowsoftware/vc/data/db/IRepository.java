@@ -22,6 +22,8 @@ public interface IRepository<T> {
 
     int removeIds(List<Integer> ids);
 
+    boolean removeItems(List<T> items);
+
     T getById(Integer id);
 
     List<T> getAll();

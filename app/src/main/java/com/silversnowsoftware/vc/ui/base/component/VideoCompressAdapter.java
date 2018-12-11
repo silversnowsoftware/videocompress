@@ -53,7 +53,7 @@ public class VideoCompressAdapter extends ArrayAdapter {
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View view = convertView;
 
         if (view == null) {
@@ -77,22 +77,24 @@ public class VideoCompressAdapter extends ArrayAdapter {
         viewHolder._view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Globals.selectedFiles = (ArrayList<Integer>) SharedPref.getData(Keys.SELECTED_FILE_LIST, Types.getSelectedFileModelListType(), getContext());
+                FileModel fileModel = (FileModel) getItem(position);
+                Globals.selectedFiles = (ArrayList<FileModel>) SharedPref.getData(Keys.SELECTED_FILE_LIST, Types.getSelectedFileModelListType(), getContext());
 
                 if (Globals.selectedFiles == null)
-                    Globals.selectedFiles = new ArrayList<Integer>();
+                    Globals.selectedFiles = new ArrayList<FileModel>();
 
                 if (viewHolder.getSelected()) {
                     viewHolder.setSelected(false);
                     viewHolder.ivSelectRow.setVisibility(View.GONE);
                     viewHolder.selectRow.setBackgroundColor(Color.WHITE);
-                    Globals.selectedFiles.remove((Object)viewHolder.getId());
+                    Globals.selectedFiles.remove(fileModel);
                 } else {
                     viewHolder.setSelected(true);
                     viewHolder.ivSelectRow.setVisibility(View.VISIBLE);
                     viewHolder.selectRow.setBackgroundResource(R.color.selectedListItemColor);
-                    Globals.selectedFiles.add(viewHolder.getId());
+
+
+                    Globals.selectedFiles.add(fileModel);
                 }
 
                 SharedPref.putData(Keys.SELECTED_FILE_LIST, Globals.selectedFiles, getContext());
