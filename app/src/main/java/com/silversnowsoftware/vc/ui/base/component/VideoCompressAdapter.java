@@ -53,7 +53,7 @@ public class VideoCompressAdapter extends ArrayAdapter {
 
     @NonNull
     @Override
-    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View view = convertView;
 
         if (view == null) {
@@ -68,7 +68,7 @@ public class VideoCompressAdapter extends ArrayAdapter {
                 viewHolder.ivSelectRow.setVisibility(View.VISIBLE);
                 viewHolder.selectRow.setBackgroundResource(R.color.selectedListItemColor);
                 Globals.selectedFiles.remove((Object)viewHolder.getId());
-                SharedPref.putData(Keys.HAS_LONG_CLICK, true, getContext());
+                SharedPref.putData(Keys.SELECTION_MODE, true, getContext());
                 notifyDataSetChanged();
 
                 return true;
@@ -77,27 +77,27 @@ public class VideoCompressAdapter extends ArrayAdapter {
         viewHolder._view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FileModel fileModel = (FileModel) getItem(position);
-                Globals.selectedFiles = (ArrayList<FileModel>) SharedPref.getData(Keys.SELECTED_FILE_LIST, Types.getSelectedFileModelListType(), getContext());
+                Boolean selectionMode = (Boolean) SharedPref.getData(Keys.SELECTION_MODE, Types.getHasLongClickType(), getContext());
+                if(selectionMode != null && selectionMode) {
+                    Globals.selectedFiles = (ArrayList<Integer>) SharedPref.getData(Keys.SELECTED_FILE_LIST, Types.getSelectedFileModelListType(), getContext());
 
-                if (Globals.selectedFiles == null)
-                    Globals.selectedFiles = new ArrayList<FileModel>();
+                    if (Globals.selectedFiles == null)
+                        Globals.selectedFiles = new ArrayList<Integer>();
 
-                if (viewHolder.getSelected()) {
-                    viewHolder.setSelected(false);
-                    viewHolder.ivSelectRow.setVisibility(View.GONE);
-                    viewHolder.selectRow.setBackgroundColor(Color.WHITE);
-                    Globals.selectedFiles.remove(fileModel);
-                } else {
-                    viewHolder.setSelected(true);
-                    viewHolder.ivSelectRow.setVisibility(View.VISIBLE);
-                    viewHolder.selectRow.setBackgroundResource(R.color.selectedListItemColor);
+                    if (viewHolder.getSelected()) {
+                        viewHolder.setSelected(false);
+                        viewHolder.ivSelectRow.setVisibility(View.GONE);
+                        viewHolder.selectRow.setBackgroundColor(Color.WHITE);
+                        Globals.selectedFiles.remove((Object) viewHolder.getId());
+                    } else {
+                        viewHolder.setSelected(true);
+                        viewHolder.ivSelectRow.setVisibility(View.VISIBLE);
+                        viewHolder.selectRow.setBackgroundResource(R.color.selectedListItemColor);
+                        Globals.selectedFiles.add(viewHolder.getId());
+                    }
 
-
-                    Globals.selectedFiles.add(fileModel);
+                    SharedPref.putData(Keys.SELECTED_FILE_LIST, Globals.selectedFiles, getContext());
                 }
-
-                SharedPref.putData(Keys.SELECTED_FILE_LIST, Globals.selectedFiles, getContext());
             }
         });
 
@@ -107,8 +107,7 @@ public class VideoCompressAdapter extends ArrayAdapter {
             viewHolder.tvVideoName.setText(model.getName());
             viewHolder.ivVideoTumbnail.setImageBitmap(FileHelper.getBitmapFromBase64(model.getThumbnail()));
             viewHolder.tvResolution.setText(model.getResolution());
-            Boolean hasLongClick = (Boolean) SharedPref.getData(Keys.HAS_LONG_CLICK, Types.getHasLongClickType(), getContext());
-           // if (hasLongClick != null && hasLongClick != false) viewHolder.ivSelectRow.setVisibility(View.VISIBLE);
+
         }
 
 

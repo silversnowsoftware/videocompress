@@ -8,5 +8,5 @@ public class Keys {
 
     public static final String FILE_LIST_KEY = "FILELISTKEY";
     public static final String SELECTED_FILE_LIST ="SELECTEDFILElIST";
-    public static final String HAS_LONG_CLICK="HASLONGCILIK";
+    public static final String SELECTION_MODE="SELECTIONMODE";
 }
