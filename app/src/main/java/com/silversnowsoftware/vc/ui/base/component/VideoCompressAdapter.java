@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -74,7 +75,7 @@ public class VideoCompressAdapter extends ArrayAdapter {
             public void onClick(View view) {
 
                 FileModel model = (FileModel) getItem(position);
-                if(Globals.selectionMode) {
+                if (Globals.selectionMode) {
 
                     if (Globals.selectedFiles == null)
                         Globals.selectedFiles = new ArrayList<FileModel>();
@@ -85,8 +86,8 @@ public class VideoCompressAdapter extends ArrayAdapter {
                         viewHolder.selectRow.setBackgroundColor(Color.WHITE);
                         Globals.selectedFiles.remove(model);
 
-                        if(Globals.selectedFiles.size()==0)
-                            Globals.selectionMode=false;
+                        if (Globals.selectedFiles.size() == 0)
+                            Globals.selectionMode = false;
 
                     } else {
                         viewHolder.setSelected(true);
@@ -100,7 +101,13 @@ public class VideoCompressAdapter extends ArrayAdapter {
                 }
             }
         });
-
+        viewHolder.playButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FileModel model = (FileModel) getItem(position);
+                FileHelper.startVideoActivity(getContext(), model.getPath());
+            }
+        });
         final FileModel model = (FileModel) getItem(position);
         if (model != null) {
             viewHolder.setId(model.getId());
@@ -161,6 +168,8 @@ public class VideoCompressAdapter extends ArrayAdapter {
         ImageView ivSelectRow;
         @BindView(R.id.selectRow)
         LinearLayout selectRow;
+        @BindView(R.id.playButton)
+        Button playButton;
         private boolean isSelected;
 
         public ViewHolder(View view) {

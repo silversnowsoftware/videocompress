@@ -34,9 +34,6 @@ public class ListActivity extends BaseActivity implements IListView {
     @Inject
     IListPresenter<IListView> mPresenter;
 
-    private Context getContext() {
-        return getApplicationContext();
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,19 +71,19 @@ public class ListActivity extends BaseActivity implements IListView {
 
         switch (item.getItemId()) {
             case R.id.action_delete:
-                deleteFiles();
+                deleteFilesOperation();
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private class DeleteFilesOperation extends AsyncTask<Void, Void, Boolean> {
+    private class DeleteFilesOperationAsync extends AsyncTask<Void, Void, Boolean> {
 
         private OnEventListener<String> mCallBack;
         private Context mContext;
         public Exception mException;
 
-        DeleteFilesOperation(Context context, OnEventListener callback) {
+        DeleteFilesOperationAsync(Context context, OnEventListener callback) {
             mCallBack = callback;
             mContext = context;
         }
@@ -132,14 +129,14 @@ public class ListActivity extends BaseActivity implements IListView {
         }
     }
 
-    private void deleteFiles() {
+    private void deleteFilesOperation() {
 
         if (getSelectedFiles() != null) {
-            DeleteFilesOperation deleteFilesOperation = new DeleteFilesOperation(getContext(), new OnEventListener() {
+
+            DeleteFilesOperationAsync deleteFilesOperationAsync = new DeleteFilesOperationAsync(getContext(), new OnEventListener() {
                 @Override
                 public void onSuccess(Boolean object) {
                     mPresenter.fillListView();
-                    SharedPref.RemoveKey(Keys.SELECTED_FILE_LIST, getContext());
                 }
 
                 @Override
@@ -147,7 +144,7 @@ public class ListActivity extends BaseActivity implements IListView {
                     showToastMethod(getString(R.string.error));
                 }
             });
-            deleteFilesOperation.execute();
+            deleteFilesOperationAsync.execute();
         }
     }
 }

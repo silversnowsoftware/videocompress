@@ -32,7 +32,7 @@ public class BaseActivity extends AppCompatActivity implements IBaseView {
     private ActivityComponent mActivityComponent;
     private ProgressDialog mProgressDialog;
 
-    private Context getContext() {
+    protected Context getContext() {
         return getApplicationContext();
     }
 
