@@ -87,12 +87,12 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
 
 
     String dstFile = null;
-    BaseResponse baseResponse;
+    FileModel responseModel;
 
     @Inject
     public EditorPresenter() {
         super();
-        baseResponse = new BaseResponse();
+        responseModel = new FileModel();
     }
 
     public void setViewHolder() {
@@ -399,7 +399,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
     }
 
     @Override
-    public void trimVideo(final OnVideoTrimListener mOnVideoTrimListener) {
+    public String trimVideo(final OnVideoTrimListener mOnVideoTrimListener) {
         dstFile = Environment.getExternalStorageDirectory() + "/" + getContext().getString(R.string.app_name) + new Date().getTime()
                 + Utility.VIDEO_FORMAT;
 
@@ -424,33 +424,39 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
                     }
                 }
         );
+        return dstFile;
     }
 
     @Override
-    public BaseResponse addSelectedFile() {
+    public FileModel addSelectedFile() {
 
-        baseResponse.setSuccess(true);
 
-        List<FileModel> fileModelList = getRepositoryFileModel().getAll();
-        FileModel fileModel = fileModelList.get(fileModelList.size() - 1);
+        try {
+            List<FileModel> fileModelList = getRepositoryFileModel().getAll();
+            responseModel = fileModelList.get(fileModelList.size() - 1);
+            responseModel.setSuccess(true);
 
-        Map<String, Integer> videoResolutions = getVideoResoution(fileModel.getPath());
-        int width = videoResolutions.get("width");
-        int height = videoResolutions.get("height");
+            Map<String, Integer> videoResolutions = getVideoResoution(responseModel.getPath());
+            int width = videoResolutions.get("width");
+            int height = videoResolutions.get("height");
 
-        String videoResolution = getSelectedResolution();
-        if (!videoResolution.isEmpty()) {
-            String resolution = getFitResolution(width, height, videoResolution);
-            fileModel.setResolution(resolution);
-            fileModel.setFileStatus(FileStatusEnum.PREPEARING);
-            getRepositoryFileModel().add(fileModel);
+            String videoResolution = getSelectedResolution();
+            if (!videoResolution.isEmpty()) {
+                String resolution = getFitResolution(width, height, videoResolution);
+                responseModel.setResolution(resolution);
+                responseModel.setFileStatus(FileStatusEnum.PREPEARING);
+                getRepositoryFileModel().add(responseModel);
 
-        } else {
-            baseResponse.setSuccess(false);
-            baseResponse.setMessage(getContext().getString(R.string.choose_format));
+            } else {
+                responseModel.setSuccess(false);
+                responseModel.setMessage(getContext().getString(R.string.choose_format));
+            }
+        } catch (Exception ex) {
+            responseModel.setSuccess(false);
+            responseModel.setMessage(ex.getMessage());
         }
 
-        return baseResponse;
+        return responseModel;
     }
 
     @Override
@@ -470,6 +476,13 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
 
         setSelectedResolution(mDefaultResolutionId);
     }
+
+    @Override
+    public void updateModel(FileModel model) {
+
+        getRepositoryFileModel().update(model);
+    }
+
 
     String getSelectedResolution() {
         int id = mViewHolder.rgResolution.getCheckedRadioButtonId();

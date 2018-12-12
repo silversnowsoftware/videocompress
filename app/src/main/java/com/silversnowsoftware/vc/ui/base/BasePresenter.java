@@ -42,7 +42,7 @@ public class BasePresenter<V extends IBaseView> implements IBasePresenter<V> {
     }
 
 
-    public IRepository<FileModel> getRepositoryFileModel() {
+    protected IRepository<FileModel> getRepositoryFileModel() {
         return new DbFileModel(getContext());
     }
 }

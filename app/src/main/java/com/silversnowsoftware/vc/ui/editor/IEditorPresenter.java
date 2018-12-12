@@ -3,6 +3,7 @@ package com.silversnowsoftware.vc.ui.editor;
 import android.content.Intent;
 import android.net.Uri;
 
+import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.model.listener.OnVideoTrimListener;
 import com.silversnowsoftware.vc.ui.base.BaseResponse;
 import com.silversnowsoftware.vc.ui.base.IBasePresenter;
@@ -34,9 +35,11 @@ public interface IEditorPresenter<V extends IEditorView> extends IBasePresenter<
 
     void onSeekThumbs(int index, float value);
 
-    void trimVideo(OnVideoTrimListener mOnVideoTrimListener);
+    String trimVideo(OnVideoTrimListener mOnVideoTrimListener);
 
-    BaseResponse addSelectedFile();
+    FileModel addSelectedFile();
 
     void setDefaultEditor();
+
+    void updateModel(FileModel model);
 }

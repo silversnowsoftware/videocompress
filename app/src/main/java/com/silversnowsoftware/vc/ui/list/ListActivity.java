@@ -67,7 +67,6 @@ public class ListActivity extends BaseActivity implements IListView {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        showToastMethod(String.valueOf(item.getItemId()));
 
         switch (item.getItemId()) {
             case R.id.action_delete:
@@ -95,7 +94,7 @@ public class ListActivity extends BaseActivity implements IListView {
                 for (FileModel fileModel : getSelectedFiles()) {
                     File file = new File(fileModel.getPath());
                     if (file.exists()) {
-                        //file.delete();
+                        file.delete();
 
                         mPresenter.deleteSelectedFile(fileModel);
                     }

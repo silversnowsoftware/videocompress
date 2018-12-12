@@ -21,6 +21,7 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
     public void add(FileModel item) {
 
         try {
+
             db.getFileModel().createOrUpdate(item);
         } catch (SQLException e) {
             e.printStackTrace();

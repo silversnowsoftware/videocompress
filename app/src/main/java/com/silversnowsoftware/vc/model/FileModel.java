@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.silversnowsoftware.vc.model.listener.ICustomListener;
+import com.silversnowsoftware.vc.ui.base.BaseResponse;
 import com.silversnowsoftware.vc.utils.constants.Globals;
 import com.silversnowsoftware.vc.utils.enums.FileStatusEnum;
 import com.silversnowsoftware.vc.utils.enums.MediaTypeEnum;
@@ -17,7 +18,7 @@ import java.util.Date;
  * Created by burak on 10/17/2018.
  */
 
-public class FileModel implements Serializable {
+public class FileModel extends BaseResponse implements Serializable  {
     public ICustomListener listener;
 
     public FileModel() {
