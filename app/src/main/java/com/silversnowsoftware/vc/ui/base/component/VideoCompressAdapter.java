@@ -25,6 +25,8 @@ import com.silversnowsoftware.vc.utils.constants.Globals;
 import com.silversnowsoftware.vc.utils.enums.FileStatusEnum;
 import com.silversnowsoftware.vc.utils.helpers.FileHelper;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -136,7 +138,7 @@ public class VideoCompressAdapter extends ArrayAdapter {
                 @Override
                 public void onSuccess(Double rate) {
                     Log.i("Success Rate: ", String.valueOf(rate.intValue()));
-                    finalViewHolder.pbProgress.setProgress(100);
+                    finalViewHolder.tvProgress.setText("100%");
                     model.setFileStatus(FileStatusEnum.SUCCESS);
                     model.setPath(Globals.currentOutputVideoPath + model.getName());
                     DbFileModel dbFileModel = new DbFileModel(getContext());
@@ -149,7 +151,7 @@ public class VideoCompressAdapter extends ArrayAdapter {
 
                     if (rate.intValue() > 0) {
                         Log.i("Rate: ", String.valueOf(rate.intValue()));
-                        finalViewHolder.pbProgress.setProgress(rate.intValue());
+                        finalViewHolder.tvProgress.setText(rate.intValue() + "%");
                     }
                     notifyDataSetChanged();
                 }
@@ -170,8 +172,8 @@ public class VideoCompressAdapter extends ArrayAdapter {
         private int _id;
         @BindView(R.id.tvVideoName)
         TextView tvVideoName;
-        @BindView(R.id.pbProgress)
-        ProgressBar pbProgress;
+        @BindView(R.id.tvProgress)
+        TextView tvProgress;
         @BindView(R.id.ivVideoTumbnail)
         ImageView ivVideoTumbnail;
         @BindView(R.id.tvResolution)
@@ -181,7 +183,7 @@ public class VideoCompressAdapter extends ArrayAdapter {
         @BindView(R.id.selectRow)
         LinearLayout selectRow;
         @BindView(R.id.playButton)
-        Button playButton;
+        ImageView playButton;
         private boolean isSelected;
 
         public ViewHolder(View view) {
