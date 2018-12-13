@@ -13,10 +13,12 @@ import android.widget.ArrayAdapter;
 
 import com.googlecode.mp4parser.authoring.Edit;
 import com.silversnowsoftware.vc.R;
+import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.model.listener.OnVideoTrimListener;
 import com.silversnowsoftware.vc.ui.base.BaseActivity;
 import com.silversnowsoftware.vc.ui.base.BaseResponse;
 import com.silversnowsoftware.vc.ui.list.ListActivity;
+import com.silversnowsoftware.vc.utils.constants.Globals;
 
 import java.util.List;
 
@@ -39,12 +41,8 @@ public class EditorActivity extends BaseActivity implements IEditorView {
 
             dismissProgressDialog();
 
-            Bundle conData = new Bundle();
-            conData.putString("INTENT_VIDEO_FILE", uri.getPath());
-            Intent intent = new Intent();
-            intent.putExtras(conData);
-            setResult(RESULT_OK, intent);
             finish();
+
 
             redirectToActivity(ListActivity.class);
         }
@@ -73,13 +71,20 @@ public class EditorActivity extends BaseActivity implements IEditorView {
         meditorViewHolder.btnCompress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                BaseResponse result = mPresenter.addSelectedFile();
-                if (!result.getSuccess()) {
-                    showToastMethod(result.getMessage());
-                    return;
-                }
+                try {
+                    FileModel result = mPresenter.addSelectedFile();
+                    if (!result.getSuccess()) {
+                        showToastMethod(result.getMessage());
+                        return;
+                    }
 
-                mPresenter.trimVideo(mOnVideoTrimListener);
+                    String dest = mPresenter.trimVideo(mOnVideoTrimListener);
+                    result.setPath(dest);
+                    mPresenter.updateModel(result);
+                }
+                catch (Exception ex){
+                    showToastMethod(getString(R.string.error));
+                }
 
             }
         });

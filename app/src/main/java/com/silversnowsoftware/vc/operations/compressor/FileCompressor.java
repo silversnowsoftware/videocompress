@@ -14,6 +14,7 @@ import com.silversnowsoftware.vc.ui.compression.videocompress.CompressListener;
 import com.silversnowsoftware.vc.ui.compression.videocompress.Compressor;
 import com.silversnowsoftware.vc.ui.compression.videocompress.InitListener;
 import com.silversnowsoftware.vc.utils.constants.Globals;
+import com.silversnowsoftware.vc.utils.helpers.FileHelper;
 
 import java.io.File;
 import java.util.regex.Matcher;
@@ -46,7 +47,7 @@ public class FileCompressor implements IFileCompressor {
             return;
 
 
-        File mFile = new File(Globals.currentOutputVideoPath + fileModel.getPath());
+        File mFile = new File(Globals.currentOutputVideoPath + fileModel.getName());
         if (mFile.exists()) {
             mFile.delete();
         }
@@ -55,9 +56,11 @@ public class FileCompressor implements IFileCompressor {
             int counter=0;
             @Override
             public void onExecSuccess(String message) {
-                Toast.makeText(context, "Video Compressed", Toast.LENGTH_SHORT).show();
+                File trimFile = new File(fileModel.getPath());
+                if (trimFile.exists()) {
+                    trimFile.delete();
+                }
                 fileModel.listener.onSuccess(100.0);
-                Log.i(TAG,"--->" + 100);
             }
 
             @Override

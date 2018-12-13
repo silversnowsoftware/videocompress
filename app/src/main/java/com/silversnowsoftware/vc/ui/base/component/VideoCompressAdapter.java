@@ -10,12 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.silversnowsoftware.vc.R;
+import com.silversnowsoftware.vc.data.db.DbFileModel;
 import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.model.listener.ICustomListener;
 import com.silversnowsoftware.vc.operations.compressor.FileCompressor;
@@ -59,11 +61,14 @@ public class VideoCompressAdapter extends ArrayAdapter {
         viewHolder._view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                viewHolder.ivSelectRow.setVisibility(View.VISIBLE);
-                viewHolder.selectRow.setBackgroundResource(R.color.selectedListItemColor);
+
                 FileModel model = (FileModel) getItem(position);
                 Globals.selectedFiles.add(model);
                 Globals.selectionMode = true;
+
+                viewHolder.ivSelectRow.setVisibility(View.VISIBLE);
+                viewHolder.selectRow.setBackgroundResource(R.color.selectedListItemColor);
+                viewHolder.playButton.setVisibility(View.GONE);
                 viewHolder.setSelected(true);
 
                 return true;
@@ -74,7 +79,7 @@ public class VideoCompressAdapter extends ArrayAdapter {
             public void onClick(View view) {
 
                 FileModel model = (FileModel) getItem(position);
-                if(Globals.selectionMode) {
+                if (Globals.selectionMode) {
 
                     if (Globals.selectedFiles == null)
                         Globals.selectedFiles = new ArrayList<FileModel>();
@@ -85,8 +90,10 @@ public class VideoCompressAdapter extends ArrayAdapter {
                         viewHolder.selectRow.setBackgroundColor(Color.WHITE);
                         Globals.selectedFiles.remove(model);
 
-                        if(Globals.selectedFiles.size()==0)
-                            Globals.selectionMode=false;
+                        if (Globals.selectedFiles.size() == 0) {
+                            Globals.selectionMode = false;
+                            viewHolder.playButton.setVisibility(View.VISIBLE);
+                        }
 
                     } else {
                         viewHolder.setSelected(true);
@@ -101,6 +108,15 @@ public class VideoCompressAdapter extends ArrayAdapter {
             }
         });
 
+        viewHolder.playButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!Globals.selectionMode) {
+                    FileModel model = (FileModel) getItem(position);
+                    FileHelper.startVideoActivity(getContext(), model.getPath());
+                }
+            }
+        });
         final FileModel model = (FileModel) getItem(position);
         if (model != null) {
             viewHolder.setId(model.getId());
@@ -122,6 +138,9 @@ public class VideoCompressAdapter extends ArrayAdapter {
                     Log.i("Success Rate: ", String.valueOf(rate.intValue()));
                     finalViewHolder.pbProgress.setProgress(100);
                     model.setFileStatus(FileStatusEnum.SUCCESS);
+                    model.setPath(Globals.currentOutputVideoPath + model.getName());
+                    DbFileModel dbFileModel = new DbFileModel(getContext());
+                    dbFileModel.update(model);
                     notifyDataSetChanged();
                 }
 
@@ -161,6 +180,8 @@ public class VideoCompressAdapter extends ArrayAdapter {
         ImageView ivSelectRow;
         @BindView(R.id.selectRow)
         LinearLayout selectRow;
+        @BindView(R.id.playButton)
+        Button playButton;
         private boolean isSelected;
 
         public ViewHolder(View view) {
