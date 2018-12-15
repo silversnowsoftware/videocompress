@@ -40,13 +40,5 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="20dp"
             android:text="@string/list" />
-
-        <Button
-            android:id="@+id/btnRemoveAll"
-            style="@style/AppTheme.MainButton"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="Sil" />
     </LinearLayout>
 </RelativeLayout>

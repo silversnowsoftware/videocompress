@@ -1,6 +1,8 @@
 package com.silversnowsoftware.vc.ui.list;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -72,6 +74,13 @@ public class ListActivity extends BaseActivity implements IListView {
             case R.id.action_delete:
                 deleteFilesOperation();
                 break;
+            case R.id.action_share:
+                Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+                Uri screenshotUri = Uri.parse(getSelectedFiles().get(0).getPath());
+                sharingIntent.setType("image/png");
+                sharingIntent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
+                startActivity(Intent.createChooser(sharingIntent, "Share image using"));
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -96,8 +105,9 @@ public class ListActivity extends BaseActivity implements IListView {
                     if (file.exists()) {
                         file.delete();
 
-                        mPresenter.deleteSelectedFile(fileModel);
+
                     }
+                    mPresenter.deleteSelectedFile(fileModel);
                 }
 
             } catch (Exception ex) {

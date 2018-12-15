@@ -24,6 +24,7 @@ import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.ui.base.BaseActivity;
 import com.silversnowsoftware.vc.ui.compression.permission.PermissionsActivity;
 import com.silversnowsoftware.vc.ui.compression.permission.PermissionsChecker;
+import com.silversnowsoftware.vc.ui.compression.videorecord.CameraActivity;
 import com.silversnowsoftware.vc.ui.editor.EditorActivity;
 import com.silversnowsoftware.vc.ui.list.ListActivity;
 import com.silversnowsoftware.vc.ui.test.TestActivity;
@@ -104,13 +105,12 @@ public class MainActivity extends BaseActivity implements IMainView {
             }
         });
 
-        mainViewHolder.btnRemoveAll.setOnClickListener(new View.OnClickListener() {
+        mainViewHolder.btnRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    mPresenter.deleteAllFiles();
+                redirectToActivity(CameraActivity.class);
             }
         });
-
     }
 
     @Override
