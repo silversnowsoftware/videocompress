@@ -7,6 +7,7 @@ import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.ui.base.BaseResponse;
 import com.silversnowsoftware.vc.ui.base.IBasePresenter;
 
+import java.lang.reflect.Array;
 import java.util.List;
 
 /**
@@ -19,4 +20,5 @@ public interface IListPresenter<V extends IListView> extends IBasePresenter<V> {
     public void setViewHolder();
 
     public BaseResponse deleteSelectedFile(FileModel fileModel);
+    public void shareVideoFiles(List<FileModel> fileModelList);
 }

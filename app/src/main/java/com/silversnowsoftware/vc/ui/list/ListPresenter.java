@@ -2,6 +2,10 @@ package com.silversnowsoftware.vc.ui.list;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.StrictMode;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -13,10 +17,14 @@ import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.ui.base.BasePresenter;
 import com.silversnowsoftware.vc.ui.base.BaseResponse;
 import com.silversnowsoftware.vc.ui.base.component.VideoCompressAdapter;
+import com.silversnowsoftware.vc.ui.editor.EditorActivity;
 import com.silversnowsoftware.vc.ui.main.IMainPresenter;
+import com.silversnowsoftware.vc.ui.main.IMainView;
 import com.silversnowsoftware.vc.utils.constants.Globals;
 import com.silversnowsoftware.vc.utils.constants.Keys;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -33,7 +41,8 @@ import static com.silversnowsoftware.vc.utils.Types.getFileModelListType;
 
 public class ListPresenter<V extends IListView> extends BasePresenter<V> implements IListPresenter<V> {
     ListViewHolder viewHolder;
-
+    @Inject
+    IMainPresenter<IMainView> mPresenter;
     @Inject
     public ListPresenter() {
         super();
@@ -54,6 +63,28 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
             response.setSuccess(false);
         }
         return response;
+    }
+
+    @Override
+    public void shareVideoFiles(List<FileModel> fileModelList) {
+        mPresenter.test();
+
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND_MULTIPLE);
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Here are some files.");
+        intent.setType("video/*");
+        ArrayList<Uri> files = new ArrayList<Uri>();
+
+        for (FileModel fileModel : fileModelList) {
+            File file = new File(fileModel.getPath());
+            Uri uri = Uri.fromFile(file);
+            files.add(uri);
+        }
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
+        getContext().startActivity(intent);
     }
 
 

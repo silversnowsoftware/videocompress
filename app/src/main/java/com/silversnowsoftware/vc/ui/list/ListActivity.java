@@ -75,11 +75,7 @@ public class ListActivity extends BaseActivity implements IListView {
                 deleteFilesOperation();
                 break;
             case R.id.action_share:
-                Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-                Uri screenshotUri = Uri.parse(getSelectedFiles().get(0).getPath());
-                sharingIntent.setType("image/png");
-                sharingIntent.putExtra(Intent.EXTRA_STREAM, screenshotUri);
-                startActivity(Intent.createChooser(sharingIntent, "Share image using"));
+                    mPresenter.shareVideoFiles(getSelectedFiles());
                 break;
         }
         return super.onOptionsItemSelected(item);
