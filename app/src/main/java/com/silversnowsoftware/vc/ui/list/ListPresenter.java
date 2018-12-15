@@ -67,13 +67,11 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
 
     @Override
     public void shareVideoFiles(List<FileModel> fileModelList) {
-        mPresenter.test();
 
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_SEND_MULTIPLE);
-        intent.putExtra(Intent.EXTRA_SUBJECT, "Here are some files.");
         intent.setType("video/*");
         ArrayList<Uri> files = new ArrayList<Uri>();
 
