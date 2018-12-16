@@ -1,6 +1,7 @@
 package com.silversnowsoftware.vc.utils;
 
 import android.net.Uri;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -112,5 +113,15 @@ public class Utility {
         
         if (callback != null)
             callback.getResult(Uri.parse(dst.toString()));
+    }
+    public static String getAndroidVersion() {
+        String release = Build.VERSION.RELEASE;
+        int sdkVersion = Build.VERSION.SDK_INT;
+        return "Android SDK: " + sdkVersion + " (" + release +")";
+    }
+    public static String getCurrentClassAndMethodNames() {
+        final StackTraceElement e = Thread.currentThread().getStackTrace()[2];
+        final String s = e.getClassName();
+        return s.substring(s.lastIndexOf('.') + 1, s.length()) + "." + e.getMethodName();
     }
 }

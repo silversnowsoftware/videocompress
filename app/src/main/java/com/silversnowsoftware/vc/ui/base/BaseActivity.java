@@ -18,10 +18,13 @@ import com.silversnowsoftware.vc.ui.editor.EditorActivity;
 import com.silversnowsoftware.vc.ui.main.MainActivity;
 import com.silversnowsoftware.vc.utils.SharedPref;
 import com.silversnowsoftware.vc.utils.Types;
+import com.silversnowsoftware.vc.utils.constants.Constants;
 import com.silversnowsoftware.vc.utils.constants.Globals;
 import com.silversnowsoftware.vc.utils.constants.Keys;
 
 import java.util.List;
+
+import retrofit.RestAdapter;
 
 /**
  * Created by burak on 10/8/2018.
@@ -36,9 +39,11 @@ public class BaseActivity extends AppCompatActivity implements IBaseView {
         return getApplicationContext();
     }
 
-    protected  List<FileModel> getSelectedFiles() {
+    protected List<FileModel> getSelectedFiles() {
         return Globals.selectedFiles;
     }
+
+    protected RestAdapter restAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,7 +54,9 @@ public class BaseActivity extends AppCompatActivity implements IBaseView {
                 .activityModule(new ActivityModule(this))
                 .applicationComponent(((VideoCompressApplication) getApplication()).getComponent())
                 .build();
-
+        restAdapter = new RestAdapter.Builder()
+                .setEndpoint(Constants.REST_BASE_SERVICE)
+                .build();
     }
 
     public ActivityComponent getActivityComponent() {

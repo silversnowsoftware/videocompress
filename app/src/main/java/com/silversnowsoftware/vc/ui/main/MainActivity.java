@@ -1,41 +1,32 @@
 package com.silversnowsoftware.vc.ui.main;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 
-import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.extractor.ExtractorsFactory;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
-import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
-import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
-import com.google.android.exoplayer2.upstream.BandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.silversnowsoftware.vc.R;
+import com.silversnowsoftware.vc.httpmodule.ILogger;
+import com.silversnowsoftware.vc.model.logger.LogModel;
 import com.silversnowsoftware.vc.ui.base.BaseActivity;
 import com.silversnowsoftware.vc.ui.compression.permission.PermissionsActivity;
 import com.silversnowsoftware.vc.ui.compression.permission.PermissionsChecker;
 import com.silversnowsoftware.vc.ui.compression.videorecord.CameraActivity;
 import com.silversnowsoftware.vc.ui.editor.EditorActivity;
 import com.silversnowsoftware.vc.ui.list.ListActivity;
-import com.silversnowsoftware.vc.ui.test.TestActivity;
 import com.silversnowsoftware.vc.utils.ManifestUtil;
+import com.silversnowsoftware.vc.utils.Utility;
 import com.silversnowsoftware.vc.utils.constants.Constants;
+import com.silversnowsoftware.vc.utils.helpers.LogHelper;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 import static com.silversnowsoftware.vc.utils.constants.Globals.handler;
 
@@ -43,74 +34,65 @@ import static com.silversnowsoftware.vc.utils.constants.Globals.handler;
 public class MainActivity extends BaseActivity implements IMainView {
 
 
-    SimpleExoPlayerView exoPlayerView;
-    SimpleExoPlayer exoPlayer;
-    String videoURL = "http://blueappsoftware.in/layout_design_android_blog.mp4";
-
     @Inject
     IMainPresenter<IMainView> mPresenter;
     MainViewHolder mainViewHolder;
+    private static final String className = MainActivity.class.getSimpleName();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         handler = new Handler();
         super.onCreate(savedInstanceState);
-        mainViewHolder = new MainViewHolder(this);
-        getActivityComponent().inject(this);
-        mPresenter.onAttach(this);
-
-
-        PermissionsChecker mChecker = new PermissionsChecker(getApplicationContext());
-        if (mChecker.lacksPermissions(ManifestUtil.PERMISSIONS)) {
-            PermissionsActivity.startActivityForResult(this, Constants.REQUEST_CODE_FOR_PERMISSIONS, ManifestUtil.PERMISSIONS);
-        }
-        ButterKnife.bind(this);
-
 
         try {
+            mainViewHolder = new MainViewHolder(this);
+            getActivityComponent().inject(this);
+            mPresenter.onAttach(this);
+
+            PermissionsChecker mChecker = new PermissionsChecker(getApplicationContext());
+            if (mChecker.lacksPermissions(ManifestUtil.PERMISSIONS)) {
+                PermissionsActivity.startActivityForResult(this, Constants.REQUEST_CODE_FOR_PERMISSIONS, ManifestUtil.PERMISSIONS);
+            }
+            ButterKnife.bind(this);
 
 
-            BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-            TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(bandwidthMeter));
-            exoPlayer = ExoPlayerFactory.newSimpleInstance(this, trackSelector);
+            mainViewHolder.btnChoose.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
-            Uri videoURI = Uri.parse(videoURL);
+                    mPresenter.chooseFile();
+                }
+            });
 
-            DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory("exoplayer_video");
-            ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-            MediaSource mediaSource = new ExtractorMediaSource(videoURI, dataSourceFactory, extractorsFactory, null, null);
+            mainViewHolder.btnListFile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
-            exoPlayerView.setPlayer(exoPlayer);
-            exoPlayer.prepare(mediaSource);
-            exoPlayer.setPlayWhenReady(true);
+                    redirectToActivity(ListActivity.class);
+                }
+            });
 
+            mainViewHolder.btnRecord.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    redirectToActivity(CameraActivity.class);
+                }
+            });
 
-        } catch (Exception e) {
-            Log.e("MainAcvtivity", " exoplayer error " + e.toString());
+        } catch (Exception ex) {
+
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(ex.getMessage())
+                    .methodName(ex.getStackTrace()[0].getMethodName())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
         }
 
-        mainViewHolder.btnChoose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-                mPresenter.chooseFile();
-            }
-        });
-
-        mainViewHolder.btnListFile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                redirectToActivity(ListActivity.class);
-            }
-        });
-
-        mainViewHolder.btnRecord.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                redirectToActivity(CameraActivity.class);
-            }
-        });
     }
 
     @Override
