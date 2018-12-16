@@ -220,8 +220,8 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
                 }
             });
         } catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
 
     }
@@ -247,8 +247,8 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
             //  exoPlayer.setPlayWhenReady(true);
         } catch (Exception ex) {
 
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
 
     }
@@ -307,8 +307,8 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
             }
         } catch (Exception ex) {
 
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
     }
 
@@ -316,8 +316,8 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
         try {
             tileView.setVideo(mVideoUri);
         } catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
     }
 
@@ -328,8 +328,8 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
             setSeekBarPosition();
         } catch (Exception ex) {
 
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
     }
 
@@ -338,8 +338,8 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
             mHandler.postDelayed(mUpdateTimeTask, 100);
         } catch (Exception ex) {
 
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
     }
 
@@ -363,8 +363,8 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
                 }
             } catch (Exception ex) {
 
-                LogHelper logHelper = new LogHelper();
-                logHelper.Log(className, ex);
+
+                LogHelper.Log(className, ex);
             }
         }
     };
@@ -406,8 +406,8 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
             txtVideoTrimSeconds.setText(String.format(Locale.US, "%02d:%02d - %02d:%02d", startMin, startSec, endMin, endSec));
         } catch (Exception ex) {
 
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
     }
 
@@ -422,8 +422,8 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
             exoPlayer.setPlayWhenReady(false);
             imgPlay.setBackgroundResource(R.drawable.ic_white_play);
         } catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
     }
 
@@ -466,8 +466,8 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
 
             txtVideoTrimSeconds.setText(String.format(Locale.US, "%02d:%02d - %02d:%02d", startMin, startSec, endMin, endSec));
         } catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
     }
 
@@ -501,8 +501,8 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
             finalTimerString = finalTimerString + minutesString + ":" + secondsString;
         } catch (Exception ex) {
 
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         } finally {
             return finalTimerString;
         }

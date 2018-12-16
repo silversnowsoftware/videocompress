@@ -37,8 +37,8 @@ public class VideoCompressApplication extends Application {
             mApplicationComponent.inject(this);
             SharedPref.Clear(this);
         } catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
     }
 

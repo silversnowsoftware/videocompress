@@ -233,8 +233,8 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
                 }
             });
         } catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
 
     }
@@ -246,8 +246,8 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             mDuration = (duration);
             setSeekBarPosition();
         } catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
     }
 
@@ -289,8 +289,8 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
 
             mViewHolder.txtVideoTrimSeconds.setText(String.format(Locale.US, "%02d:%02d - %02d:%02d", startMin, startSec, endMin, endSec));
         } catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
     }
 
@@ -316,8 +316,8 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             onVideoPrepared();
             //  exoPlayer.setPlayWhenReady(true);
         } catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
 
     }
@@ -327,8 +327,8 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
         try {
             mHandler.postDelayed(mUpdateTimeTask, 100);
         } catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
     }
 
@@ -351,8 +351,8 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
                     mHandler.postDelayed(this, 100);
                 }
             } catch (Exception ex) {
-                LogHelper logHelper = new LogHelper();
-                logHelper.Log(className, ex);
+
+                LogHelper.Log(className, ex);
             }
         }
     };
@@ -394,8 +394,8 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
 
             finalTimerString = finalTimerString + minutesString + ":" + secondsString;
         } catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
         // return timer string
         return finalTimerString;
@@ -435,8 +435,8 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
 
             mViewHolder.txtVideoTrimSeconds.setText(String.format(Locale.US, "%02d:%02d - %02d:%02d", startMin, startSec, endMin, endSec));
         } catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
     }
 
@@ -468,8 +468,8 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
                     }
             );
         } catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
         return dstFile;
     }
@@ -501,8 +501,8 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
         } catch (Exception ex) {
             responseModel.setSuccess(false);
             responseModel.setMessage(getContext().getString(R.string.error));
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
 
         return responseModel;
@@ -528,8 +528,8 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
 
             setSelectedResolution(mDefaultResolutionId);
         } catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
     }
 
@@ -538,8 +538,8 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
         try {
             getRepositoryFileModel().update(model);
         } catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
     }
 
@@ -567,8 +567,8 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
 
             }
         } catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         } finally {
             return "";
         }
@@ -604,8 +604,8 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             mViewHolder.rgResolution.clearCheck();
             mViewHolder.rgResolution.check(id);
         } catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
 
     }
@@ -637,8 +637,8 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
                 resolution = maxResult + "x" + minResult;
             }
         } catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
         return resolution;
     }
@@ -658,8 +658,8 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
                     resolution = item.getKey();
             }
         } catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
         return resolution;
     }
@@ -690,8 +690,8 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
                 }
             }
         } catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
     }
 

@@ -31,8 +31,8 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
             db.getFileModel().createOrUpdate(item);
         } catch (SQLException ex) {
 
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
 
     }
@@ -44,8 +44,8 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
             try {
                 db.getFileModel().createOrUpdate(item);
             } catch (SQLException ex) {
-                LogHelper logHelper = new LogHelper();
-                logHelper.Log(className, ex);
+
+                LogHelper.Log(className, ex);
             }
         }
     }
@@ -56,8 +56,8 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
             db.getFileModel().update(item);
         } catch (SQLException ex) {
 
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
     }
 
@@ -66,8 +66,8 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
         try {
             db.getFileModel().delete(item);
         } catch (SQLException ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
     }
 
@@ -77,8 +77,8 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
             List<FileModel> list = getAll();
             db.getFileModel().delete(list);
         } catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
     }
 
@@ -88,8 +88,8 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
         try {
             result = db.getFileModel().deleteIds(ids);
         } catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
         return result;
     }
@@ -101,8 +101,8 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
             db.getFileModel().delete(items);
         } catch (Exception ex) {
             result = false;
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
         return result;
     }
@@ -112,8 +112,8 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
         try {
             return db.getFileModel().queryForId(id);
         } catch (SQLException ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
         return null;
     }
@@ -124,8 +124,8 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
             return db.getFileModel().queryForAll();
 
         } catch (SQLException ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
         return null;
     }
@@ -136,8 +136,8 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
         try {
             file = db.getFileModel().queryForSameId(item);
         } catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
         return file;
     }
@@ -149,8 +149,8 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
             b = db.getFileModel().idExists(id);
 
         } catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
         return b;
     }

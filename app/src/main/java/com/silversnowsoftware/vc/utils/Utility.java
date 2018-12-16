@@ -48,8 +48,8 @@ public class Utility {
             generateVideo(src, file, startMs, endMs, callback);
         }catch (Exception ex) {
 
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
     }
 
@@ -127,8 +127,8 @@ public class Utility {
             if (callback != null)
                 callback.getResult(Uri.parse(dst.toString()));
         }catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
     }
     public static String getAndroidVersion() {

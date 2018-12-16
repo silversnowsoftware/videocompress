@@ -79,10 +79,9 @@ public class MainActivity extends BaseActivity implements IMainView {
                     redirectToActivity(CameraActivity.class);
                 }
             });
-
         } catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
 
 

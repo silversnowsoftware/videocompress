@@ -47,8 +47,8 @@ public class ListActivity extends BaseActivity implements IListView {
             mPresenter.setViewHolder();
             mPresenter.fillListView();
         }catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
 
 

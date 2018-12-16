@@ -56,8 +56,8 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
             mediaIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
             activity.startActivityForResult(mediaIntent, 1);
         } catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
 
         }
     }
@@ -73,8 +73,8 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
                 }
             }
         } catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
 
         }
 
@@ -108,15 +108,15 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
                 videoLength = Double.parseDouble(time) / 1000.00;
             } catch (Exception ex) {
                 videoLength = 0.00;
-                LogHelper logHelper = new LogHelper();
-                logHelper.Log(className, ex);
+
+                LogHelper.Log(className, ex);
             }
             fileModel.setVideoLength(videoLength);
 
         } catch (Exception ex) {
 
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
 
         }
 
@@ -129,8 +129,8 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
         try {
             getRepositoryFileModel().removeAll();
         } catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
     }
 

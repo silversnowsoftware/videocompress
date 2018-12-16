@@ -59,8 +59,8 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
         try {
             viewHolder = new ListViewHolder(getView());
         } catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
     }
 
@@ -72,8 +72,8 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
             response.setSuccess(true);
         } catch (Exception ex) {
             response.setSuccess(false);
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
 
         }
         return response;
@@ -100,8 +100,8 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
             intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
             getContext().startActivity(intent);
         } catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
     }
 
@@ -122,8 +122,8 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
             }
             viewHolder.lvFileModel.setEmptyView(viewHolder.tvNoDataFound);
         } catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
     }
 
@@ -134,8 +134,8 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
 
         } catch (Exception ex) {
 
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
 
         }
         return list;
@@ -147,8 +147,8 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
             adapter = new VideoCompressAdapter(getContext(), R.layout.file_model_list, fileModelList);
 
         } catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
 
         }
         return adapter;

@@ -48,8 +48,8 @@ public class MainTrimmerActivity extends AppCompatActivity implements View.OnCli
 
             btnTrimVideo.setOnClickListener(this);
         } catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
     }
 
@@ -69,8 +69,8 @@ public class MainTrimmerActivity extends AppCompatActivity implements View.OnCli
             }
         } catch (Exception ex) {
 
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
     }
 
@@ -106,8 +106,8 @@ public class MainTrimmerActivity extends AppCompatActivity implements View.OnCli
             }
         } catch (Exception ex) {
 
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
     }
 
@@ -118,8 +118,8 @@ public class MainTrimmerActivity extends AppCompatActivity implements View.OnCli
                     REQUEST_ID_STORAGE_PERMISSIONS);
         } catch (Exception ex) {
 
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
     }
 
@@ -196,8 +196,8 @@ public class MainTrimmerActivity extends AppCompatActivity implements View.OnCli
                 return uri.getPath();
             }
         } catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         } finally {
             return "";
         }
@@ -242,8 +242,8 @@ public class MainTrimmerActivity extends AppCompatActivity implements View.OnCli
             }
             return null;
         } catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         } finally {
             if (cursor != null)
                 cursor.close();

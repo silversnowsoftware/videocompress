@@ -76,8 +76,8 @@ public class EditorActivity extends BaseActivity implements IEditorView {
         }
         catch (Exception ex)
         {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
 
         meditorViewHolder.btnCompress.setOnClickListener(new View.OnClickListener() {
@@ -95,8 +95,8 @@ public class EditorActivity extends BaseActivity implements IEditorView {
                     mPresenter.updateModel(result);
                 }
                 catch (Exception ex){
-                    LogHelper logHelper = new LogHelper();
-                    logHelper.Log(className, ex);
+
+                    LogHelper.Log(className, ex);
                 }
 
             }

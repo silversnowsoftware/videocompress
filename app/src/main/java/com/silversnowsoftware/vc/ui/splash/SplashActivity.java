@@ -27,8 +27,8 @@ public class SplashActivity extends BaseActivity {
                 }
             }, 3000);
         } catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
     }
 

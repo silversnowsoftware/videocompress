@@ -87,8 +87,8 @@ public class FileCompressor implements IFileCompressor {
                 }
             });
         } catch (Exception ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
 
     }
@@ -117,8 +117,8 @@ public class FileCompressor implements IFileCompressor {
                 }
             });
         } catch (FFmpegNotSupportedException ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
     }
 

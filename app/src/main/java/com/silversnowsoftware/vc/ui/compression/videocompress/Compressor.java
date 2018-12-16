@@ -56,8 +56,8 @@ public class Compressor {
                 }
             });
         } catch (FFmpegNotSupportedException ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
     }
 
@@ -90,8 +90,8 @@ public class Compressor {
                 }
             });
         } catch (FFmpegCommandAlreadyRunningException ex) {
-            LogHelper logHelper = new LogHelper();
-            logHelper.Log(className, ex);
+
+            LogHelper.Log(className, ex);
         }
     }
 }

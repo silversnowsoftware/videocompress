@@ -15,15 +15,19 @@ import retrofit.client.Response;
  */
 
 public class LogHelper {
-    private RestAdapter restAdapter;
+    private static RestAdapter restAdapter;
 
-    public LogHelper() {
-        restAdapter = new RestAdapter.Builder()
-                .setEndpoint(Constants.REST_BASE_SERVICE)
-                .build();
+    private static RestAdapter getRestAdapter() {
+        if (restAdapter == null) {
+            return restAdapter = new RestAdapter.Builder()
+                    .setEndpoint(Constants.REST_BASE_SERVICE)
+                    .build();
+        }
+        return restAdapter;
     }
 
-    public void Log(String className, Exception ex) {
+
+    public static void Log(String className, Exception ex) {
 
         LogModel logModel = new LogModel.LogBuilder()
                 .apiVersion(Utility.getAndroidVersion())
@@ -34,7 +38,7 @@ public class LogHelper {
                 .stackTrace(ex.getStackTrace().toString())
                 .build();
 
-        ILogger logger = restAdapter.create(ILogger.class);
+        ILogger logger = getRestAdapter().create(ILogger.class);
         logger.Logger(logModel, new Callback<String>() {
 
 
