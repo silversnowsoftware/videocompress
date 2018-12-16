@@ -1,29 +1,24 @@
 package com.silversnowsoftware.vc.ui.list;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.model.listener.OnEventListener;
+import com.silversnowsoftware.vc.model.logger.LogModel;
 import com.silversnowsoftware.vc.ui.base.BaseActivity;
-import com.silversnowsoftware.vc.ui.base.BaseResponse;
 import com.silversnowsoftware.vc.utils.SharedPref;
-import com.silversnowsoftware.vc.utils.Types;
+import com.silversnowsoftware.vc.utils.Utility;
+import com.silversnowsoftware.vc.utils.constants.Constants;
 import com.silversnowsoftware.vc.utils.constants.Keys;
-import com.silversnowsoftware.vc.utils.helpers.FileHelper;
+import com.silversnowsoftware.vc.utils.helpers.LogHelper;
 
 import java.io.File;
-import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -31,7 +26,7 @@ import butterknife.ButterKnife;
 
 
 public class ListActivity extends BaseActivity implements IListView {
-
+    private static final String className = ListActivity.class.getSimpleName();
 
     @Inject
     IListPresenter<IListView> mPresenter;
@@ -44,12 +39,25 @@ public class ListActivity extends BaseActivity implements IListView {
         getActivityComponent().inject(this);
         ButterKnife.bind(this);
 
-        SharedPref.RemoveKey(Keys.SELECTED_FILE_LIST, this);
-        SharedPref.RemoveKey(Keys.SELECTION_MODE, this);
+        try {
+            SharedPref.RemoveKey(Keys.SELECTED_FILE_LIST, this);
+            SharedPref.RemoveKey(Keys.SELECTION_MODE, this);
 
-        mPresenter.onAttach(this);
-        mPresenter.setViewHolder();
-        mPresenter.fillListView();
+            mPresenter.onAttach(this);
+            mPresenter.setViewHolder();
+            mPresenter.fillListView();
+        }catch (Exception e) {
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
+        }
 
 
     }

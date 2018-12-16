@@ -38,6 +38,7 @@ import com.silversnowsoftware.vc.model.customvideoviews.BarThumb;
 import com.silversnowsoftware.vc.model.customvideoviews.CustomRangeSeekBar;
 import com.silversnowsoftware.vc.model.listener.OnRangeSeekBarChangeListener;
 import com.silversnowsoftware.vc.model.listener.OnVideoTrimListener;
+import com.silversnowsoftware.vc.model.logger.LogModel;
 import com.silversnowsoftware.vc.operations.compressor.FileCompressor;
 import com.silversnowsoftware.vc.ui.base.BasePresenter;
 import com.silversnowsoftware.vc.ui.base.BaseResponse;
@@ -45,8 +46,10 @@ import com.silversnowsoftware.vc.ui.list.ListActivity;
 import com.silversnowsoftware.vc.ui.trimmer.VideoTimmerActivity;
 import com.silversnowsoftware.vc.utils.Types;
 import com.silversnowsoftware.vc.utils.Utility;
+import com.silversnowsoftware.vc.utils.constants.Constants;
 import com.silversnowsoftware.vc.utils.constants.Keys;
 import com.silversnowsoftware.vc.utils.enums.FileStatusEnum;
+import com.silversnowsoftware.vc.utils.helpers.LogHelper;
 
 import java.io.File;
 import java.util.Arrays;
@@ -73,7 +76,7 @@ import static com.silversnowsoftware.vc.utils.helpers.FileHelper.retriveVideoFra
 
 public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
         implements IEditorPresenter<V> {
-
+    private static final String className = EditorPresenter.class.getSimpleName();
     EditorViewHolder mViewHolder;
     String srcFile;
     String mDefaultResolutionId;
@@ -114,212 +117,290 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
 
     @Override
     public void setVideoToVideoView() {
-        List<FileModel> fileModelList = getRepositoryFileModel().getAll();
+        try {
+            List<FileModel> fileModelList = getRepositoryFileModel().getAll();
 
-        srcFile = fileModelList.get(fileModelList.size() - 1).getPath();
-        mMaxDuration = getVideoDuration((Activity) getView(), srcFile);
-        mDefaultResolutionId = findVideoResolution(srcFile);
-        setSelectedResolution(mDefaultResolutionId);
+            srcFile = fileModelList.get(fileModelList.size() - 1).getPath();
+            mMaxDuration = getVideoDuration((Activity) getView(), srcFile);
+            mDefaultResolutionId = findVideoResolution(srcFile);
+            setSelectedResolution(mDefaultResolutionId);
 
-        mViewHolder.tileView.post(new Runnable() {
-            @Override
-            public void run() {
+            mViewHolder.tileView.post(new Runnable() {
+                @Override
+                public void run() {
 
-                setBitmap(Uri.parse(srcFile));
-                setExoPlayer();
-            }
-        });
-
-        mViewHolder.mCustomRangeSeekBarNew.addOnRangeSeekBarListener(new OnRangeSeekBarChangeListener() {
-            @Override
-            public void onCreate(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
-                // Do nothing
-            }
-
-            @Override
-            public void onSeek(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
-                onSeekThumbs(index, value);
-            }
-
-            @Override
-            public void onSeekStart(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
-                if (mViewHolder.exoPlayer != null) {
-                    mHandler.removeCallbacks(mUpdateTimeTask);
-                    mViewHolder.seekBarVideo.setProgress(0);
-                    mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
-                    mViewHolder.exoPlayer.setPlayWhenReady(false);
-                    mViewHolder.imgPlay.setBackgroundResource(R.drawable.ic_white_play);
+                    setBitmap(Uri.parse(srcFile));
+                    setExoPlayer();
                 }
-            }
+            });
 
-            @Override
-            public void onSeekStop(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
-
-            }
-        });
-
-        mViewHolder.imgPlay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                playPauseVideo();
-            }
-        });
-
-        mViewHolder.exoPlayerView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                playPauseVideo();
-                return false;
-            }
-        });
-
-        mViewHolder.mCustomRangeSeekBarNew.addOnRangeSeekBarListener(new OnRangeSeekBarChangeListener() {
-            @Override
-            public void onCreate(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
-                // Do nothing
-            }
-
-            @Override
-            public void onSeek(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
-                onSeekThumbs(index, value);
-            }
-
-            @Override
-            public void onSeekStart(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
-                if (mViewHolder.exoPlayer != null) {
-                    mHandler.removeCallbacks(mUpdateTimeTask);
-                    mViewHolder.seekBarVideo.setProgress(0);
-                    mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
-                    mViewHolder.exoPlayer.setPlayWhenReady(false);
-                    mViewHolder.imgPlay.setBackgroundResource(R.drawable.ic_white_play);
+            mViewHolder.mCustomRangeSeekBarNew.addOnRangeSeekBarListener(new OnRangeSeekBarChangeListener() {
+                @Override
+                public void onCreate(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
+                    // Do nothing
                 }
-            }
 
-            @Override
-            public void onSeekStop(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
-
-            }
-        });
-
-
-        mViewHolder.seekBarVideo.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
-
-        {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                if (mViewHolder.exoPlayer != null) {
-                    mHandler.removeCallbacks(mUpdateTimeTask);
-                    mViewHolder.seekBarVideo.setMax(mTimeVideo * 1000);
-                    mViewHolder.seekBarVideo.setProgress(0);
-                    mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
-                    mViewHolder.exoPlayer.setPlayWhenReady(false);
-                    mViewHolder.imgPlay.setBackgroundResource(R.drawable.ic_white_play);
+                @Override
+                public void onSeek(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
+                    onSeekThumbs(index, value);
                 }
-            }
 
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                mHandler.removeCallbacks(mUpdateTimeTask);
-                mViewHolder.exoPlayer.seekTo((mStartPosition * 1000) - mViewHolder.seekBarVideo.getProgress());
-            }
-        });
+                @Override
+                public void onSeekStart(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
+                    if (mViewHolder.exoPlayer != null) {
+                        mHandler.removeCallbacks(mUpdateTimeTask);
+                        mViewHolder.seekBarVideo.setProgress(0);
+                        mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
+                        mViewHolder.exoPlayer.setPlayWhenReady(false);
+                        mViewHolder.imgPlay.setBackgroundResource(R.drawable.ic_white_play);
+                    }
+                }
+
+                @Override
+                public void onSeekStop(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
+
+                }
+            });
+
+            mViewHolder.imgPlay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    playPauseVideo();
+                }
+            });
+
+            mViewHolder.exoPlayerView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    playPauseVideo();
+                    return false;
+                }
+            });
+
+            mViewHolder.mCustomRangeSeekBarNew.addOnRangeSeekBarListener(new OnRangeSeekBarChangeListener() {
+                @Override
+                public void onCreate(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
+                    // Do nothing
+                }
+
+                @Override
+                public void onSeek(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
+                    onSeekThumbs(index, value);
+                }
+
+                @Override
+                public void onSeekStart(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
+                    if (mViewHolder.exoPlayer != null) {
+                        mHandler.removeCallbacks(mUpdateTimeTask);
+                        mViewHolder.seekBarVideo.setProgress(0);
+                        mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
+                        mViewHolder.exoPlayer.setPlayWhenReady(false);
+                        mViewHolder.imgPlay.setBackgroundResource(R.drawable.ic_white_play);
+                    }
+                }
+
+                @Override
+                public void onSeekStop(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
+
+                }
+            });
+
+
+            mViewHolder.seekBarVideo.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
+
+            {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+                    if (mViewHolder.exoPlayer != null) {
+                        mHandler.removeCallbacks(mUpdateTimeTask);
+                        mViewHolder.seekBarVideo.setMax(mTimeVideo * 1000);
+                        mViewHolder.seekBarVideo.setProgress(0);
+                        mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
+                        mViewHolder.exoPlayer.setPlayWhenReady(false);
+                        mViewHolder.imgPlay.setBackgroundResource(R.drawable.ic_white_play);
+                    }
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                    mHandler.removeCallbacks(mUpdateTimeTask);
+                    mViewHolder.exoPlayer.seekTo((mStartPosition * 1000) - mViewHolder.seekBarVideo.getProgress());
+                }
+            });
+        } catch (Exception e) {
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
+        }
 
     }
 
     @Override
     public void onVideoPrepared() {
-
-        int duration = getVideoDuration((Activity) getView(), srcFile);
-        mDuration = (duration);
-        setSeekBarPosition();
+        try {
+            int duration = getVideoDuration((Activity) getView(), srcFile);
+            mDuration = (duration);
+            setSeekBarPosition();
+        } catch (Exception e) {
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
+        }
     }
 
     @Override
     public void setSeekBarPosition() {
 
-        if (mDuration >= mMaxDuration) {
-            mStartPosition = 0;
-            mEndPosition = mMaxDuration;
+        try {
+            if (mDuration >= mMaxDuration) {
+                mStartPosition = 0;
+                mEndPosition = mMaxDuration;
 
-            mViewHolder.mCustomRangeSeekBarNew.setThumbValue(0, (mStartPosition * 100) / mDuration);
-            mViewHolder.mCustomRangeSeekBarNew.setThumbValue(1, (mEndPosition * 100) / mDuration);
+                mViewHolder.mCustomRangeSeekBarNew.setThumbValue(0, (mStartPosition * 100) / mDuration);
+                mViewHolder.mCustomRangeSeekBarNew.setThumbValue(1, (mEndPosition * 100) / mDuration);
 
-        } else {
-            mStartPosition = 0;
-            mEndPosition = mDuration;
+            } else {
+                mStartPosition = 0;
+                mEndPosition = mDuration;
+            }
+
+
+            mTimeVideo = mDuration;
+            mViewHolder.mCustomRangeSeekBarNew.initMaxWidth();
+            mViewHolder.seekBarVideo.setMax(mMaxDuration * 1000);
+            mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
+
+            String mStart = mStartPosition + "";
+            if (mStartPosition < 10)
+                mStart = "0" + mStartPosition;
+
+            int startMin = Integer.parseInt(mStart) / 60;
+            int startSec = Integer.parseInt(mStart) % 60;
+
+            String mEnd = mEndPosition + "";
+            if (mEndPosition < 10)
+                mEnd = "0" + mEndPosition;
+
+            int endMin = Integer.parseInt(mEnd) / 60;
+            int endSec = Integer.parseInt(mEnd) % 60;
+
+            mViewHolder.txtVideoTrimSeconds.setText(String.format(Locale.US, "%02d:%02d - %02d:%02d", startMin, startSec, endMin, endSec));
+        } catch (Exception e) {
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
         }
-
-
-        mTimeVideo = mDuration;
-        mViewHolder.mCustomRangeSeekBarNew.initMaxWidth();
-        mViewHolder.seekBarVideo.setMax(mMaxDuration * 1000);
-        mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
-
-        String mStart = mStartPosition + "";
-        if (mStartPosition < 10)
-            mStart = "0" + mStartPosition;
-
-        int startMin = Integer.parseInt(mStart) / 60;
-        int startSec = Integer.parseInt(mStart) % 60;
-
-        String mEnd = mEndPosition + "";
-        if (mEndPosition < 10)
-            mEnd = "0" + mEndPosition;
-
-        int endMin = Integer.parseInt(mEnd) / 60;
-        int endSec = Integer.parseInt(mEnd) % 60;
-
-        mViewHolder.txtVideoTrimSeconds.setText(String.format(Locale.US, "%02d:%02d - %02d:%02d", startMin, startSec, endMin, endSec));
     }
 
     @Override
     public void setExoPlayer() {
 
-        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-        TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(bandwidthMeter));
-        mViewHolder.exoPlayer = ExoPlayerFactory.newSimpleInstance((Activity) getView(), trackSelector);
+        try {
+            BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+            TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(bandwidthMeter));
+            mViewHolder.exoPlayer = ExoPlayerFactory.newSimpleInstance((Activity) getView(), trackSelector);
 
-        DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(getContext(), "exoplayer_video");
-        ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-        MediaSource mediaSource = new ExtractorMediaSource(
-                Uri.parse(srcFile),
-                dataSourceFactory,
-                new DefaultExtractorsFactory(),
-                null,
-                null);
+            DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(getContext(), "exoplayer_video");
+            ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+            MediaSource mediaSource = new ExtractorMediaSource(
+                    Uri.parse(srcFile),
+                    dataSourceFactory,
+                    new DefaultExtractorsFactory(),
+                    null,
+                    null);
 
-        mViewHolder.exoPlayerView.setPlayer(mViewHolder.exoPlayer);
-        mViewHolder.exoPlayer.prepare(mediaSource);
-        onVideoPrepared();
-        //  exoPlayer.setPlayWhenReady(true);
-
+            mViewHolder.exoPlayerView.setPlayer(mViewHolder.exoPlayer);
+            mViewHolder.exoPlayer.prepare(mediaSource);
+            onVideoPrepared();
+            //  exoPlayer.setPlayWhenReady(true);
+        } catch (Exception e) {
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
+        }
 
     }
 
     @Override
     public void updateProgressBar() {
-        mHandler.postDelayed(mUpdateTimeTask, 100);
+        try {
+            mHandler.postDelayed(mUpdateTimeTask, 100);
+        } catch (Exception e) {
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
+        }
     }
 
     public Runnable mUpdateTimeTask = new Runnable() {
         public void run() {
-            if (mViewHolder.seekBarVideo.getProgress() >= mViewHolder.seekBarVideo.getMax()) {
-                mViewHolder.seekBarVideo.setProgress((int) (mViewHolder.exoPlayer.getCurrentPosition() - mStartPosition * 1000));
-                mViewHolder.txtVideoLength.setText(milliSecondsToTimer(mViewHolder.seekBarVideo.getProgress()) + "");
-                mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
-                mViewHolder.exoPlayer.setPlayWhenReady(false);
-                mViewHolder.seekBarVideo.setProgress(0);
-                mViewHolder.txtVideoLength.setText("00:00");
-                mViewHolder.imgPlay.setBackgroundResource(R.drawable.ic_white_play);
-            } else {
-                mViewHolder.seekBarVideo.setProgress((int) (mViewHolder.exoPlayer.getCurrentPosition() - mStartPosition * 1000));
-                mViewHolder.txtVideoLength.setText(milliSecondsToTimer(mViewHolder.seekBarVideo.getProgress()) + "");
-                mHandler.postDelayed(this, 100);
+            try {
+
+
+                if (mViewHolder.seekBarVideo.getProgress() >= mViewHolder.seekBarVideo.getMax()) {
+                    mViewHolder.seekBarVideo.setProgress((int) (mViewHolder.exoPlayer.getCurrentPosition() - mStartPosition * 1000));
+                    mViewHolder.txtVideoLength.setText(milliSecondsToTimer(mViewHolder.seekBarVideo.getProgress()) + "");
+                    mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
+                    mViewHolder.exoPlayer.setPlayWhenReady(false);
+                    mViewHolder.seekBarVideo.setProgress(0);
+                    mViewHolder.txtVideoLength.setText("00:00");
+                    mViewHolder.imgPlay.setBackgroundResource(R.drawable.ic_white_play);
+                } else {
+                    mViewHolder.seekBarVideo.setProgress((int) (mViewHolder.exoPlayer.getCurrentPosition() - mStartPosition * 1000));
+                    mViewHolder.txtVideoLength.setText(milliSecondsToTimer(mViewHolder.seekBarVideo.getProgress()) + "");
+                    mHandler.postDelayed(this, 100);
+                }
+            } catch (Exception e) {
+                LogModel logModel = new LogModel.LogBuilder()
+                        .apiVersion(Utility.getAndroidVersion())
+                        .appName(Constants.APP_NAME)
+                        .className(className)
+                        .errorMessage(e.getMessage())
+                        .methodName(e.getStackTrace()[0].getMethodName())
+                        .stackTrace(e.getStackTrace().toString())
+                        .build();
+                LogHelper logHelper = new LogHelper();
+                logHelper.Log(logModel);
             }
         }
     };
@@ -331,99 +412,137 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
 
     @Override
     public String milliSecondsToTimer(long milliseconds) {
+
         String finalTimerString = "";
         String secondsString;
         String minutesString;
+        try {
 
 
-        int hours = (int) (milliseconds / (1000 * 60 * 60));
-        int minutes = (int) (milliseconds % (1000 * 60 * 60)) / (1000 * 60);
-        int seconds = (int) ((milliseconds % (1000 * 60 * 60)) % (1000 * 60) / 1000);
-        // Add hours if there
-        if (hours > 0) {
-            finalTimerString = hours + ":";
+            int hours = (int) (milliseconds / (1000 * 60 * 60));
+            int minutes = (int) (milliseconds % (1000 * 60 * 60)) / (1000 * 60);
+            int seconds = (int) ((milliseconds % (1000 * 60 * 60)) % (1000 * 60) / 1000);
+            // Add hours if there
+            if (hours > 0) {
+                finalTimerString = hours + ":";
+            }
+
+            // Prepending 0 to seconds if it is one digit
+            if (seconds < 10) {
+                secondsString = "0" + seconds;
+            } else {
+                secondsString = "" + seconds;
+            }
+
+            if (minutes < 10) {
+                minutesString = "0" + minutes;
+            } else {
+                minutesString = "" + minutes;
+            }
+
+            finalTimerString = finalTimerString + minutesString + ":" + secondsString;
+        } catch (Exception e) {
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
         }
-
-        // Prepending 0 to seconds if it is one digit
-        if (seconds < 10) {
-            secondsString = "0" + seconds;
-        } else {
-            secondsString = "" + seconds;
-        }
-
-        if (minutes < 10) {
-            minutesString = "0" + minutes;
-        } else {
-            minutesString = "" + minutes;
-        }
-
-        finalTimerString = finalTimerString + minutesString + ":" + secondsString;
-
         // return timer string
         return finalTimerString;
     }
 
     @Override
     public void onSeekThumbs(int index, float value) {
-        switch (index) {
-            case BarThumb.LEFT: {
-                mStartPosition = (int) ((mDuration * value) / 100L);
-                mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
-                break;
+        try {
+            switch (index) {
+                case BarThumb.LEFT: {
+                    mStartPosition = (int) ((mDuration * value) / 100L);
+                    mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
+                    break;
+                }
+                case BarThumb.RIGHT: {
+                    mEndPosition = (int) ((mDuration * value) / 100L);
+                    break;
+                }
             }
-            case BarThumb.RIGHT: {
-                mEndPosition = (int) ((mDuration * value) / 100L);
-                break;
-            }
+            mTimeVideo = (mEndPosition - mStartPosition);
+            mViewHolder.seekBarVideo.setMax(mTimeVideo * 1000);
+            mViewHolder.seekBarVideo.setProgress(0);
+            mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
+
+            String mStart = mStartPosition + "";
+            if (mStartPosition < 10)
+                mStart = "0" + mStartPosition;
+
+            int startMin = Integer.parseInt(mStart) / 60;
+            int startSec = Integer.parseInt(mStart) % 60;
+
+            String mEnd = mEndPosition + "";
+            if (mEndPosition < 10)
+                mEnd = "0" + mEndPosition;
+            int endMin = Integer.parseInt(mEnd) / 60;
+            int endSec = Integer.parseInt(mEnd) % 60;
+
+            mViewHolder.txtVideoTrimSeconds.setText(String.format(Locale.US, "%02d:%02d - %02d:%02d", startMin, startSec, endMin, endSec));
+        } catch (Exception e) {
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
         }
-        mTimeVideo = (mEndPosition - mStartPosition);
-        mViewHolder.seekBarVideo.setMax(mTimeVideo * 1000);
-        mViewHolder.seekBarVideo.setProgress(0);
-        mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
-
-        String mStart = mStartPosition + "";
-        if (mStartPosition < 10)
-            mStart = "0" + mStartPosition;
-
-        int startMin = Integer.parseInt(mStart) / 60;
-        int startSec = Integer.parseInt(mStart) % 60;
-
-        String mEnd = mEndPosition + "";
-        if (mEndPosition < 10)
-            mEnd = "0" + mEndPosition;
-        int endMin = Integer.parseInt(mEnd) / 60;
-        int endSec = Integer.parseInt(mEnd) % 60;
-
-        mViewHolder.txtVideoTrimSeconds.setText(String.format(Locale.US, "%02d:%02d - %02d:%02d", startMin, startSec, endMin, endSec));
-
     }
 
     @Override
     public String trimVideo(final OnVideoTrimListener mOnVideoTrimListener) {
         dstFile = Environment.getExternalStorageDirectory() + "/" + getContext().getString(R.string.app_name) + new Date().getTime()
                 + Utility.VIDEO_FORMAT;
+        try {
 
-        MediaMetadataRetriever
-                mediaMetadataRetriever = new MediaMetadataRetriever();
-        mediaMetadataRetriever.setDataSource((Activity) getView(), Uri.parse(srcFile));
-        final File file = new File(srcFile);
+            MediaMetadataRetriever
+                    mediaMetadataRetriever = new MediaMetadataRetriever();
+            mediaMetadataRetriever.setDataSource((Activity) getView(), Uri.parse(srcFile));
+            final File file = new File(srcFile);
 
-        //notify that video trimming started
-        if (mOnVideoTrimListener != null)
-            mOnVideoTrimListener.onTrimStarted();
+            //notify that video trimming started
+            if (mOnVideoTrimListener != null)
+                mOnVideoTrimListener.onTrimStarted();
 
-        BackgroundTask.execute(
-                new BackgroundTask.Task("", 0L, "") {
-                    @Override
-                    public void execute() {
-                        try {
-                            Utility.startTrim(file, dstFile, mStartPosition * 1000, mEndPosition * 1000, mOnVideoTrimListener);
-                        } catch (final Throwable e) {
-                            Thread.getDefaultUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), e);
+            BackgroundTask.execute(
+                    new BackgroundTask.Task("", 0L, "") {
+                        @Override
+                        public void execute() {
+                            try {
+                                Utility.startTrim(file, dstFile, mStartPosition * 1000, mEndPosition * 1000, mOnVideoTrimListener);
+                            } catch (final Throwable e) {
+                                Thread.getDefaultUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), e);
+                            }
                         }
                     }
-                }
-        );
+            );
+        } catch (Exception e) {
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
+        }
         return dstFile;
     }
 
@@ -451,9 +570,19 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
                 responseModel.setSuccess(false);
                 responseModel.setMessage(getContext().getString(R.string.choose_format));
             }
-        } catch (Exception ex) {
+        } catch (Exception e) {
             responseModel.setSuccess(false);
-            responseModel.setMessage(ex.getMessage());
+            responseModel.setMessage(getContext().getString(R.string.error));
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
         }
 
         return responseModel;
@@ -461,146 +590,244 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
 
     @Override
     public void setDefaultEditor() {
-        mStartPosition = 0;
-        mEndPosition = mMaxDuration;
-        mViewHolder.mCustomRangeSeekBarNew.setThumbValue(0, (mStartPosition * 100) / mDuration);
-        mViewHolder.mCustomRangeSeekBarNew.setThumbValue(1, (mEndPosition * 100) / mDuration);
-        mViewHolder.seekBarVideo.setProgress((int) (mViewHolder.exoPlayer.getCurrentPosition() - mStartPosition * 1000));
-        mViewHolder.seekBarVideo.setMax(mMaxDuration * 1000);
-        mViewHolder.txtVideoLength.setText(milliSecondsToTimer(mViewHolder.seekBarVideo.getProgress()) + "");
-        mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
-        mViewHolder.exoPlayer.setPlayWhenReady(false);
-        mViewHolder.seekBarVideo.setProgress(0);
-        mViewHolder.txtVideoLength.setText("00:00");
-        mViewHolder.imgPlay.setBackgroundResource(R.drawable.ic_white_play);
+        try {
 
-        setSelectedResolution(mDefaultResolutionId);
+
+            mStartPosition = 0;
+            mEndPosition = mMaxDuration;
+            mViewHolder.mCustomRangeSeekBarNew.setThumbValue(0, (mStartPosition * 100) / mDuration);
+            mViewHolder.mCustomRangeSeekBarNew.setThumbValue(1, (mEndPosition * 100) / mDuration);
+            mViewHolder.seekBarVideo.setProgress((int) (mViewHolder.exoPlayer.getCurrentPosition() - mStartPosition * 1000));
+            mViewHolder.seekBarVideo.setMax(mMaxDuration * 1000);
+            mViewHolder.txtVideoLength.setText(milliSecondsToTimer(mViewHolder.seekBarVideo.getProgress()) + "");
+            mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
+            mViewHolder.exoPlayer.setPlayWhenReady(false);
+            mViewHolder.seekBarVideo.setProgress(0);
+            mViewHolder.txtVideoLength.setText("00:00");
+            mViewHolder.imgPlay.setBackgroundResource(R.drawable.ic_white_play);
+
+            setSelectedResolution(mDefaultResolutionId);
+        } catch (Exception e) {
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
+        }
     }
 
     @Override
     public void updateModel(FileModel model) {
-
-        getRepositoryFileModel().update(model);
+        try {
+            getRepositoryFileModel().update(model);
+        } catch (Exception e) {
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
+        }
     }
 
 
     String getSelectedResolution() {
-        int id = mViewHolder.rgResolution.getCheckedRadioButtonId();
-        switch (id) {
-            case R.id.rb144p:
-                return (String) mViewHolder.rb144p.getText();
-            case R.id.rb240p:
-                return (String) mViewHolder.rb240p.getText();
-            case R.id.rb360p:
-                return (String) mViewHolder.rb360p.getText();
-            case R.id.rb480p:
-                return (String) mViewHolder.rb480p.getText();
-            case R.id.rb720p:
-                return (String) mViewHolder.rb720p.getText();
-            case R.id.rb1080p:
-                return (String) mViewHolder.rb1080p.getText();
-            default:
-                return "";
+        try {
 
+
+            int id = mViewHolder.rgResolution.getCheckedRadioButtonId();
+            switch (id) {
+                case R.id.rb144p:
+                    return (String) mViewHolder.rb144p.getText();
+                case R.id.rb240p:
+                    return (String) mViewHolder.rb240p.getText();
+                case R.id.rb360p:
+                    return (String) mViewHolder.rb360p.getText();
+                case R.id.rb480p:
+                    return (String) mViewHolder.rb480p.getText();
+                case R.id.rb720p:
+                    return (String) mViewHolder.rb720p.getText();
+                case R.id.rb1080p:
+                    return (String) mViewHolder.rb1080p.getText();
+                default:
+                    return "";
+
+            }
+        } catch (Exception e) {
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
+        } finally {
+            return "";
         }
 
     }
 
     void setSelectedResolution(String resolution) {
-        int id = -1;
-        switch (resolution) {
-            case "144p":
-                id = mViewHolder.rb144p.getId();
-                break;
-            case "240p":
-                id = mViewHolder.rb240p.getId();
-                break;
-            case "360p":
-                id = mViewHolder.rb360p.getId();
-                break;
-            case "480p":
-                id = mViewHolder.rb480p.getId();
-                break;
-            case "720p":
-                id = mViewHolder.rb720p.getId();
-                break;
-            case "1080p":
-                id = mViewHolder.rb1080p.getId();
-                break;
-            default:
-                id = -1;
-                break;
+        try {
+            int id = -1;
+            switch (resolution) {
+                case "144p":
+                    id = mViewHolder.rb144p.getId();
+                    break;
+                case "240p":
+                    id = mViewHolder.rb240p.getId();
+                    break;
+                case "360p":
+                    id = mViewHolder.rb360p.getId();
+                    break;
+                case "480p":
+                    id = mViewHolder.rb480p.getId();
+                    break;
+                case "720p":
+                    id = mViewHolder.rb720p.getId();
+                    break;
+                case "1080p":
+                    id = mViewHolder.rb1080p.getId();
+                    break;
+                default:
+                    id = -1;
+                    break;
+            }
+            mViewHolder.rgResolution.clearCheck();
+            mViewHolder.rgResolution.check(id);
+        } catch (Exception e) {
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
         }
-        mViewHolder.rgResolution.clearCheck();
-        mViewHolder.rgResolution.check(id);
 
     }
 
     String getFitResolution(int width, int height, String videoResolution) {
-        int[] resolutions = VideoResolutions.get(videoResolution);
-
-        int orientation = 0;
-        int minValue = height;
-        int maxValue = width;
-        if (height > width) {
-            orientation = 1;
-            maxValue = height;
-            minValue = width;
-        }
-
-        double minRate = (double) resolutions[1] / (double) minValue;
-        double maxRate = (double) resolutions[0] / (double) maxValue;
-
-        int minResult = (int) (minValue * minRate);
-        int maxResult = (int) (maxValue * maxRate);
-
         String resolution = "";
+        try {
+            int[] resolutions = VideoResolutions.get(videoResolution);
 
-        if (orientation == 0) {
-            resolution = minResult + "x" + maxResult;
-        } else {
-            resolution = maxResult + "x" + minResult;
+            int orientation = 0;
+            int minValue = height;
+            int maxValue = width;
+            if (height > width) {
+                orientation = 1;
+                maxValue = height;
+                minValue = width;
+            }
+
+            double minRate = (double) resolutions[1] / (double) minValue;
+            double maxRate = (double) resolutions[0] / (double) maxValue;
+
+            int minResult = (int) (minValue * minRate);
+            int maxResult = (int) (maxValue * maxRate);
+
+
+            if (orientation == 0) {
+                resolution = minResult + "x" + maxResult;
+            } else {
+                resolution = maxResult + "x" + minResult;
+            }
+        } catch (Exception e) {
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
         }
         return resolution;
     }
 
     String findVideoResolution(String path) {
         String resolution = "";
-        Map<String, Integer> videoResolutions = getVideoResoution(path);
-        int width = videoResolutions.get("width");
-        int height = videoResolutions.get("height");
-        int[] value = new int[]{width, height};
+        try {
+            Map<String, Integer> videoResolutions = getVideoResoution(path);
+            int width = videoResolutions.get("width");
+            int height = videoResolutions.get("height");
+            int[] value = new int[]{width, height};
 
-        for (Map.Entry<String, int[]> item : VideoResolutions.entrySet()) {
-            int w = item.getValue()[1];
-            int h = item.getValue()[0];
-            if (width == w)
-                resolution = item.getKey();
+            for (Map.Entry<String, int[]> item : VideoResolutions.entrySet()) {
+                int w = item.getValue()[1];
+                int h = item.getValue()[0];
+                if (width == w)
+                    resolution = item.getKey();
+            }
+        } catch (Exception e) {
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
         }
         return resolution;
     }
 
     void playPauseVideo() {
-        if (mViewHolder.exoPlayer.getPlayWhenReady()) {
-            if (mViewHolder.exoPlayer != null) {
-                mViewHolder.exoPlayer.setPlayWhenReady(false);
-                mViewHolder.imgPlay.setBackgroundResource(R.drawable.ic_white_play);
-                mViewHolder.seekBarLayout.animate().cancel();
-                mViewHolder.seekBarLayout.setTranslationY(0);
-            }
-        } else {
-            if (mViewHolder.exoPlayer != null) {
-                mViewHolder.exoPlayer.setPlayWhenReady(true);
-                mViewHolder.imgPlay.setBackgroundResource(R.drawable.ic_white_pause);
-                int progress = mViewHolder.seekBarVideo.getProgress();
-                if (progress >= 0) {
-                    mViewHolder.txtVideoLength.setText("00:0" + (progress / 1000));
-                    mHandler.postDelayed(mUpdateTimeTask, 100);
+        try {
+
+
+            if (mViewHolder.exoPlayer.getPlayWhenReady()) {
+                if (mViewHolder.exoPlayer != null) {
+                    mViewHolder.exoPlayer.setPlayWhenReady(false);
+                    mViewHolder.imgPlay.setBackgroundResource(R.drawable.ic_white_play);
+                    mViewHolder.seekBarLayout.animate().cancel();
+                    mViewHolder.seekBarLayout.setTranslationY(0);
                 }
+            } else {
+                if (mViewHolder.exoPlayer != null) {
+                    mViewHolder.exoPlayer.setPlayWhenReady(true);
+                    mViewHolder.imgPlay.setBackgroundResource(R.drawable.ic_white_pause);
+                    int progress = mViewHolder.seekBarVideo.getProgress();
+                    if (progress >= 0) {
+                        mViewHolder.txtVideoLength.setText("00:0" + (progress / 1000));
+                        mHandler.postDelayed(mUpdateTimeTask, 100);
+                    }
 
-                mViewHolder.seekBarLayout.animate().setStartDelay(3000).translationY(mViewHolder.seekBarLayout.getHeight()).setDuration(1000);
+                    mViewHolder.seekBarLayout.animate().setStartDelay(3000).translationY(mViewHolder.seekBarLayout.getHeight()).setDuration(1000);
 
+                }
             }
+        } catch (Exception e) {
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
         }
     }
 

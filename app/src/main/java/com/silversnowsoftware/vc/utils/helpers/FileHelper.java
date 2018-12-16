@@ -19,7 +19,10 @@ import android.util.Base64;
 import android.widget.Toast;
 
 import com.silversnowsoftware.vc.R;
+import com.silversnowsoftware.vc.model.logger.LogModel;
 import com.silversnowsoftware.vc.ui.main.MainActivity;
+import com.silversnowsoftware.vc.utils.Utility;
+import com.silversnowsoftware.vc.utils.constants.Constants;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -39,39 +42,72 @@ import static com.silversnowsoftware.vc.utils.constants.Arrays.MIME_MapTable;
  */
 
 public class FileHelper {
-
+    private static final String className = FileHelper.class.getSimpleName();
     public static String getMIMEType(File file) {
 
         String type = "*/*";
-        String fName = file.getName();
+        try {
+            String fName = file.getName();
 
-        int dotIndex = fName.lastIndexOf(".");
-        if (dotIndex < 0) {
+            int dotIndex = fName.lastIndexOf(".");
+            if (dotIndex < 0) {
+                return type;
+            }
+
+            String end = fName.substring(dotIndex, fName.length()).toLowerCase();
+            if (end == "") return type;
+
+            for (int i = 0; i < MIME_MapTable.length; i++) {
+                if (end.equals(MIME_MapTable[i][0]))
+                    type = MIME_MapTable[i][1];
+            }
+        } catch (Exception e) {
+
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
+        } finally {
             return type;
         }
 
-        String end = fName.substring(dotIndex, fName.length()).toLowerCase();
-        if (end == "") return type;
-
-        for (int i = 0; i < MIME_MapTable.length; i++) {
-            if (end.equals(MIME_MapTable[i][0]))
-                type = MIME_MapTable[i][1];
-        }
-        return type;
     }
 
     public static String getFileSize(String path) {
-        File f = new File(path);
-        if (!f.exists()) {
+        try {
+            File f = new File(path);
+            if (!f.exists()) {
+                return "0 MB";
+            } else {
+                long size = f.length();
+                return (size / 1024f) / 1024f + "MB";
+            }
+        } catch (Exception e) {
+
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
+        } finally {
             return "0 MB";
-        } else {
-            long size = f.length();
-            return (size / 1024f) / 1024f + "MB";
         }
     }
 
     public static Intent openFile(File file) throws Exception {
         Intent intent = null;
+
         try {
             intent = new Intent();
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -84,6 +120,16 @@ public class FileHelper {
 
         } catch (Exception e) {
             intent = null;
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
             throw new Exception("Dosya Açılamadı.");
         }
         return intent;
@@ -94,90 +140,119 @@ public class FileHelper {
 
 
         ArrayList<String> Paths = new ArrayList<>();
+        try {
+            if (data.getClipData() != null) {
+                int count = data.getClipData().getItemCount();
+                for (int i = 0; i < count; i++) {
+                    Paths.add(
+                            getRealPath(context, data.getClipData().getItemAt(i).getUri())
+                    );
+                }
+            }
 
-        if (data.getClipData() != null) {
-            int count = data.getClipData().getItemCount();
-            for (int i = 0; i < count; i++) {
+            if (data.getData() != null) {
                 Paths.add(
-                        getRealPath(context, data.getClipData().getItemAt(i).getUri())
+                        getRealPath(context, data.getData())
                 );
             }
+        } catch (Exception e) {
+
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
+        } finally {
+            return Paths;
         }
 
-        if (data.getData() != null) {
-            Paths.add(
-                    getRealPath(context, data.getData())
-            );
-        }
-
-        return Paths;
     }
 
     public static String getRealPath(final Context context, final Uri uri) {
 
-        final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+        try {
+            final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
 
-        // DocumentProvider
-        if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
-            // ExternalStorageProvider
-            if (isExternalStorageDocument(uri)) {
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                final String type = split[0];
+            // DocumentProvider
+            if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
+                // ExternalStorageProvider
+                if (isExternalStorageDocument(uri)) {
+                    final String docId = DocumentsContract.getDocumentId(uri);
+                    final String[] split = docId.split(":");
+                    final String type = split[0];
 
-                if ("primary".equalsIgnoreCase(type)) {
-                    return Environment.getExternalStorageDirectory() + "/" + split[1];
+                    if ("primary".equalsIgnoreCase(type)) {
+                        return Environment.getExternalStorageDirectory() + "/" + split[1];
+                    }
+
+                    // TODO handle non-primary volumes
                 }
+                // DownloadsProvider
+                else if (isDownloadsDocument(uri)) {
 
-                // TODO handle non-primary volumes
-            }
-            // DownloadsProvider
-            else if (isDownloadsDocument(uri)) {
+                    final String id = DocumentsContract.getDocumentId(uri);
+                    final Uri contentUri = ContentUris.withAppendedId(
+                            Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
 
-                final String id = DocumentsContract.getDocumentId(uri);
-                final Uri contentUri = ContentUris.withAppendedId(
-                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
-
-                return getDataColumn(context, contentUri, null, null);
-            }
-            // MediaProvider
-            else if (isMediaDocument(uri)) {
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                final String type = split[0];
-
-                Uri contentUri = null;
-                if ("image".equals(type)) {
-                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                } else if ("video".equals(type)) {
-                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-                } else if ("audio".equals(type)) {
-                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                    return getDataColumn(context, contentUri, null, null);
                 }
+                // MediaProvider
+                else if (isMediaDocument(uri)) {
+                    final String docId = DocumentsContract.getDocumentId(uri);
+                    final String[] split = docId.split(":");
+                    final String type = split[0];
 
-                final String selection = "_id=?";
-                final String[] selectionArgs = new String[]{
-                        split[1]
-                };
+                    Uri contentUri = null;
+                    if ("image".equals(type)) {
+                        contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                    } else if ("video".equals(type)) {
+                        contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                    } else if ("audio".equals(type)) {
+                        contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                    }
 
-                return getDataColumn(context, contentUri, selection, selectionArgs);
+                    final String selection = "_id=?";
+                    final String[] selectionArgs = new String[]{
+                            split[1]
+                    };
+
+                    return getDataColumn(context, contentUri, selection, selectionArgs);
+                }
             }
-        }
-        // MediaStore (and general)
-        else if ("content".equalsIgnoreCase(uri.getScheme())) {
+            // MediaStore (and general)
+            else if ("content".equalsIgnoreCase(uri.getScheme())) {
 
-            // Return the remote address
-            if (isGooglePhotosUri(uri))
-                return uri.getLastPathSegment();
+                // Return the remote address
+                if (isGooglePhotosUri(uri))
+                    return uri.getLastPathSegment();
 
-            return getDataColumn(context, uri, null, null);
-        }
-        // File
-        else if ("file".equalsIgnoreCase(uri.getScheme())) {
-            return uri.getPath();
-        }
+                return getDataColumn(context, uri, null, null);
+            }
+            // File
+            else if ("file".equalsIgnoreCase(uri.getScheme())) {
+                return uri.getPath();
+            }
 
-        return null;
+        } catch (Exception e) {
+
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
+        } finally {
+            return null;
+        }
     }
 
     /**
@@ -206,6 +281,18 @@ public class FileHelper {
                 final int index = cursor.getColumnIndexOrThrow(column);
                 return cursor.getString(index);
             }
+        } catch (Exception e) {
+
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
         } finally {
             if (cursor != null)
                 cursor.close();
@@ -247,6 +334,7 @@ public class FileHelper {
     }
 
     public static String getBinaryOfImage(String filePath) {
+
         Bitmap bmp = null;
         ByteArrayOutputStream bos = null;
         byte[] bt = null;
@@ -258,7 +346,17 @@ public class FileHelper {
             bt = bos.toByteArray();
             encodeString = Base64.encodeToString(bt, Base64.DEFAULT);
         } catch (Exception e) {
-            e.printStackTrace();
+
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
         }
         return encodeString;
     }
@@ -274,13 +372,20 @@ public class FileHelper {
         }
         try {
             dis.readFully(fileData);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
+
             dis.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
         }
         return Base64.encodeToString(fileData, Base64.DEFAULT);
     }
@@ -298,7 +403,16 @@ public class FileHelper {
 
             bitmap = mediaMetadataRetriever.getFrameAtTime(25000000, MediaMetadataRetriever.OPTION_CLOSEST);
         } catch (Exception e) {
-            e.printStackTrace();
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
             throw new Throwable(
                     "Exception in retriveVideoFrameFromVideo(String videoPath)"
                             + e.getMessage());
@@ -318,42 +432,117 @@ public class FileHelper {
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             return decodedByte;
 
-        } catch (Exception ex) {
+        } catch (Exception e) {
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
         }
         return null;
     }
 
     public static String getBase64FromBitmap(Bitmap bitmap) {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-        byte[] byteArray = byteArrayOutputStream.toByteArray();
-        String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
-        return encoded;
+        String encoded = "";
+        try {
+
+
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            byte[] byteArray = byteArrayOutputStream.toByteArray();
+            encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+        } catch (Exception e) {
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
+        } finally {
+            return encoded;
+        }
+
     }
 
     public static String getFileNameFromPath(String path) {
-        String filename = path.substring(path.lastIndexOf("/") + 1);
-        return filename;
+        String filename = "";
+        try {
+            filename = path.substring(path.lastIndexOf("/") + 1);
+        } catch (Exception e) {
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
+        } finally {
+            return filename;
+        }
+
     }
 
     public static int getVideoDuration(Activity activity, String path) {
+        int duration = 0;
+        try {
+            MediaPlayer mp = MediaPlayer.create(activity, Uri.parse(path));
+            duration = mp.getDuration() / 1000;
+        } catch (Exception e) {
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
+        } finally {
+            return duration;
+        }
 
-        MediaPlayer mp = MediaPlayer.create(activity, Uri.parse(path));
-        int duration = mp.getDuration() / 1000;
-        return duration;
     }
 
 
     public static Map<String, Integer> getVideoResoution(String path) {
         Map<String, Integer> values = new HashMap<String, Integer>();
-        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-        retriever.setDataSource(path);
-        int width = Integer.valueOf(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH));
-        int height = Integer.valueOf(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT));
-        values.put("width", width);
-        values.put("height", height);
-        retriever.release();
-        return values;
+        try {
+
+            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+            retriever.setDataSource(path);
+            int width = Integer.valueOf(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH));
+            int height = Integer.valueOf(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT));
+            values.put("width", width);
+            values.put("height", height);
+            retriever.release();
+        } catch (Exception e) {
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
+        } finally {
+            return values;
+        }
+
     }
 
     private static void bugFixApi23ThanForShowMedia() {
@@ -362,17 +551,39 @@ public class FileHelper {
                 Method m = StrictMode.class.getMethod("disableDeathOnFileUriExposure");
                 m.invoke(null);
             } catch (Exception e) {
-                e.printStackTrace();
+                LogModel logModel = new LogModel.LogBuilder()
+                        .apiVersion(Utility.getAndroidVersion())
+                        .appName(Constants.APP_NAME)
+                        .className(className)
+                        .errorMessage(e.getMessage())
+                        .methodName(e.getStackTrace()[0].getMethodName())
+                        .stackTrace(e.getStackTrace().toString())
+                        .build();
+                LogHelper logHelper = new LogHelper();
+                logHelper.Log(logModel);
             }
         }
     }
 
     public static void startVideoActivity(Context context, String path) {
-        bugFixApi23ThanForShowMedia();
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent = intent.setDataAndType(Uri.parse(path), "video/*");
-        context.startActivity(intent);
+        try {
+            bugFixApi23ThanForShowMedia();
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent = intent.setDataAndType(Uri.parse(path), "video/*");
+            context.startActivity(intent);
+        }catch (Exception e) {
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
+        }
     }
 
 }

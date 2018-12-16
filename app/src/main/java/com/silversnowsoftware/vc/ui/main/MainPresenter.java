@@ -6,10 +6,14 @@ import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 
 import com.silversnowsoftware.vc.model.FileModel;
+import com.silversnowsoftware.vc.model.logger.LogModel;
 import com.silversnowsoftware.vc.ui.base.BasePresenter;
 import com.silversnowsoftware.vc.utils.Types;
+import com.silversnowsoftware.vc.utils.Utility;
+import com.silversnowsoftware.vc.utils.constants.Constants;
 import com.silversnowsoftware.vc.utils.constants.Keys;
 import com.silversnowsoftware.vc.utils.helpers.FileHelper;
+import com.silversnowsoftware.vc.utils.helpers.LogHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +32,7 @@ import static com.silversnowsoftware.vc.utils.helpers.FileHelper.getFileNameFrom
 
 public class MainPresenter<V extends IMainView> extends BasePresenter<V>
         implements IMainPresenter<V> {
-
+    private static final String className = MainPresenter.class.getSimpleName();
     private Double videoLength = 0.00;
 
     @Inject
@@ -38,16 +42,33 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
 
     @Override
     public void chooseFile() {
-        Activity activity = (Activity) getView();
-        Intent mediaIntent = new Intent(
-                Intent.ACTION_GET_CONTENT
-                //,Uri.parse(Environment.DIRECTORY_DCIM)
-        );
-        // mediaIntent.setType("*/*");
-        mediaIntent.setType("video/*");
-        mediaIntent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"video/*"});
-        mediaIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        activity.startActivityForResult(mediaIntent, 1);
+        try {
+
+
+            Activity activity = (Activity) getView();
+            Intent mediaIntent = new Intent(
+                    Intent.ACTION_GET_CONTENT
+                    //,Uri.parse(Environment.DIRECTORY_DCIM)
+            );
+            // mediaIntent.setType("*/*");
+            mediaIntent.setType("video/*");
+            mediaIntent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"video/*"});
+            mediaIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+            activity.startActivityForResult(mediaIntent, 1);
+        } catch (Exception e) {
+
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
+
+        }
     }
 
     public void collectFiles(Intent data) {
@@ -60,7 +81,18 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
                     getRepositoryFileModel().add(file);
                 }
             }
-        } catch (Exception ex) {
+        } catch (Exception e) {
+
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
 
         }
 
@@ -93,12 +125,32 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
             try {
                 videoLength = Double.parseDouble(time) / 1000.00;
             } catch (Exception e) {
-                e.printStackTrace();
                 videoLength = 0.00;
+                LogModel logModel = new LogModel.LogBuilder()
+                        .apiVersion(Utility.getAndroidVersion())
+                        .appName(Constants.APP_NAME)
+                        .className(className)
+                        .errorMessage(e.getMessage())
+                        .methodName(e.getStackTrace()[0].getMethodName())
+                        .stackTrace(e.getStackTrace().toString())
+                        .build();
+                LogHelper logHelper = new LogHelper();
+                logHelper.Log(logModel);
             }
             fileModel.setVideoLength(videoLength);
 
-        } catch (Exception ex) {
+        } catch (Exception e) {
+
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
 
         }
 
@@ -110,9 +162,17 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
     public void deleteAllFiles() {
         try {
             getRepositoryFileModel().removeAll();
-        }
-        catch (Exception ex){
-
+        } catch (Exception e) {
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
         }
     }
 

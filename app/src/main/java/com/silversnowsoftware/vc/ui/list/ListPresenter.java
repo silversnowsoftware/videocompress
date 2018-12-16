@@ -14,14 +14,18 @@ import android.widget.TextView;
 
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.model.FileModel;
+import com.silversnowsoftware.vc.model.logger.LogModel;
 import com.silversnowsoftware.vc.ui.base.BasePresenter;
 import com.silversnowsoftware.vc.ui.base.BaseResponse;
 import com.silversnowsoftware.vc.ui.base.component.VideoCompressAdapter;
 import com.silversnowsoftware.vc.ui.editor.EditorActivity;
 import com.silversnowsoftware.vc.ui.main.IMainPresenter;
 import com.silversnowsoftware.vc.ui.main.IMainView;
+import com.silversnowsoftware.vc.utils.Utility;
+import com.silversnowsoftware.vc.utils.constants.Constants;
 import com.silversnowsoftware.vc.utils.constants.Globals;
 import com.silversnowsoftware.vc.utils.constants.Keys;
+import com.silversnowsoftware.vc.utils.helpers.LogHelper;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -40,9 +44,11 @@ import static com.silversnowsoftware.vc.utils.Types.getFileModelListType;
  */
 
 public class ListPresenter<V extends IListView> extends BasePresenter<V> implements IListPresenter<V> {
+    private static final String className = ListPresenter.class.getSimpleName();
     ListViewHolder viewHolder;
     @Inject
     IMainPresenter<IMainView> mPresenter;
+
     @Inject
     public ListPresenter() {
         super();
@@ -50,7 +56,20 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
     }
 
     public void setViewHolder() {
-        viewHolder = new ListViewHolder(getView());
+        try {
+            viewHolder = new ListViewHolder(getView());
+        } catch (Exception e) {
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
+        }
     }
 
     @Override
@@ -59,46 +78,85 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
         try {
             getRepositoryFileModel().remove(fileModel);
             response.setSuccess(true);
-        } catch (Exception ex) {
+        } catch (Exception e) {
             response.setSuccess(false);
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
+
         }
         return response;
     }
 
     @Override
     public void shareVideoFiles(List<FileModel> fileModelList) {
+        try {
 
-        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-        StrictMode.setVmPolicy(builder.build());
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_SEND_MULTIPLE);
-        intent.setType("video/*");
-        ArrayList<Uri> files = new ArrayList<Uri>();
 
-        for (FileModel fileModel : fileModelList) {
-            File file = new File(fileModel.getPath());
-            Uri uri = Uri.fromFile(file);
-            files.add(uri);
+            StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+            StrictMode.setVmPolicy(builder.build());
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_SEND_MULTIPLE);
+            intent.setType("video/*");
+            ArrayList<Uri> files = new ArrayList<Uri>();
+
+            for (FileModel fileModel : fileModelList) {
+                File file = new File(fileModel.getPath());
+                Uri uri = Uri.fromFile(file);
+                files.add(uri);
+            }
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
+            getContext().startActivity(intent);
+        } catch (Exception e) {
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
         }
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
-        getContext().startActivity(intent);
     }
 
 
     public void fillListView() {
+        try {
 
-        List<FileModel> fileModelList = getFileModelList();
-        VideoCompressAdapter videoCompressAdapter = getVideoCompressAdapter(fileModelList);
-        videoCompressAdapter.setActivity((Activity) getView());
-        Globals.selectionMode = false;
-        Globals.selectedFiles.clear();
-        if (fileModelList != null) {
-            videoCompressAdapter.notifyDataSetChanged();
-            viewHolder.lvFileModel.setAdapter(videoCompressAdapter);
 
+            List<FileModel> fileModelList = getFileModelList();
+            VideoCompressAdapter videoCompressAdapter = getVideoCompressAdapter(fileModelList);
+            videoCompressAdapter.setActivity((Activity) getView());
+            Globals.selectionMode = false;
+            Globals.selectedFiles.clear();
+            if (fileModelList != null) {
+                videoCompressAdapter.notifyDataSetChanged();
+                viewHolder.lvFileModel.setAdapter(videoCompressAdapter);
+
+            }
+            viewHolder.lvFileModel.setEmptyView(viewHolder.tvNoDataFound);
+        } catch (Exception e) {
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
         }
-        viewHolder.lvFileModel.setEmptyView(viewHolder.tvNoDataFound);
     }
 
     private List<FileModel> getFileModelList() {
@@ -106,7 +164,18 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
         try {
             list = getRepositoryFileModel().getAll();
 
-        } catch (Exception ex) {
+        } catch (Exception e) {
+
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
 
         }
         return list;
@@ -117,7 +186,18 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
         try {
             adapter = new VideoCompressAdapter(getContext(), R.layout.file_model_list, fileModelList);
 
-        } catch (Exception ex) {
+        } catch (Exception e) {
+
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
 
         }
         return adapter;

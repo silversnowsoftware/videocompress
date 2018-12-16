@@ -3,6 +3,10 @@ package com.silversnowsoftware.vc.data.db;
 import android.content.Context;
 
 import com.silversnowsoftware.vc.model.FileModel;
+import com.silversnowsoftware.vc.model.logger.LogModel;
+import com.silversnowsoftware.vc.utils.Utility;
+import com.silversnowsoftware.vc.utils.constants.Constants;
+import com.silversnowsoftware.vc.utils.helpers.LogHelper;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -13,6 +17,7 @@ import java.util.List;
 
 public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
 
+    private static final String className = DbFileModel.class.getSimpleName();
     public DbFileModel(Context context) {
         super(context);
     }
@@ -24,7 +29,16 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
 
             db.getFileModel().createOrUpdate(item);
         } catch (SQLException e) {
-            e.printStackTrace();
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
         }
 
     }

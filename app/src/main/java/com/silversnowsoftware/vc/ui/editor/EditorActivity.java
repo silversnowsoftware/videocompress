@@ -15,10 +15,14 @@ import com.googlecode.mp4parser.authoring.Edit;
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.model.listener.OnVideoTrimListener;
+import com.silversnowsoftware.vc.model.logger.LogModel;
 import com.silversnowsoftware.vc.ui.base.BaseActivity;
 import com.silversnowsoftware.vc.ui.base.BaseResponse;
 import com.silversnowsoftware.vc.ui.list.ListActivity;
+import com.silversnowsoftware.vc.utils.Utility;
+import com.silversnowsoftware.vc.utils.constants.Constants;
 import com.silversnowsoftware.vc.utils.constants.Globals;
+import com.silversnowsoftware.vc.utils.helpers.LogHelper;
 
 import java.util.List;
 
@@ -26,6 +30,7 @@ import javax.inject.Inject;
 
 public class EditorActivity extends BaseActivity implements IEditorView {
 
+    private static final String className = EditorActivity.class.getSimpleName();
     @Inject
     IEditorPresenter<IEditorView> mPresenter;
     EditorViewHolder meditorViewHolder;
@@ -64,9 +69,24 @@ public class EditorActivity extends BaseActivity implements IEditorView {
         setContentView(R.layout.activity_editor);
         meditorViewHolder = new EditorViewHolder(this);
         getActivityComponent().inject(this);
-        mPresenter.onAttach(this);
-        mPresenter.setViewHolder();
-        mPresenter.setVideoToVideoView();
+        try {
+            mPresenter.onAttach(this);
+            mPresenter.setViewHolder();
+            mPresenter.setVideoToVideoView();
+        }
+        catch (Exception e)
+        {
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
+        }
 
         meditorViewHolder.btnCompress.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,8 +102,17 @@ public class EditorActivity extends BaseActivity implements IEditorView {
                     result.setPath(dest);
                     mPresenter.updateModel(result);
                 }
-                catch (Exception ex){
-                    showToastMethod(getString(R.string.error));
+                catch (Exception e){
+                    LogModel logModel = new LogModel.LogBuilder()
+                            .apiVersion(Utility.getAndroidVersion())
+                            .appName(Constants.APP_NAME)
+                            .className(className)
+                            .errorMessage(e.getMessage())
+                            .methodName(e.getStackTrace()[0].getMethodName())
+                            .stackTrace(e.getStackTrace().toString())
+                            .build();
+                    LogHelper logHelper = new LogHelper();
+                    logHelper.Log(logModel);
                 }
 
             }

@@ -7,8 +7,12 @@ import com.silversnowsoftware.vc.di.component.ApplicationComponent;
 import com.silversnowsoftware.vc.di.component.DaggerApplicationComponent;
 import com.silversnowsoftware.vc.di.module.ApplicationModule;
 import com.silversnowsoftware.vc.model.FileModel;
+import com.silversnowsoftware.vc.model.logger.LogModel;
 import com.silversnowsoftware.vc.utils.SharedPref;
+import com.silversnowsoftware.vc.utils.Utility;
+import com.silversnowsoftware.vc.utils.constants.Constants;
 import com.silversnowsoftware.vc.utils.constants.Globals;
+import com.silversnowsoftware.vc.utils.helpers.LogHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,18 +23,32 @@ import java.util.List;
  */
 
 public class VideoCompressApplication extends Application {
-
+    private static final String className = VideoCompressApplication.class.getSimpleName();
     private ApplicationComponent mApplicationComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        Globals.selectedFiles = new ArrayList<FileModel>();
+        try {
+            Globals.selectedFiles = new ArrayList<FileModel>();
 
-                mApplicationComponent = DaggerApplicationComponent.builder()
-                .applicationModule(new ApplicationModule(this)).build();
-        mApplicationComponent.inject(this);
-        SharedPref.Clear(this);
+            mApplicationComponent = DaggerApplicationComponent.builder()
+                    .applicationModule(new ApplicationModule(this)).build();
+            mApplicationComponent.inject(this);
+            SharedPref.Clear(this);
+        } catch (Exception e) {
+
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
+        }
     }
 
     public ApplicationComponent getComponent() {

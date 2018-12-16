@@ -47,9 +47,12 @@ import com.silversnowsoftware.vc.model.customvideoviews.CustomRangeSeekBar;
 import com.silversnowsoftware.vc.model.customvideoviews.TileView;
 import com.silversnowsoftware.vc.model.listener.OnRangeSeekBarChangeListener;
 import com.silversnowsoftware.vc.model.listener.OnVideoTrimListener;
+import com.silversnowsoftware.vc.model.logger.LogModel;
 import com.silversnowsoftware.vc.utils.Types;
 import com.silversnowsoftware.vc.utils.Utility;
+import com.silversnowsoftware.vc.utils.constants.Constants;
 import com.silversnowsoftware.vc.utils.constants.Keys;
+import com.silversnowsoftware.vc.utils.helpers.LogHelper;
 
 import java.io.File;
 import java.util.Date;
@@ -61,7 +64,7 @@ import static com.silversnowsoftware.vc.utils.helpers.FileHelper.getVideoDuratio
 
 
 public class VideoTimmerActivity extends AppCompatActivity implements View.OnClickListener {
-
+    private static final String className = VideoTimmerActivity.class.getSimpleName();
     private TextView txtVideoCancel;
     private TextView txtVideoUpload;
     private TextView txtVideoEditTitle;
@@ -119,261 +122,384 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
             mProgressDialog.dismiss();
         }
     };
-    List<FileModel> fileModelList =null;
+    List<FileModel> fileModelList = null;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_timmer);
-        fileModelList = (List<FileModel>) getData(Keys.FILE_LIST_KEY, Types.getFileModelListType(), getApplicationContext());
-        txtVideoCancel = (TextView) findViewById(R.id.txtVideoCancel);
-        txtVideoUpload = (TextView) findViewById(R.id.txtVideoUpload);
-        txtVideoEditTitle = (TextView) findViewById(R.id.txtVideoEditTitle);
-        txtVideoTrimSeconds = (TextView) findViewById(R.id.txtVideoTrimSeconds);
-        rlVideoView = (RelativeLayout) findViewById(R.id.llVideoView);
-        tileView = (TileView) findViewById(R.id.timeLineView);
-        mCustomRangeSeekBarNew = ((CustomRangeSeekBar) findViewById(R.id.timeLineBar));
-        imgPlay = (ImageView) findViewById(R.id.imgPlay);
-        seekBarVideo = (SeekBar) findViewById(R.id.seekBarVideo);
-        txtVideoLength = (TextView) findViewById(R.id.txtVideoLength);
-        exoPlayerView = (SimpleExoPlayerView) findViewById(R.id.exoVideoView);
-
-        srcFile = fileModelList.get(0).getPath();
-
-        dstFile = Environment.getExternalStorageDirectory() + "/" + getString(R.string.app_name) + new Date().getTime()
-                + Utility.VIDEO_FORMAT;
+        try {
 
 
-        tileView.post(new Runnable() {
-            @Override
-            public void run() {
+            fileModelList = (List<FileModel>) getData(Keys.FILE_LIST_KEY, Types.getFileModelListType(), getApplicationContext());
+            txtVideoCancel = (TextView) findViewById(R.id.txtVideoCancel);
+            txtVideoUpload = (TextView) findViewById(R.id.txtVideoUpload);
+            txtVideoEditTitle = (TextView) findViewById(R.id.txtVideoEditTitle);
+            txtVideoTrimSeconds = (TextView) findViewById(R.id.txtVideoTrimSeconds);
+            rlVideoView = (RelativeLayout) findViewById(R.id.llVideoView);
+            tileView = (TileView) findViewById(R.id.timeLineView);
+            mCustomRangeSeekBarNew = ((CustomRangeSeekBar) findViewById(R.id.timeLineBar));
+            imgPlay = (ImageView) findViewById(R.id.imgPlay);
+            seekBarVideo = (SeekBar) findViewById(R.id.seekBarVideo);
+            txtVideoLength = (TextView) findViewById(R.id.txtVideoLength);
+            exoPlayerView = (SimpleExoPlayerView) findViewById(R.id.exoVideoView);
 
-                setBitmap(Uri.parse(srcFile));
-                setExoPlayer();
-            }
-        });
+            srcFile = fileModelList.get(0).getPath();
 
-        txtVideoCancel.setOnClickListener(this);
-        txtVideoUpload.setOnClickListener(this);
+            dstFile = Environment.getExternalStorageDirectory() + "/" + getString(R.string.app_name) + new Date().getTime()
+                    + Utility.VIDEO_FORMAT;
 
 
+            tileView.post(new Runnable() {
+                @Override
+                public void run() {
 
-        // handle your range seekbar changes
-        mCustomRangeSeekBarNew.addOnRangeSeekBarListener(new OnRangeSeekBarChangeListener() {
-            @Override
-            public void onCreate(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
-                // Do nothing
-            }
-
-            @Override
-            public void onSeek(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
-                onSeekThumbs(index, value);
-            }
-
-            @Override
-            public void onSeekStart(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
-                if (exoPlayer != null) {
-                    mHandler.removeCallbacks(mUpdateTimeTask);
-                    seekBarVideo.setProgress(0);
-                    exoPlayer.seekTo(mStartPosition * 1000);
-                    exoPlayer.setPlayWhenReady(false);
-                    imgPlay.setBackgroundResource(R.drawable.ic_white_play);
+                    setBitmap(Uri.parse(srcFile));
+                    setExoPlayer();
                 }
-            }
+            });
 
-            @Override
-            public void onSeekStop(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
-
-            }
-        });
-
-        imgPlay.setOnClickListener(this);
+            txtVideoCancel.setOnClickListener(this);
+            txtVideoUpload.setOnClickListener(this);
 
 
-        seekBarVideo.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-                if (exoPlayer != null) {
-                    mHandler.removeCallbacks(mUpdateTimeTask);
-                    seekBarVideo.setMax(mTimeVideo * 1000);
-                    seekBarVideo.setProgress(0);
-                    exoPlayer.seekTo(mStartPosition * 1000);
-                    exoPlayer.setPlayWhenReady(false);
-                    imgPlay.setBackgroundResource(R.drawable.ic_white_play);
+            // handle your range seekbar changes
+            mCustomRangeSeekBarNew.addOnRangeSeekBarListener(new OnRangeSeekBarChangeListener() {
+                @Override
+                public void onCreate(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
+                    // Do nothing
                 }
-            }
 
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                mHandler.removeCallbacks(mUpdateTimeTask);
-                exoPlayer.seekTo((mStartPosition * 1000) - seekBarVideo.getProgress());
-            }
-        });
+                @Override
+                public void onSeek(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
+                    onSeekThumbs(index, value);
+                }
 
+                @Override
+                public void onSeekStart(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
+                    if (exoPlayer != null) {
+                        mHandler.removeCallbacks(mUpdateTimeTask);
+                        seekBarVideo.setProgress(0);
+                        exoPlayer.seekTo(mStartPosition * 1000);
+                        exoPlayer.setPlayWhenReady(false);
+                        imgPlay.setBackgroundResource(R.drawable.ic_white_play);
+                    }
+                }
+
+                @Override
+                public void onSeekStop(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
+
+                }
+            });
+
+            imgPlay.setOnClickListener(this);
+
+
+            seekBarVideo.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+                    if (exoPlayer != null) {
+                        mHandler.removeCallbacks(mUpdateTimeTask);
+                        seekBarVideo.setMax(mTimeVideo * 1000);
+                        seekBarVideo.setProgress(0);
+                        exoPlayer.seekTo(mStartPosition * 1000);
+                        exoPlayer.setPlayWhenReady(false);
+                        imgPlay.setBackgroundResource(R.drawable.ic_white_play);
+                    }
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                    mHandler.removeCallbacks(mUpdateTimeTask);
+                    exoPlayer.seekTo((mStartPosition * 1000) - seekBarVideo.getProgress());
+                }
+            });
+        } catch (Exception e) {
+
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
+        }
 
     }
 
     public void setExoPlayer() {
+        try {
+            BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+            TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(bandwidthMeter));
+            exoPlayer = ExoPlayerFactory.newSimpleInstance(this, trackSelector);
 
-        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-        TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(bandwidthMeter));
-        exoPlayer = ExoPlayerFactory.newSimpleInstance(this, trackSelector);
+            DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(getApplicationContext(), "exoplayer_video");
+            ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+            MediaSource mediaSource = new ExtractorMediaSource(
+                    Uri.parse(srcFile),
+                    dataSourceFactory,
+                    new DefaultExtractorsFactory(),
+                    null,
+                    null);
 
-        DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(getApplicationContext(), "exoplayer_video");
-        ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-        MediaSource mediaSource = new ExtractorMediaSource(
-                        Uri.parse(srcFile),
-                        dataSourceFactory,
-                        new DefaultExtractorsFactory(),
-                        null,
-                        null);
+            exoPlayerView.setPlayer(exoPlayer);
+            exoPlayer.prepare(mediaSource);
+            onVideoPrepared();
+            //  exoPlayer.setPlayWhenReady(true);
+        } catch (Exception e) {
 
-        exoPlayerView.setPlayer(exoPlayer);
-        exoPlayer.prepare(mediaSource);
-        onVideoPrepared();
-        //  exoPlayer.setPlayWhenReady(true);
-
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
+        }
 
     }
 
     @Override
     public void onClick(View view) {
-        if (view == txtVideoCancel) {
-            finish();
-        } else if (view == txtVideoUpload) {
-            int diff = mEndPosition - mStartPosition;
-            if (diff < 3) {
-                Toast.makeText(VideoTimmerActivity.this, getString(R.string.video_length_validation),
-                        Toast.LENGTH_LONG).show();
-            } else {
-                MediaMetadataRetriever
-                        mediaMetadataRetriever = new MediaMetadataRetriever();
-                mediaMetadataRetriever.setDataSource(VideoTimmerActivity.this, Uri.parse(srcFile));
-                final File file = new File(srcFile);
+        try {
+            if (view == txtVideoCancel) {
+                finish();
+            } else if (view == txtVideoUpload) {
+                int diff = mEndPosition - mStartPosition;
+                if (diff < 3) {
+                    Toast.makeText(VideoTimmerActivity.this, getString(R.string.video_length_validation),
+                            Toast.LENGTH_LONG).show();
+                } else {
+                    MediaMetadataRetriever
+                            mediaMetadataRetriever = new MediaMetadataRetriever();
+                    mediaMetadataRetriever.setDataSource(VideoTimmerActivity.this, Uri.parse(srcFile));
+                    final File file = new File(srcFile);
 
-                //notify that video trimming started
-                if (mOnVideoTrimListener != null)
-                    mOnVideoTrimListener.onTrimStarted();
+                    //notify that video trimming started
+                    if (mOnVideoTrimListener != null)
+                        mOnVideoTrimListener.onTrimStarted();
 
-                BackgroundTask.execute(
-                        new BackgroundTask.Task("", 0L, "") {
-                            @Override
-                            public void execute() {
-                                try {
-                                    Utility.startTrim(file, dstFile, mStartPosition * 1000, mEndPosition * 1000, mOnVideoTrimListener);
-                                } catch (final Throwable e) {
-                                    Thread.getDefaultUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), e);
+                    BackgroundTask.execute(
+                            new BackgroundTask.Task("", 0L, "") {
+                                @Override
+                                public void execute() {
+                                    try {
+                                        Utility.startTrim(file, dstFile, mStartPosition * 1000, mEndPosition * 1000, mOnVideoTrimListener);
+                                    } catch (final Throwable e) {
+                                        Thread.getDefaultUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), e);
+                                    }
                                 }
                             }
-                        }
-                );
-            }
-
-        } else if (view == imgPlay) {
-            if (exoPlayer.getPlayWhenReady()) {
-                if (exoPlayer != null) {
-                    exoPlayer.setPlayWhenReady(false);
-                    imgPlay.setBackgroundResource(R.drawable.ic_white_play);
+                    );
                 }
-            } else {
-                if (exoPlayer != null) {
-                    exoPlayer.setPlayWhenReady(true);
-                    imgPlay.setBackgroundResource(R.drawable.ic_white_pause);
-                    int prgrss = seekBarVideo.getProgress();
-                    if (prgrss >= 0) {
-                        txtVideoLength.setText("00:0" + (prgrss/1000));
-                        updateProgressBar();
+
+            } else if (view == imgPlay) {
+                if (exoPlayer.getPlayWhenReady()) {
+                    if (exoPlayer != null) {
+                        exoPlayer.setPlayWhenReady(false);
+                        imgPlay.setBackgroundResource(R.drawable.ic_white_play);
+                    }
+                } else {
+                    if (exoPlayer != null) {
+                        exoPlayer.setPlayWhenReady(true);
+                        imgPlay.setBackgroundResource(R.drawable.ic_white_pause);
+                        int prgrss = seekBarVideo.getProgress();
+                        if (prgrss >= 0) {
+                            txtVideoLength.setText("00:0" + (prgrss / 1000));
+                            updateProgressBar();
+                        }
                     }
                 }
             }
+        } catch (Exception e) {
+
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
         }
     }
 
     private void setBitmap(Uri mVideoUri) {
-        tileView.setVideo(mVideoUri);
+        try {
+            tileView.setVideo(mVideoUri);
+        } catch (Exception e) {
+
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
+        }
     }
 
     private void onVideoPrepared() {
+        try {
+            int duration = getVideoDuration(this, srcFile);
+            mDuration = (int) (duration / 1000);
+            setSeekBarPosition();
+        } catch (Exception e) {
 
-        int duration = getVideoDuration(this,srcFile);
-        mDuration = (int) (duration/ 1000);
-        setSeekBarPosition();
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
+        }
     }
 
     public void updateProgressBar() {
-        mHandler.postDelayed(mUpdateTimeTask, 100);
+        try {
+            mHandler.postDelayed(mUpdateTimeTask, 100);
+        } catch (Exception e) {
+
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
+        }
     }
 
     private Runnable mUpdateTimeTask = new Runnable() {
         public void run() {
-            if (seekBarVideo.getProgress() >= seekBarVideo.getMax()) {
-                seekBarVideo.setProgress((int) (exoPlayer.getCurrentPosition() - mStartPosition * 1000));
-                txtVideoLength.setText(milliSecondsToTimer(seekBarVideo.getProgress()) + "");
-                exoPlayer.seekTo(mStartPosition * 1000);
-                exoPlayer.setPlayWhenReady(false);
-                seekBarVideo.setProgress(0);
-                txtVideoLength.setText("00:00");
-                imgPlay.setBackgroundResource(R.drawable.ic_white_play);
-            } else {
-                seekBarVideo.setProgress((int) (exoPlayer.getCurrentPosition() - mStartPosition * 1000));
-                txtVideoLength.setText(milliSecondsToTimer(seekBarVideo.getProgress()) + "");
-                mHandler.postDelayed(this, 100);
+            try {
+
+
+                if (seekBarVideo.getProgress() >= seekBarVideo.getMax()) {
+                    seekBarVideo.setProgress((int) (exoPlayer.getCurrentPosition() - mStartPosition * 1000));
+                    txtVideoLength.setText(milliSecondsToTimer(seekBarVideo.getProgress()) + "");
+                    exoPlayer.seekTo(mStartPosition * 1000);
+                    exoPlayer.setPlayWhenReady(false);
+                    seekBarVideo.setProgress(0);
+                    txtVideoLength.setText("00:00");
+                    imgPlay.setBackgroundResource(R.drawable.ic_white_play);
+                } else {
+                    seekBarVideo.setProgress((int) (exoPlayer.getCurrentPosition() - mStartPosition * 1000));
+                    txtVideoLength.setText(milliSecondsToTimer(seekBarVideo.getProgress()) + "");
+                    mHandler.postDelayed(this, 100);
+                }
+            } catch (Exception e) {
+
+                LogModel logModel = new LogModel.LogBuilder()
+                        .apiVersion(Utility.getAndroidVersion())
+                        .appName(Constants.APP_NAME)
+                        .className(className)
+                        .errorMessage(e.getMessage())
+                        .methodName(e.getStackTrace()[0].getMethodName())
+                        .stackTrace(e.getStackTrace().toString())
+                        .build();
+                LogHelper logHelper = new LogHelper();
+                logHelper.Log(logModel);
             }
         }
     };
 
     private void setSeekBarPosition() {
+        try {
+            if (mDuration >= mMaxDuration) {
+                mStartPosition = 0;
+                mEndPosition = mMaxDuration;
 
-        if (mDuration >= mMaxDuration) {
-            mStartPosition = 0;
-            mEndPosition = mMaxDuration;
+                mCustomRangeSeekBarNew.setThumbValue(0, (mStartPosition * 100) / mDuration);
+                mCustomRangeSeekBarNew.setThumbValue(1, (mEndPosition * 100) / mDuration);
 
-            mCustomRangeSeekBarNew.setThumbValue(0, (mStartPosition * 100) / mDuration);
-            mCustomRangeSeekBarNew.setThumbValue(1, (mEndPosition * 100) / mDuration);
+            } else {
+                mStartPosition = 0;
+                mEndPosition = mDuration;
+            }
 
-        } else {
-            mStartPosition = 0;
-            mEndPosition = mDuration;
+
+            mTimeVideo = mDuration;
+            mCustomRangeSeekBarNew.initMaxWidth();
+            seekBarVideo.setMax(mMaxDuration * 1000);
+            exoPlayer.seekTo(mStartPosition * 1000);
+
+            String mStart = mStartPosition + "";
+            if (mStartPosition < 10)
+                mStart = "0" + mStartPosition;
+
+            int startMin = Integer.parseInt(mStart) / 60;
+            int startSec = Integer.parseInt(mStart) % 60;
+
+            String mEnd = mEndPosition + "";
+            if (mEndPosition < 10)
+                mEnd = "0" + mEndPosition;
+
+            int endMin = Integer.parseInt(mEnd) / 60;
+            int endSec = Integer.parseInt(mEnd) % 60;
+
+            txtVideoTrimSeconds.setText(String.format(Locale.US, "%02d:%02d - %02d:%02d", startMin, startSec, endMin, endSec));
+        } catch (Exception e) {
+
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
         }
-
-
-        mTimeVideo = mDuration;
-        mCustomRangeSeekBarNew.initMaxWidth();
-        seekBarVideo.setMax(mMaxDuration * 1000);
-        exoPlayer.seekTo(mStartPosition * 1000);
-
-        String mStart = mStartPosition + "";
-        if (mStartPosition < 10)
-            mStart = "0" + mStartPosition;
-
-        int startMin = Integer.parseInt(mStart) / 60;
-        int startSec = Integer.parseInt(mStart) % 60;
-
-        String mEnd = mEndPosition + "";
-        if (mEndPosition < 10)
-            mEnd = "0" + mEndPosition;
-
-        int endMin = Integer.parseInt(mEnd) / 60;
-        int endSec = Integer.parseInt(mEnd) % 60;
-
-        txtVideoTrimSeconds.setText(String.format(Locale.US, "%02d:%02d - %02d:%02d", startMin, startSec, endMin, endSec));
     }
 
     /**
      * called when playing video completes
      */
     private void onVideoCompleted() {
+        try {
+            mHandler.removeCallbacks(mUpdateTimeTask);
+            seekBarVideo.setProgress(0);
+            exoPlayer.seekTo(mStartPosition * 1000);
+            exoPlayer.setPlayWhenReady(false);
+            imgPlay.setBackgroundResource(R.drawable.ic_white_play);
+        } catch (Exception e) {
 
-        mHandler.removeCallbacks(mUpdateTimeTask);
-        seekBarVideo.setProgress(0);
-        exoPlayer.seekTo(mStartPosition * 1000);
-        exoPlayer.setPlayWhenReady(false);
-        imgPlay.setBackgroundResource(R.drawable.ic_white_play);
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
+        }
     }
 
     /**
@@ -383,37 +509,50 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
      * @param value value
      */
     private void onSeekThumbs(int index, float value) {
-        switch (index) {
-            case BarThumb.LEFT: {
-                mStartPosition = (int) ((mDuration * value) / 100L);
-                exoPlayer.seekTo(mStartPosition * 1000);
-                break;
+        try {
+            switch (index) {
+                case BarThumb.LEFT: {
+                    mStartPosition = (int) ((mDuration * value) / 100L);
+                    exoPlayer.seekTo(mStartPosition * 1000);
+                    break;
+                }
+                case BarThumb.RIGHT: {
+                    mEndPosition = (int) ((mDuration * value) / 100L);
+                    break;
+                }
             }
-            case BarThumb.RIGHT: {
-                mEndPosition = (int) ((mDuration * value) / 100L);
-                break;
-            }
+            mTimeVideo = (mEndPosition - mStartPosition);
+            seekBarVideo.setMax(mTimeVideo * 1000);
+            seekBarVideo.setProgress(0);
+            exoPlayer.seekTo(mStartPosition * 1000);
+
+            String mStart = mStartPosition + "";
+            if (mStartPosition < 10)
+                mStart = "0" + mStartPosition;
+
+            int startMin = Integer.parseInt(mStart) / 60;
+            int startSec = Integer.parseInt(mStart) % 60;
+
+            String mEnd = mEndPosition + "";
+            if (mEndPosition < 10)
+                mEnd = "0" + mEndPosition;
+            int endMin = Integer.parseInt(mEnd) / 60;
+            int endSec = Integer.parseInt(mEnd) % 60;
+
+            txtVideoTrimSeconds.setText(String.format(Locale.US, "%02d:%02d - %02d:%02d", startMin, startSec, endMin, endSec));
+        } catch (Exception e) {
+
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
         }
-        mTimeVideo = (mEndPosition - mStartPosition);
-        seekBarVideo.setMax(mTimeVideo * 1000);
-        seekBarVideo.setProgress(0);
-        exoPlayer.seekTo(mStartPosition * 1000);
-
-        String mStart = mStartPosition + "";
-        if (mStartPosition < 10)
-            mStart = "0" + mStartPosition;
-
-        int startMin = Integer.parseInt(mStart) / 60;
-        int startSec = Integer.parseInt(mStart) % 60;
-
-        String mEnd = mEndPosition + "";
-        if (mEndPosition < 10)
-            mEnd = "0" + mEndPosition;
-        int endMin = Integer.parseInt(mEnd) / 60;
-        int endSec = Integer.parseInt(mEnd) % 60;
-
-        txtVideoTrimSeconds.setText(String.format(Locale.US, "%02d:%02d - %02d:%02d", startMin, startSec, endMin, endSec));
-
     }
 
     public String milliSecondsToTimer(long milliseconds) {
@@ -421,31 +560,45 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
         String secondsString;
         String minutesString;
 
+        try {
+            int hours = (int) (milliseconds / (1000 * 60 * 60));
+            int minutes = (int) (milliseconds % (1000 * 60 * 60)) / (1000 * 60);
+            int seconds = (int) ((milliseconds % (1000 * 60 * 60)) % (1000 * 60) / 1000);
+            // Add hours if there
+            if (hours > 0) {
+                finalTimerString = hours + ":";
+            }
 
-        int hours = (int) (milliseconds / (1000 * 60 * 60));
-        int minutes = (int) (milliseconds % (1000 * 60 * 60)) / (1000 * 60);
-        int seconds = (int) ((milliseconds % (1000 * 60 * 60)) % (1000 * 60) / 1000);
-        // Add hours if there
-        if (hours > 0) {
-            finalTimerString = hours + ":";
+            // Prepending 0 to seconds if it is one digit
+            if (seconds < 10) {
+                secondsString = "0" + seconds;
+            } else {
+                secondsString = "" + seconds;
+            }
+
+            if (minutes < 10) {
+                minutesString = "0" + minutes;
+            } else {
+                minutesString = "" + minutes;
+            }
+
+            finalTimerString = finalTimerString + minutesString + ":" + secondsString;
+        } catch (Exception e) {
+
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
+        } finally {
+            return finalTimerString;
         }
 
-        // Prepending 0 to seconds if it is one digit
-        if (seconds < 10) {
-            secondsString = "0" + seconds;
-        } else {
-            secondsString = "" + seconds;
-        }
 
-        if (minutes < 10) {
-            minutesString = "0" + minutes;
-        } else {
-            minutesString = "" + minutes;
-        }
-
-        finalTimerString = finalTimerString + minutesString + ":" + secondsString;
-
-        // return timer string
-        return finalTimerString;
     }
 }

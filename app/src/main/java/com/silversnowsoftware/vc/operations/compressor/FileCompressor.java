@@ -10,11 +10,15 @@ import com.github.hiteshsondhi88.libffmpeg.FFmpegInterface;
 import com.github.hiteshsondhi88.libffmpeg.LoadBinaryResponseHandler;
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException;
 import com.silversnowsoftware.vc.model.FileModel;
+import com.silversnowsoftware.vc.model.logger.LogModel;
 import com.silversnowsoftware.vc.ui.compression.videocompress.CompressListener;
 import com.silversnowsoftware.vc.ui.compression.videocompress.Compressor;
 import com.silversnowsoftware.vc.ui.compression.videocompress.InitListener;
+import com.silversnowsoftware.vc.utils.Utility;
+import com.silversnowsoftware.vc.utils.constants.Constants;
 import com.silversnowsoftware.vc.utils.constants.Globals;
 import com.silversnowsoftware.vc.utils.helpers.FileHelper;
+import com.silversnowsoftware.vc.utils.helpers.LogHelper;
 
 import java.io.File;
 import java.util.regex.Matcher;
@@ -27,7 +31,7 @@ import java.util.regex.Pattern;
 
 public class FileCompressor implements IFileCompressor {
 
-
+    private static final String className = FileCompressor.class.getSimpleName();
     private Compressor mCompressor;
     private Context context;
     private FFmpegInterface ffmpeg;
@@ -108,6 +112,16 @@ public class FileCompressor implements IFileCompressor {
             });
         } catch (FFmpegNotSupportedException e) {
             e.printStackTrace();
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
         }
     }
 

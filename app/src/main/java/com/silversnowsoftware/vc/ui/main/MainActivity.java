@@ -87,6 +87,7 @@ public class MainActivity extends BaseActivity implements IMainView {
                     .className(className)
                     .errorMessage(ex.getMessage())
                     .methodName(ex.getStackTrace()[0].getMethodName())
+                    .stackTrace(ex.getStackTrace().toString())
                     .build();
             LogHelper logHelper = new LogHelper();
             logHelper.Log(logModel);

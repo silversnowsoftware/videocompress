@@ -14,6 +14,9 @@ import com.googlecode.mp4parser.authoring.container.mp4.MovieCreator;
 import com.googlecode.mp4parser.authoring.tracks.AppendTrack;
 import com.googlecode.mp4parser.authoring.tracks.CroppedTrack;
 import com.silversnowsoftware.vc.model.listener.OnVideoTrimListener;
+import com.silversnowsoftware.vc.model.logger.LogModel;
+import com.silversnowsoftware.vc.utils.constants.Constants;
+import com.silversnowsoftware.vc.utils.helpers.LogHelper;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -30,89 +33,120 @@ import java.util.Locale;
  */
 
 public class Utility {
+    private static final String className = Utility.class.getSimpleName();
     public static final String VIDEO_FORMAT = ".mp4";
     private static final String TAG = Utility.class.getSimpleName();
 
     public static void startTrim(@NonNull File src, @NonNull String dst, long startMs, long endMs,
                                  @NonNull OnVideoTrimListener callback) throws IOException {
-        final String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
+        try {
+            final String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
 
-        File file = new File(dst);
-        file.getParentFile().mkdirs();
-        Log.d(TAG, "Generated file path " + dst);
-        generateVideo(src, file, startMs, endMs, callback);
+            File file = new File(dst);
+            file.getParentFile().mkdirs();
+            Log.d(TAG, "Generated file path " + dst);
+            generateVideo(src, file, startMs, endMs, callback);
+        }catch (Exception e) {
+
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
+        }
     }
 
     private static void generateVideo(@NonNull File src, @NonNull File dst, long startMs,
                                       long endMs, @NonNull OnVideoTrimListener callback) throws IOException {
         // NOTE: Switched to using FileDataSourceViaHeapImpl since it does not use memory mapping (VM).
         // Otherwise we get OOM with large movie files.
-        Movie movie = MovieCreator.build(new FileDataSourceViaHeapImpl(src.getAbsolutePath()));
+        try {
 
-        List<Track> tracks = movie.getTracks();
-        movie.setTracks(new LinkedList<Track>());
-        // remove all tracks we will create new tracks from the old
 
-        double startTime1 = startMs / 1000;
-        double endTime1 = endMs / 1000;
+            Movie movie = MovieCreator.build(new FileDataSourceViaHeapImpl(src.getAbsolutePath()));
 
-        boolean timeCorrected = false;
+            List<Track> tracks = movie.getTracks();
+            movie.setTracks(new LinkedList<Track>());
+            // remove all tracks we will create new tracks from the old
 
-        // Here we try to find a track that has sync samples. Since we can only start decoding
-        // at such a sample we SHOULD make sure that the start of the new fragment is exactly
-        // such a frame
-        for (Track track : tracks) {
-            if (track.getSyncSamples() != null && track.getSyncSamples().length > 0) {
-                if (timeCorrected) {
-                    // This exception here could be a false positive in case we have multiple tracks
-                    // with sync samples at exactly the same positions. E.g. a single movie containing
-                    // multiple qualities of the same video (Microsoft Smooth Streaming file)
+            double startTime1 = startMs / 1000;
+            double endTime1 = endMs / 1000;
 
-                    throw new RuntimeException("The startTime has already been corrected by another track with SyncSample. Not Supported.");
-                }
+            boolean timeCorrected = false;
+
+            // Here we try to find a track that has sync samples. Since we can only start decoding
+            // at such a sample we SHOULD make sure that the start of the new fragment is exactly
+            // such a frame
+            for (Track track : tracks) {
+                if (track.getSyncSamples() != null && track.getSyncSamples().length > 0) {
+                    if (timeCorrected) {
+                        // This exception here could be a false positive in case we have multiple tracks
+                        // with sync samples at exactly the same positions. E.g. a single movie containing
+                        // multiple qualities of the same video (Microsoft Smooth Streaming file)
+
+                        throw new RuntimeException("The startTime has already been corrected by another track with SyncSample. Not Supported.");
+                    }
 //                startTime1 = correctTimeToSyncSample(track, startTime1, false);
 //                endTime1 = correctTimeToSyncSample(track, endTime1, true);
-                timeCorrected = true;
-            }
-        }
-
-        for (Track track : tracks) {
-            long currentSample = 0;
-            double currentTime = 0;
-            double lastTime = -1;
-            long startSample1 = -1;
-            long endSample1 = -1;
-
-            for (int i = 0; i < track.getSampleDurations().length; i++) {
-                long delta = track.getSampleDurations()[i];
-
-
-                if (currentTime > lastTime && currentTime <= startTime1) {
-                    // current sample is still before the new starttime
-                    startSample1 = currentSample;
+                    timeCorrected = true;
                 }
-                if (currentTime > lastTime && currentTime <= endTime1) {
-                    // current sample is after the new start time and still before the new endtime
-                    endSample1 = currentSample;
-                }
-                lastTime = currentTime;
-                currentTime += (double) delta / (double) track.getTrackMetaData().getTimescale();
-                currentSample++;
             }
-            movie.addTrack(new AppendTrack(new CroppedTrack(track, startSample1, endSample1)));
+
+            for (Track track : tracks) {
+                long currentSample = 0;
+                double currentTime = 0;
+                double lastTime = -1;
+                long startSample1 = -1;
+                long endSample1 = -1;
+
+                for (int i = 0; i < track.getSampleDurations().length; i++) {
+                    long delta = track.getSampleDurations()[i];
+
+
+                    if (currentTime > lastTime && currentTime <= startTime1) {
+                        // current sample is still before the new starttime
+                        startSample1 = currentSample;
+                    }
+                    if (currentTime > lastTime && currentTime <= endTime1) {
+                        // current sample is after the new start time and still before the new endtime
+                        endSample1 = currentSample;
+                    }
+                    lastTime = currentTime;
+                    currentTime += (double) delta / (double) track.getTrackMetaData().getTimescale();
+                    currentSample++;
+                }
+                movie.addTrack(new AppendTrack(new CroppedTrack(track, startSample1, endSample1)));
+            }
+
+            Container out = new DefaultMp4Builder().build(movie);
+
+            FileOutputStream fos = new FileOutputStream(dst);
+            FileChannel fc = fos.getChannel();
+            out.writeContainer(fc);
+
+            fc.close();
+            fos.close();
+
+            if (callback != null)
+                callback.getResult(Uri.parse(dst.toString()));
+        }catch (Exception e) {
+
+            LogModel logModel = new LogModel.LogBuilder()
+                    .apiVersion(Utility.getAndroidVersion())
+                    .appName(Constants.APP_NAME)
+                    .className(className)
+                    .errorMessage(e.getMessage())
+                    .methodName(e.getStackTrace()[0].getMethodName())
+                    .stackTrace(e.getStackTrace().toString())
+                    .build();
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(logModel);
         }
-
-        Container out = new DefaultMp4Builder().build(movie);
-
-        FileOutputStream fos = new FileOutputStream(dst);
-        FileChannel fc = fos.getChannel();
-        out.writeContainer(fc);
-
-        fc.close();
-        fos.close();
-        
-        if (callback != null)
-            callback.getResult(Uri.parse(dst.toString()));
     }
     public static String getAndroidVersion() {
         String release = Build.VERSION.RELEASE;
