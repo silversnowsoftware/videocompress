@@ -74,18 +74,10 @@ public class EditorActivity extends BaseActivity implements IEditorView {
             mPresenter.setViewHolder();
             mPresenter.setVideoToVideoView();
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
 
         meditorViewHolder.btnCompress.setOnClickListener(new View.OnClickListener() {
@@ -102,17 +94,9 @@ public class EditorActivity extends BaseActivity implements IEditorView {
                     result.setPath(dest);
                     mPresenter.updateModel(result);
                 }
-                catch (Exception e){
-                    LogModel logModel = new LogModel.LogBuilder()
-                            .apiVersion(Utility.getAndroidVersion())
-                            .appName(Constants.APP_NAME)
-                            .className(className)
-                            .errorMessage(e.getMessage())
-                            .methodName(e.getStackTrace()[0].getMethodName())
-                            .stackTrace(e.getStackTrace().toString())
-                            .build();
+                catch (Exception ex){
                     LogHelper logHelper = new LogHelper();
-                    logHelper.Log(logModel);
+                    logHelper.Log(className, ex);
                 }
 
             }

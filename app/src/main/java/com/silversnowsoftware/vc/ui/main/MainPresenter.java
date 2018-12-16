@@ -55,18 +55,9 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
             mediaIntent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"video/*"});
             mediaIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
             activity.startActivityForResult(mediaIntent, 1);
-        } catch (Exception e) {
-
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
 
         }
     }
@@ -81,18 +72,9 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
                     getRepositoryFileModel().add(file);
                 }
             }
-        } catch (Exception e) {
-
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
 
         }
 
@@ -124,33 +106,17 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
 
             try {
                 videoLength = Double.parseDouble(time) / 1000.00;
-            } catch (Exception e) {
+            } catch (Exception ex) {
                 videoLength = 0.00;
-                LogModel logModel = new LogModel.LogBuilder()
-                        .apiVersion(Utility.getAndroidVersion())
-                        .appName(Constants.APP_NAME)
-                        .className(className)
-                        .errorMessage(e.getMessage())
-                        .methodName(e.getStackTrace()[0].getMethodName())
-                        .stackTrace(e.getStackTrace().toString())
-                        .build();
                 LogHelper logHelper = new LogHelper();
-                logHelper.Log(logModel);
+                logHelper.Log(className, ex);
             }
             fileModel.setVideoLength(videoLength);
 
-        } catch (Exception e) {
+        } catch (Exception ex) {
 
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
 
         }
 
@@ -162,17 +128,9 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
     public void deleteAllFiles() {
         try {
             getRepositoryFileModel().removeAll();
-        } catch (Exception e) {
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
     }
 

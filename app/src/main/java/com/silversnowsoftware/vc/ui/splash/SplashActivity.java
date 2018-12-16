@@ -13,6 +13,7 @@ import com.silversnowsoftware.vc.utils.helpers.LogHelper;
 
 public class SplashActivity extends BaseActivity {
     private static final String className = SplashActivity.class.getSimpleName();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,18 +26,9 @@ public class SplashActivity extends BaseActivity {
                     finish();
                 }
             }, 3000);
-        }catch (Exception e) {
-
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
     }
 

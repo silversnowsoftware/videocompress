@@ -47,46 +47,30 @@ public class MainTrimmerActivity extends AppCompatActivity implements View.OnCli
             btnTrimVideo = (Button) findViewById(R.id.btnTrimVideo);
 
             btnTrimVideo.setOnClickListener(this);
-        } catch (Exception e) {
-
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
     }
 
     @Override
     public void onClick(View view) {
-        try{
-        if (view == btnTrimVideo) {
-            if (checkStoragePermission()) {
+        try {
+            if (view == btnTrimVideo) {
+                if (checkStoragePermission()) {
 
-                Intent intent = new Intent();
-                intent.setType("video/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Video"), REQUEST_TAKE_GALLERY_VIDEO);
-            } else {
-                requestStoragePermission();
+                    Intent intent = new Intent();
+                    intent.setType("video/*");
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    startActivityForResult(Intent.createChooser(intent, "Select Video"), REQUEST_TAKE_GALLERY_VIDEO);
+                } else {
+                    requestStoragePermission();
+                }
             }
-        }}catch (Exception e) {
+        } catch (Exception ex) {
 
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
     }
 
@@ -120,18 +104,10 @@ public class MainTrimmerActivity extends AppCompatActivity implements View.OnCli
                     }
                 }
             }
-        }catch (Exception e) {
+        } catch (Exception ex) {
 
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
     }
 
@@ -140,18 +116,10 @@ public class MainTrimmerActivity extends AppCompatActivity implements View.OnCli
             ActivityCompat.requestPermissions(MainTrimmerActivity.this,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     REQUEST_ID_STORAGE_PERMISSIONS);
-        }catch (Exception e) {
+        } catch (Exception ex) {
 
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
     }
 
@@ -227,19 +195,10 @@ public class MainTrimmerActivity extends AppCompatActivity implements View.OnCli
             else if ("file".equalsIgnoreCase(uri.getScheme())) {
                 return uri.getPath();
             }
-        }catch (Exception e) {
-
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
-        }finally {
+            logHelper.Log(className, ex);
+        } finally {
             return "";
         }
 
@@ -282,18 +241,9 @@ public class MainTrimmerActivity extends AppCompatActivity implements View.OnCli
                 }
             }
             return null;
-        }catch (Exception e) {
-
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         } finally {
             if (cursor != null)
                 cursor.close();

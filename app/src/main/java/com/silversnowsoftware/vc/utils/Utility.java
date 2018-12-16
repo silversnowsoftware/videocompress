@@ -46,18 +46,10 @@ public class Utility {
             file.getParentFile().mkdirs();
             Log.d(TAG, "Generated file path " + dst);
             generateVideo(src, file, startMs, endMs, callback);
-        }catch (Exception e) {
+        }catch (Exception ex) {
 
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
     }
 
@@ -134,18 +126,9 @@ public class Utility {
 
             if (callback != null)
                 callback.getResult(Uri.parse(dst.toString()));
-        }catch (Exception e) {
-
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        }catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
     }
     public static String getAndroidVersion() {

@@ -232,17 +232,9 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
                     mViewHolder.exoPlayer.seekTo((mStartPosition * 1000) - mViewHolder.seekBarVideo.getProgress());
                 }
             });
-        } catch (Exception e) {
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
 
     }
@@ -253,17 +245,9 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             int duration = getVideoDuration((Activity) getView(), srcFile);
             mDuration = (duration);
             setSeekBarPosition();
-        } catch (Exception e) {
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
     }
 
@@ -304,17 +288,9 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             int endSec = Integer.parseInt(mEnd) % 60;
 
             mViewHolder.txtVideoTrimSeconds.setText(String.format(Locale.US, "%02d:%02d - %02d:%02d", startMin, startSec, endMin, endSec));
-        } catch (Exception e) {
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
     }
 
@@ -339,17 +315,9 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             mViewHolder.exoPlayer.prepare(mediaSource);
             onVideoPrepared();
             //  exoPlayer.setPlayWhenReady(true);
-        } catch (Exception e) {
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
 
     }
@@ -358,17 +326,9 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
     public void updateProgressBar() {
         try {
             mHandler.postDelayed(mUpdateTimeTask, 100);
-        } catch (Exception e) {
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
     }
 
@@ -390,17 +350,9 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
                     mViewHolder.txtVideoLength.setText(milliSecondsToTimer(mViewHolder.seekBarVideo.getProgress()) + "");
                     mHandler.postDelayed(this, 100);
                 }
-            } catch (Exception e) {
-                LogModel logModel = new LogModel.LogBuilder()
-                        .apiVersion(Utility.getAndroidVersion())
-                        .appName(Constants.APP_NAME)
-                        .className(className)
-                        .errorMessage(e.getMessage())
-                        .methodName(e.getStackTrace()[0].getMethodName())
-                        .stackTrace(e.getStackTrace().toString())
-                        .build();
+            } catch (Exception ex) {
                 LogHelper logHelper = new LogHelper();
-                logHelper.Log(logModel);
+                logHelper.Log(className, ex);
             }
         }
     };
@@ -441,17 +393,9 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             }
 
             finalTimerString = finalTimerString + minutesString + ":" + secondsString;
-        } catch (Exception e) {
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
         // return timer string
         return finalTimerString;
@@ -490,17 +434,9 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             int endSec = Integer.parseInt(mEnd) % 60;
 
             mViewHolder.txtVideoTrimSeconds.setText(String.format(Locale.US, "%02d:%02d - %02d:%02d", startMin, startSec, endMin, endSec));
-        } catch (Exception e) {
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
     }
 
@@ -531,17 +467,9 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
                         }
                     }
             );
-        } catch (Exception e) {
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
         return dstFile;
     }
@@ -570,19 +498,11 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
                 responseModel.setSuccess(false);
                 responseModel.setMessage(getContext().getString(R.string.choose_format));
             }
-        } catch (Exception e) {
+        } catch (Exception ex) {
             responseModel.setSuccess(false);
             responseModel.setMessage(getContext().getString(R.string.error));
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
 
         return responseModel;
@@ -607,17 +527,9 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             mViewHolder.imgPlay.setBackgroundResource(R.drawable.ic_white_play);
 
             setSelectedResolution(mDefaultResolutionId);
-        } catch (Exception e) {
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
     }
 
@@ -625,17 +537,9 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
     public void updateModel(FileModel model) {
         try {
             getRepositoryFileModel().update(model);
-        } catch (Exception e) {
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
     }
 
@@ -662,17 +566,9 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
                     return "";
 
             }
-        } catch (Exception e) {
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         } finally {
             return "";
         }
@@ -707,17 +603,9 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             }
             mViewHolder.rgResolution.clearCheck();
             mViewHolder.rgResolution.check(id);
-        } catch (Exception e) {
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
 
     }
@@ -748,17 +636,9 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             } else {
                 resolution = maxResult + "x" + minResult;
             }
-        } catch (Exception e) {
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
         return resolution;
     }
@@ -777,17 +657,9 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
                 if (width == w)
                     resolution = item.getKey();
             }
-        } catch (Exception e) {
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
         return resolution;
     }
@@ -817,17 +689,9 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
 
                 }
             }
-        } catch (Exception e) {
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
     }
 

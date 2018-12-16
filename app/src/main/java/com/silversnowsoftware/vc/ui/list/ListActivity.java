@@ -46,17 +46,9 @@ public class ListActivity extends BaseActivity implements IListView {
             mPresenter.onAttach(this);
             mPresenter.setViewHolder();
             mPresenter.fillListView();
-        }catch (Exception e) {
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        }catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
 
 

@@ -38,17 +38,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
         try {
             TableUtils.createTable(connectionSource,FileModel.class);
-        } catch (SQLException | java.sql.SQLException e) {
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (SQLException | java.sql.SQLException ex) {
+
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
     }
 
@@ -57,8 +50,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         try {
             TableUtils.dropTable(connectionSource,FileModel.class,true);
             onCreate(database,connectionSource);
-        } catch (SQLException | java.sql.SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException | java.sql.SQLException ex) {
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(className, ex);
         }
     }
 

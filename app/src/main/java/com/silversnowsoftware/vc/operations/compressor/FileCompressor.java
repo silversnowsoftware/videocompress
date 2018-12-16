@@ -47,43 +47,49 @@ public class FileCompressor implements IFileCompressor {
 
 
     public void Compress(final FileModel fileModel) {
-        if (fileModel == null)
-            return;
+        try {
+            if (fileModel == null)
+                return;
 
 
-        File mFile = new File(Globals.currentOutputVideoPath + fileModel.getName());
-        if (mFile.exists()) {
-            mFile.delete();
-        }
-        Log.i("Progress " , fileModel.getName() + "--" +  fileModel.getVideoLength());
-        mCompressor.execCommand(fileModel.getCompressCmd(), new CompressListener() {
-            int counter=0;
-            @Override
-            public void onExecSuccess(String message) {
-                File trimFile = new File(fileModel.getPath());
-                if (trimFile.exists()) {
-                    trimFile.delete();
+            File mFile = new File(Globals.currentOutputVideoPath + fileModel.getName());
+            if (mFile.exists()) {
+                mFile.delete();
+            }
+            Log.i("Progress ", fileModel.getName() + "--" + fileModel.getVideoLength());
+            mCompressor.execCommand(fileModel.getCompressCmd(), new CompressListener() {
+                int counter = 0;
+
+                @Override
+                public void onExecSuccess(String message) {
+                    File trimFile = new File(fileModel.getPath());
+                    if (trimFile.exists()) {
+                        trimFile.delete();
+                    }
+                    fileModel.listener.onSuccess(100.0);
                 }
-                fileModel.listener.onSuccess(100.0);
-            }
 
-            @Override
-            public void onExecFail(String reason) {
-                Toast.makeText(context, reason, Toast.LENGTH_SHORT).show();
-            }
+                @Override
+                public void onExecFail(String reason) {
+                    Toast.makeText(context, reason, Toast.LENGTH_SHORT).show();
+                }
 
-            @Override
-            public void onExecProgress(String message) {
+                @Override
+                public void onExecProgress(String message) {
 
                     Double progress = getProgress(message, fileModel.getVideoLength()) * 100;
                     fileModel.setProgress(progress);
                     fileModel.listener.onProgress(progress);
 
 
-                counter++;
+                    counter++;
 
-            }
-        });
+                }
+            });
+        } catch (Exception ex) {
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(className, ex);
+        }
 
     }
 
@@ -110,18 +116,9 @@ public class FileCompressor implements IFileCompressor {
 
                 }
             });
-        } catch (FFmpegNotSupportedException e) {
-            e.printStackTrace();
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (FFmpegNotSupportedException ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
     }
 
@@ -139,8 +136,8 @@ public class FileCompressor implements IFileCompressor {
            /*  if (seconds.intValue() == videoLength.intValue()){
                  return 0.0;
              }*/
-             if (0.0 != videoLength) {
-                Log.i("VideoLen" , String.valueOf(seconds) + "/" + String.valueOf(videoLength));
+            if (0.0 != videoLength) {
+                Log.i("VideoLen", String.valueOf(seconds) + "/" + String.valueOf(videoLength));
                 return seconds / videoLength;
             }
             return 0.0;

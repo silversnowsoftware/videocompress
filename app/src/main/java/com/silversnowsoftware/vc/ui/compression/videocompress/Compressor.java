@@ -11,6 +11,8 @@ import com.github.hiteshsondhi88.libffmpeg.LoadBinaryResponseHandler;
 import com.github.hiteshsondhi88.libffmpeg.ShellCommand;
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException;
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException;
+import com.silversnowsoftware.vc.data.db.DbFileModel;
+import com.silversnowsoftware.vc.utils.helpers.LogHelper;
 
 import java.lang.reflect.Array;
 
@@ -21,7 +23,7 @@ public class Compressor {
     private Context context;
     public Activity a;
     public FFmpeg ffmpeg;
-
+    private static final String className = Compressor.class.getSimpleName();
     public Compressor(Activity activity) {
         a = activity;
         ffmpeg = FFmpeg.getInstance(a);
@@ -53,8 +55,9 @@ public class Compressor {
 
                 }
             });
-        } catch (FFmpegNotSupportedException e) {
-            e.printStackTrace();
+        } catch (FFmpegNotSupportedException ex) {
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(className, ex);
         }
     }
 
@@ -86,8 +89,9 @@ public class Compressor {
                 public void onFinish() {
                 }
             });
-        } catch (FFmpegCommandAlreadyRunningException e) {
-            e.printStackTrace();
+        } catch (FFmpegCommandAlreadyRunningException ex) {
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(className, ex);
         }
     }
 }

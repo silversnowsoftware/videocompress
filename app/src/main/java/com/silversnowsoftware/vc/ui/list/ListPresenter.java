@@ -58,17 +58,9 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
     public void setViewHolder() {
         try {
             viewHolder = new ListViewHolder(getView());
-        } catch (Exception e) {
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
     }
 
@@ -78,18 +70,10 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
         try {
             getRepositoryFileModel().remove(fileModel);
             response.setSuccess(true);
-        } catch (Exception e) {
+        } catch (Exception ex) {
             response.setSuccess(false);
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
 
         }
         return response;
@@ -115,17 +99,9 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
             getContext().startActivity(intent);
-        } catch (Exception e) {
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
     }
 
@@ -145,17 +121,9 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
 
             }
             viewHolder.lvFileModel.setEmptyView(viewHolder.tvNoDataFound);
-        } catch (Exception e) {
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
     }
 
@@ -164,18 +132,10 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
         try {
             list = getRepositoryFileModel().getAll();
 
-        } catch (Exception e) {
+        } catch (Exception ex) {
 
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
 
         }
         return list;
@@ -186,18 +146,9 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
         try {
             adapter = new VideoCompressAdapter(getContext(), R.layout.file_model_list, fileModelList);
 
-        } catch (Exception e) {
-
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
 
         }
         return adapter;

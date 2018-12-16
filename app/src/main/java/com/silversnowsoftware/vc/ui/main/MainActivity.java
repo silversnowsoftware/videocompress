@@ -39,6 +39,7 @@ public class MainActivity extends BaseActivity implements IMainView {
     MainViewHolder mainViewHolder;
     private static final String className = MainActivity.class.getSimpleName();
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         handler = new Handler();
@@ -80,17 +81,8 @@ public class MainActivity extends BaseActivity implements IMainView {
             });
 
         } catch (Exception ex) {
-
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(ex.getMessage())
-                    .methodName(ex.getStackTrace()[0].getMethodName())
-                    .stackTrace(ex.getStackTrace().toString())
-                    .build();
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
 
 

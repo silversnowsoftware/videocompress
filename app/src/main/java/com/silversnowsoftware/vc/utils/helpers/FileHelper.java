@@ -43,6 +43,7 @@ import static com.silversnowsoftware.vc.utils.constants.Arrays.MIME_MapTable;
 
 public class FileHelper {
     private static final String className = FileHelper.class.getSimpleName();
+
     public static String getMIMEType(File file) {
 
         String type = "*/*";
@@ -61,18 +62,10 @@ public class FileHelper {
                 if (end.equals(MIME_MapTable[i][0]))
                     type = MIME_MapTable[i][1];
             }
-        } catch (Exception e) {
+        } catch (Exception ex) {
 
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         } finally {
             return type;
         }
@@ -88,18 +81,9 @@ public class FileHelper {
                 long size = f.length();
                 return (size / 1024f) / 1024f + "MB";
             }
-        } catch (Exception e) {
-
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         } finally {
             return "0 MB";
         }
@@ -118,19 +102,10 @@ public class FileHelper {
 
             intent.setDataAndType(/*uri*/Uri.fromFile(file), type);
 
-        } catch (Exception e) {
+        } catch (Exception ex) {
             intent = null;
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
-            throw new Exception("Dosya Açılamadı.");
+            logHelper.Log(className, ex);
         }
         return intent;
     }
@@ -155,18 +130,10 @@ public class FileHelper {
                         getRealPath(context, data.getData())
                 );
             }
-        } catch (Exception e) {
+        } catch (Exception ex) {
 
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         } finally {
             return Paths;
         }
@@ -238,18 +205,10 @@ public class FileHelper {
                 return uri.getPath();
             }
 
-        } catch (Exception e) {
+        } catch (Exception ex) {
 
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         } finally {
             return null;
         }
@@ -281,18 +240,10 @@ public class FileHelper {
                 final int index = cursor.getColumnIndexOrThrow(column);
                 return cursor.getString(index);
             }
-        } catch (Exception e) {
+        } catch (Exception ex) {
 
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         } finally {
             if (cursor != null)
                 cursor.close();
@@ -345,18 +296,9 @@ public class FileHelper {
             bmp.compress(Bitmap.CompressFormat.JPEG, 100, bos);
             bt = bos.toByteArray();
             encodeString = Base64.encodeToString(bt, Base64.DEFAULT);
-        } catch (Exception e) {
-
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
         return encodeString;
     }
@@ -374,18 +316,9 @@ public class FileHelper {
             dis.readFully(fileData);
 
             dis.close();
-        } catch (Exception e) {
-
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
         return Base64.encodeToString(fileData, Base64.DEFAULT);
     }
@@ -402,20 +335,12 @@ public class FileHelper {
             mediaMetadataRetriever.setDataSource(videoPath);
 
             bitmap = mediaMetadataRetriever.getFrameAtTime(25000000, MediaMetadataRetriever.OPTION_CLOSEST);
-        } catch (Exception e) {
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
             throw new Throwable(
                     "Exception in retriveVideoFrameFromVideo(String videoPath)"
-                            + e.getMessage());
+                            + ex.getMessage());
 
         } finally {
             if (mediaMetadataRetriever != null) {
@@ -432,17 +357,9 @@ public class FileHelper {
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
             return decodedByte;
 
-        } catch (Exception e) {
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
         return null;
     }
@@ -456,17 +373,9 @@ public class FileHelper {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
             byte[] byteArray = byteArrayOutputStream.toByteArray();
             encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
-        } catch (Exception e) {
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         } finally {
             return encoded;
         }
@@ -477,17 +386,9 @@ public class FileHelper {
         String filename = "";
         try {
             filename = path.substring(path.lastIndexOf("/") + 1);
-        } catch (Exception e) {
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         } finally {
             return filename;
         }
@@ -499,17 +400,9 @@ public class FileHelper {
         try {
             MediaPlayer mp = MediaPlayer.create(activity, Uri.parse(path));
             duration = mp.getDuration() / 1000;
-        } catch (Exception e) {
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         } finally {
             return duration;
         }
@@ -528,17 +421,9 @@ public class FileHelper {
             values.put("width", width);
             values.put("height", height);
             retriever.release();
-        } catch (Exception e) {
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         } finally {
             return values;
         }
@@ -550,17 +435,9 @@ public class FileHelper {
             try {
                 Method m = StrictMode.class.getMethod("disableDeathOnFileUriExposure");
                 m.invoke(null);
-            } catch (Exception e) {
-                LogModel logModel = new LogModel.LogBuilder()
-                        .apiVersion(Utility.getAndroidVersion())
-                        .appName(Constants.APP_NAME)
-                        .className(className)
-                        .errorMessage(e.getMessage())
-                        .methodName(e.getStackTrace()[0].getMethodName())
-                        .stackTrace(e.getStackTrace().toString())
-                        .build();
+            } catch (Exception ex) {
                 LogHelper logHelper = new LogHelper();
-                logHelper.Log(logModel);
+                logHelper.Log(className, ex);
             }
         }
     }
@@ -572,17 +449,9 @@ public class FileHelper {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent = intent.setDataAndType(Uri.parse(path), "video/*");
             context.startActivity(intent);
-        }catch (Exception e) {
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
     }
 

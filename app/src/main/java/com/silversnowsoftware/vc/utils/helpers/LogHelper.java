@@ -2,6 +2,7 @@ package com.silversnowsoftware.vc.utils.helpers;
 
 import com.silversnowsoftware.vc.httpmodule.ILogger;
 import com.silversnowsoftware.vc.model.logger.LogModel;
+import com.silversnowsoftware.vc.utils.Utility;
 import com.silversnowsoftware.vc.utils.constants.Constants;
 
 import retrofit.Callback;
@@ -22,7 +23,16 @@ public class LogHelper {
                 .build();
     }
 
-    public void Log(LogModel logModel) {
+    public void Log(String className, Exception ex) {
+
+        LogModel logModel = new LogModel.LogBuilder()
+                .apiVersion(Utility.getAndroidVersion())
+                .appName(Constants.APP_NAME)
+                .className(className)
+                .errorMessage(ex.getMessage())
+                .methodName(ex.getStackTrace()[0].getMethodName())
+                .stackTrace(ex.getStackTrace().toString())
+                .build();
 
         ILogger logger = restAdapter.create(ILogger.class);
         logger.Logger(logModel, new Callback<String>() {

@@ -219,18 +219,9 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
                     exoPlayer.seekTo((mStartPosition * 1000) - seekBarVideo.getProgress());
                 }
             });
-        } catch (Exception e) {
-
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
 
     }
@@ -254,18 +245,10 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
             exoPlayer.prepare(mediaSource);
             onVideoPrepared();
             //  exoPlayer.setPlayWhenReady(true);
-        } catch (Exception e) {
+        } catch (Exception ex) {
 
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
 
     }
@@ -322,36 +305,19 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
                     }
                 }
             }
-        } catch (Exception e) {
+        } catch (Exception ex) {
 
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
     }
 
     private void setBitmap(Uri mVideoUri) {
         try {
             tileView.setVideo(mVideoUri);
-        } catch (Exception e) {
-
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
     }
 
@@ -360,36 +326,20 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
             int duration = getVideoDuration(this, srcFile);
             mDuration = (int) (duration / 1000);
             setSeekBarPosition();
-        } catch (Exception e) {
+        } catch (Exception ex) {
 
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
     }
 
     public void updateProgressBar() {
         try {
             mHandler.postDelayed(mUpdateTimeTask, 100);
-        } catch (Exception e) {
+        } catch (Exception ex) {
 
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
     }
 
@@ -411,18 +361,10 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
                     txtVideoLength.setText(milliSecondsToTimer(seekBarVideo.getProgress()) + "");
                     mHandler.postDelayed(this, 100);
                 }
-            } catch (Exception e) {
+            } catch (Exception ex) {
 
-                LogModel logModel = new LogModel.LogBuilder()
-                        .apiVersion(Utility.getAndroidVersion())
-                        .appName(Constants.APP_NAME)
-                        .className(className)
-                        .errorMessage(e.getMessage())
-                        .methodName(e.getStackTrace()[0].getMethodName())
-                        .stackTrace(e.getStackTrace().toString())
-                        .build();
                 LogHelper logHelper = new LogHelper();
-                logHelper.Log(logModel);
+                logHelper.Log(className, ex);
             }
         }
     };
@@ -462,18 +404,10 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
             int endSec = Integer.parseInt(mEnd) % 60;
 
             txtVideoTrimSeconds.setText(String.format(Locale.US, "%02d:%02d - %02d:%02d", startMin, startSec, endMin, endSec));
-        } catch (Exception e) {
+        } catch (Exception ex) {
 
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
     }
 
@@ -487,18 +421,9 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
             exoPlayer.seekTo(mStartPosition * 1000);
             exoPlayer.setPlayWhenReady(false);
             imgPlay.setBackgroundResource(R.drawable.ic_white_play);
-        } catch (Exception e) {
-
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
     }
 
@@ -540,18 +465,9 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
             int endSec = Integer.parseInt(mEnd) % 60;
 
             txtVideoTrimSeconds.setText(String.format(Locale.US, "%02d:%02d - %02d:%02d", startMin, startSec, endMin, endSec));
-        } catch (Exception e) {
-
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (Exception ex) {
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
     }
 
@@ -583,18 +499,10 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
             }
 
             finalTimerString = finalTimerString + minutesString + ":" + secondsString;
-        } catch (Exception e) {
+        } catch (Exception ex) {
 
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         } finally {
             return finalTimerString;
         }

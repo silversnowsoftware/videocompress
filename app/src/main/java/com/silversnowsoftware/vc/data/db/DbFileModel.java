@@ -18,6 +18,7 @@ import java.util.List;
 public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
 
     private static final String className = DbFileModel.class.getSimpleName();
+
     public DbFileModel(Context context) {
         super(context);
     }
@@ -28,17 +29,10 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
         try {
 
             db.getFileModel().createOrUpdate(item);
-        } catch (SQLException e) {
-            LogModel logModel = new LogModel.LogBuilder()
-                    .apiVersion(Utility.getAndroidVersion())
-                    .appName(Constants.APP_NAME)
-                    .className(className)
-                    .errorMessage(e.getMessage())
-                    .methodName(e.getStackTrace()[0].getMethodName())
-                    .stackTrace(e.getStackTrace().toString())
-                    .build();
+        } catch (SQLException ex) {
+
             LogHelper logHelper = new LogHelper();
-            logHelper.Log(logModel);
+            logHelper.Log(className, ex);
         }
 
     }
@@ -49,8 +43,9 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
 
             try {
                 db.getFileModel().createOrUpdate(item);
-            } catch (SQLException e) {
-                e.printStackTrace();
+            } catch (SQLException ex) {
+                LogHelper logHelper = new LogHelper();
+                logHelper.Log(className, ex);
             }
         }
     }
@@ -59,8 +54,10 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
     public void update(FileModel item) {
         try {
             db.getFileModel().update(item);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException ex) {
+
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(className, ex);
         }
     }
 
@@ -68,8 +65,9 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
     public void remove(FileModel item) {
         try {
             db.getFileModel().delete(item);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException ex) {
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(className, ex);
         }
     }
 
@@ -79,7 +77,8 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
             List<FileModel> list = getAll();
             db.getFileModel().delete(list);
         } catch (Exception ex) {
-
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(className, ex);
         }
     }
 
@@ -89,7 +88,8 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
         try {
             result = db.getFileModel().deleteIds(ids);
         } catch (Exception ex) {
-
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(className, ex);
         }
         return result;
     }
@@ -101,6 +101,8 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
             db.getFileModel().delete(items);
         } catch (Exception ex) {
             result = false;
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(className, ex);
         }
         return result;
     }
@@ -109,8 +111,9 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
     public FileModel getById(Integer id) {
         try {
             return db.getFileModel().queryForId(id);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException ex) {
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(className, ex);
         }
         return null;
     }
@@ -120,8 +123,9 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
         try {
             return db.getFileModel().queryForAll();
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException ex) {
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(className, ex);
         }
         return null;
     }
@@ -132,7 +136,8 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
         try {
             file = db.getFileModel().queryForSameId(item);
         } catch (Exception ex) {
-
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(className, ex);
         }
         return file;
     }
@@ -144,6 +149,8 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
             b = db.getFileModel().idExists(id);
 
         } catch (Exception ex) {
+            LogHelper logHelper = new LogHelper();
+            logHelper.Log(className, ex);
         }
         return b;
     }
