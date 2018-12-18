@@ -83,7 +83,8 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentStart="true"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:textColor="@color/listItemTextColor" />
             <TextView
                 android:id="@+id/tvResolution"
                 android:layout_width="wrap_content"

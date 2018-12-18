@@ -27,6 +27,7 @@ import com.silversnowsoftware.vc.utils.helpers.FileHelper;
 
 import org.w3c.dom.Text;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,6 +61,7 @@ public class VideoCompressAdapter extends ArrayAdapter {
 
         }
         final ViewHolder viewHolder = new ViewHolder(view);
+
         viewHolder._view.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -70,9 +72,8 @@ public class VideoCompressAdapter extends ArrayAdapter {
 
                 viewHolder.ivSelectRow.setVisibility(View.VISIBLE);
                 viewHolder.selectRow.setBackgroundResource(R.color.selectedListItemColor);
-                viewHolder.playButton.setVisibility(View.GONE);
                 viewHolder.setSelected(true);
-
+                notifyDataSetChanged();
                 return true;
             }
         });
@@ -90,18 +91,18 @@ public class VideoCompressAdapter extends ArrayAdapter {
                         viewHolder.setSelected(false);
                         viewHolder.ivSelectRow.setVisibility(View.GONE);
                         viewHolder.selectRow.setBackgroundColor(Color.WHITE);
+
                         Globals.selectedFiles.remove(model);
 
                         if (Globals.selectedFiles.size() == 0) {
                             Globals.selectionMode = false;
-                            viewHolder.playButton.setVisibility(View.VISIBLE);
+                            notifyDataSetChanged();
                         }
 
                     } else {
                         viewHolder.setSelected(true);
                         viewHolder.ivSelectRow.setVisibility(View.VISIBLE);
                         viewHolder.selectRow.setBackgroundResource(R.color.selectedListItemColor);
-
                         Globals.selectedFiles.add(model);
                     }
 
@@ -125,7 +126,7 @@ public class VideoCompressAdapter extends ArrayAdapter {
             viewHolder.tvVideoName.setText(model.getName());
             viewHolder.ivVideoTumbnail.setImageBitmap(FileHelper.getBitmapFromBase64(model.getThumbnail()));
             viewHolder.tvResolution.setText(model.getResolution());
-
+            viewHolder.tvCreateDate.setText(DateFormat.getDateTimeInstance(DateFormat.DEFAULT,DateFormat.SHORT).format(model.getCreateDate()));
         }
 
 
@@ -178,6 +179,8 @@ public class VideoCompressAdapter extends ArrayAdapter {
         ImageView ivVideoTumbnail;
         @BindView(R.id.tvResolution)
         TextView tvResolution;
+        @BindView(R.id.tvCreateDate)
+        TextView tvCreateDate;
         @BindView(R.id.ivSelectRow)
         ImageView ivSelectRow;
         @BindView(R.id.selectRow)
