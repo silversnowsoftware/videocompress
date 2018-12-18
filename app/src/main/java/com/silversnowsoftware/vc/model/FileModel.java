@@ -51,7 +51,10 @@ public class FileModel extends BaseResponse implements Serializable  {
     private String Resolution;
     private Double VideoLength;
     private Double Progress;
-
+    @DatabaseField(columnName = "IsCrop")
+    private Integer IsCrop;
+    @DatabaseField(columnName = "IsCompress")
+    private Integer IsCompress;
 
     public String getName() {
         return Name;
@@ -162,5 +165,21 @@ public class FileModel extends BaseResponse implements Serializable  {
 
     public void setCreateDate(Date createDate) {
         CreateDate = createDate;
+    }
+
+    public Integer getIsCrop() {
+        return IsCrop;
+    }
+
+    public void setIsCrop(Integer isCrop) {
+        IsCrop = isCrop;
+    }
+
+    public Integer getIsCompress() {
+        return IsCompress;
+    }
+
+    public void setIsCompress(Integer isCompress) {
+        IsCompress = isCompress;
     }
 }

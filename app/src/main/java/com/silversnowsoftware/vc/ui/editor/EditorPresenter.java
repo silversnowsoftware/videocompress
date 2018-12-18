@@ -90,7 +90,8 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
     private int mMaxDuration = 60;
     private Handler mHandler = new Handler();
     private  DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-
+    private boolean isCrop;
+    private boolean isCompress;
 
     String dstFile = null;
     FileModel responseModel;
@@ -134,34 +135,6 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
 
                     setBitmap(Uri.parse(srcFile));
                     setExoPlayer();
-                }
-            });
-
-            mViewHolder.mCustomRangeSeekBarNew.addOnRangeSeekBarListener(new OnRangeSeekBarChangeListener() {
-                @Override
-                public void onCreate(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
-                    // Do nothing
-                }
-
-                @Override
-                public void onSeek(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
-                    onSeekThumbs(index, value);
-                }
-
-                @Override
-                public void onSeekStart(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
-                    if (mViewHolder.exoPlayer != null) {
-                        mHandler.removeCallbacks(mUpdateTimeTask);
-                        mViewHolder.seekBarVideo.setProgress(0);
-                        mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
-                        mViewHolder.exoPlayer.setPlayWhenReady(false);
-                        mViewHolder.imgPlay.setBackgroundResource(R.drawable.ic_white_play);
-                    }
-                }
-
-                @Override
-                public void onSeekStop(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
-
                 }
             });
 
@@ -436,7 +409,10 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             int endMin = Integer.parseInt(mEnd) / 60;
             int endSec = Integer.parseInt(mEnd) % 60;
 
-            mViewHolder.txtVideoTrimSeconds.setText(String.format(Locale.US, "%02d:%02d - %02d:%02d", startMin, startSec, endMin, endSec));
+            if (endSec<mDuration || startSec > startMin)
+
+
+                mViewHolder.txtVideoTrimSeconds.setText(String.format(Locale.US, "%02d:%02d - %02d:%02d", startMin, startSec, endMin, endSec));
         } catch (Exception ex) {
 
             LogManager.Log(className, ex);
