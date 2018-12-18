@@ -16,7 +16,7 @@ import com.silversnowsoftware.vc.utils.SharedPref;
 import com.silversnowsoftware.vc.utils.Utility;
 import com.silversnowsoftware.vc.utils.constants.Constants;
 import com.silversnowsoftware.vc.utils.constants.Keys;
-import com.silversnowsoftware.vc.utils.helpers.LogHelper;
+import com.silversnowsoftware.vc.utils.helpers.LogManager;
 
 import java.io.File;
 
@@ -48,7 +48,7 @@ public class ListActivity extends BaseActivity implements IListView {
             mPresenter.fillListView();
         }catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
 
 

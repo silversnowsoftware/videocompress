@@ -17,7 +17,7 @@ import com.silversnowsoftware.vc.ui.list.ListActivity;
 import com.silversnowsoftware.vc.utils.ManifestUtil;
 import com.silversnowsoftware.vc.utils.Utility;
 import com.silversnowsoftware.vc.utils.constants.Constants;
-import com.silversnowsoftware.vc.utils.helpers.LogHelper;
+import com.silversnowsoftware.vc.utils.helpers.LogManager;
 
 import java.util.HashMap;
 
@@ -81,7 +81,7 @@ public class MainActivity extends BaseActivity implements IMainView {
             });
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
 
 

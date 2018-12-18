@@ -9,7 +9,7 @@ import com.silversnowsoftware.vc.ui.base.BaseActivity;
 import com.silversnowsoftware.vc.ui.main.MainActivity;
 import com.silversnowsoftware.vc.utils.Utility;
 import com.silversnowsoftware.vc.utils.constants.Constants;
-import com.silversnowsoftware.vc.utils.helpers.LogHelper;
+import com.silversnowsoftware.vc.utils.helpers.LogManager;
 
 public class SplashActivity extends BaseActivity {
     private static final String className = SplashActivity.class.getSimpleName();
@@ -28,7 +28,7 @@ public class SplashActivity extends BaseActivity {
             }, 3000);
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
     }
 

@@ -25,7 +25,7 @@ import com.silversnowsoftware.vc.utils.Utility;
 import com.silversnowsoftware.vc.utils.constants.Constants;
 import com.silversnowsoftware.vc.utils.constants.Globals;
 import com.silversnowsoftware.vc.utils.constants.Keys;
-import com.silversnowsoftware.vc.utils.helpers.LogHelper;
+import com.silversnowsoftware.vc.utils.helpers.LogManager;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -60,7 +60,7 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
             viewHolder = new ListViewHolder(getView());
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
     }
 
@@ -73,7 +73,7 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
         } catch (Exception ex) {
             response.setSuccess(false);
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
 
         }
         return response;
@@ -101,7 +101,7 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
             getContext().startActivity(intent);
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
     }
 
@@ -123,7 +123,7 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
             viewHolder.lvFileModel.setEmptyView(viewHolder.tvNoDataFound);
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
     }
 
@@ -135,7 +135,7 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
         } catch (Exception ex) {
 
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
 
         }
         return list;
@@ -148,7 +148,7 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
 
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
 
         }
         return adapter;

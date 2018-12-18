@@ -13,7 +13,7 @@ import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.model.logger.LogModel;
 import com.silversnowsoftware.vc.utils.Utility;
 import com.silversnowsoftware.vc.utils.constants.Constants;
-import com.silversnowsoftware.vc.utils.helpers.LogHelper;
+import com.silversnowsoftware.vc.utils.helpers.LogManager;
 
 /**
  * Created by burak on 10/21/2018.
@@ -41,7 +41,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         } catch (SQLException | java.sql.SQLException ex) {
 
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
     }
 
@@ -52,7 +52,7 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
             onCreate(database,connectionSource);
         } catch (SQLException | java.sql.SQLException ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
     }
 

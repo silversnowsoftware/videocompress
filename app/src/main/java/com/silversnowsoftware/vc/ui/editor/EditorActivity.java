@@ -22,7 +22,7 @@ import com.silversnowsoftware.vc.ui.list.ListActivity;
 import com.silversnowsoftware.vc.utils.Utility;
 import com.silversnowsoftware.vc.utils.constants.Constants;
 import com.silversnowsoftware.vc.utils.constants.Globals;
-import com.silversnowsoftware.vc.utils.helpers.LogHelper;
+import com.silversnowsoftware.vc.utils.helpers.LogManager;
 
 import java.util.List;
 
@@ -77,7 +77,7 @@ public class EditorActivity extends BaseActivity implements IEditorView {
         catch (Exception ex)
         {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
 
         meditorViewHolder.btnCompress.setOnClickListener(new View.OnClickListener() {
@@ -96,7 +96,7 @@ public class EditorActivity extends BaseActivity implements IEditorView {
                 }
                 catch (Exception ex){
 
-                    LogHelper.Log(className, ex);
+                    LogManager.Log(className, ex);
                 }
 
             }

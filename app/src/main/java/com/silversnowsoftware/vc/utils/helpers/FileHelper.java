@@ -65,7 +65,7 @@ public class FileHelper {
         } catch (Exception ex) {
 
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         } finally {
             return type;
         }
@@ -83,7 +83,7 @@ public class FileHelper {
             }
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         } finally {
             return "0 MB";
         }
@@ -105,7 +105,7 @@ public class FileHelper {
         } catch (Exception ex) {
             intent = null;
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
         return intent;
     }
@@ -133,7 +133,7 @@ public class FileHelper {
         } catch (Exception ex) {
 
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         } finally {
             return Paths;
         }
@@ -208,10 +208,8 @@ public class FileHelper {
         } catch (Exception ex) {
 
 
-            LogHelper.Log(className, ex);
-        } finally {
-            return null;
-        }
+            LogManager.Log(className, ex);
+        } return null;
     }
 
     /**
@@ -243,7 +241,7 @@ public class FileHelper {
         } catch (Exception ex) {
 
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         } finally {
             if (cursor != null)
                 cursor.close();
@@ -298,7 +296,7 @@ public class FileHelper {
             encodeString = Base64.encodeToString(bt, Base64.DEFAULT);
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
         return encodeString;
     }
@@ -318,7 +316,7 @@ public class FileHelper {
             dis.close();
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
         return Base64.encodeToString(fileData, Base64.DEFAULT);
     }
@@ -337,7 +335,7 @@ public class FileHelper {
             bitmap = mediaMetadataRetriever.getFrameAtTime(25000000, MediaMetadataRetriever.OPTION_CLOSEST);
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
             throw new Throwable(
                     "Exception in retriveVideoFrameFromVideo(String videoPath)"
                             + ex.getMessage());
@@ -359,7 +357,7 @@ public class FileHelper {
 
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
         return null;
     }
@@ -375,7 +373,7 @@ public class FileHelper {
             encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         } finally {
             return encoded;
         }
@@ -388,7 +386,7 @@ public class FileHelper {
             filename = path.substring(path.lastIndexOf("/") + 1);
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         } finally {
             return filename;
         }
@@ -402,7 +400,7 @@ public class FileHelper {
             duration = mp.getDuration() / 1000;
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         } finally {
             return duration;
         }
@@ -423,7 +421,7 @@ public class FileHelper {
             retriever.release();
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         } finally {
             return values;
         }
@@ -437,7 +435,7 @@ public class FileHelper {
                 m.invoke(null);
             } catch (Exception ex) {
 
-                LogHelper.Log(className, ex);
+                LogManager.Log(className, ex);
             }
         }
     }
@@ -451,7 +449,7 @@ public class FileHelper {
             context.startActivity(intent);
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
     }
 

@@ -12,7 +12,7 @@ import com.github.hiteshsondhi88.libffmpeg.ShellCommand;
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegCommandAlreadyRunningException;
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException;
 import com.silversnowsoftware.vc.data.db.DbFileModel;
-import com.silversnowsoftware.vc.utils.helpers.LogHelper;
+import com.silversnowsoftware.vc.utils.helpers.LogManager;
 
 import java.lang.reflect.Array;
 
@@ -57,7 +57,7 @@ public class Compressor {
             });
         } catch (FFmpegNotSupportedException ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
     }
 
@@ -91,7 +91,7 @@ public class Compressor {
             });
         } catch (FFmpegCommandAlreadyRunningException ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
     }
 }

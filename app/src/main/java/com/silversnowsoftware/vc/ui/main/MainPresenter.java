@@ -13,7 +13,7 @@ import com.silversnowsoftware.vc.utils.Utility;
 import com.silversnowsoftware.vc.utils.constants.Constants;
 import com.silversnowsoftware.vc.utils.constants.Keys;
 import com.silversnowsoftware.vc.utils.helpers.FileHelper;
-import com.silversnowsoftware.vc.utils.helpers.LogHelper;
+import com.silversnowsoftware.vc.utils.helpers.LogManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +57,7 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
             activity.startActivityForResult(mediaIntent, 1);
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
 
         }
     }
@@ -66,6 +66,8 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
         try {
             ArrayList<String> tempfilepath = FileHelper.GetAllPath(getContext(), data);
             for (String path : tempfilepath) {
+                if (path == null)
+                    continue;
 
                 FileModel file = createFileModel(path);
                 if (file != null) {
@@ -74,7 +76,7 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
             }
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
 
         }
 
@@ -109,14 +111,14 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
             } catch (Exception ex) {
                 videoLength = 0.00;
 
-                LogHelper.Log(className, ex);
+                LogManager.Log(className, ex);
             }
             fileModel.setVideoLength(videoLength);
 
         } catch (Exception ex) {
 
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
 
         }
 
@@ -130,7 +132,7 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
             getRepositoryFileModel().removeAll();
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
     }
 

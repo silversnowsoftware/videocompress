@@ -16,7 +16,7 @@ import com.googlecode.mp4parser.authoring.tracks.CroppedTrack;
 import com.silversnowsoftware.vc.model.listener.OnVideoTrimListener;
 import com.silversnowsoftware.vc.model.logger.LogModel;
 import com.silversnowsoftware.vc.utils.constants.Constants;
-import com.silversnowsoftware.vc.utils.helpers.LogHelper;
+import com.silversnowsoftware.vc.utils.helpers.LogManager;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -49,7 +49,7 @@ public class Utility {
         }catch (Exception ex) {
 
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
     }
 
@@ -128,7 +128,7 @@ public class Utility {
                 callback.getResult(Uri.parse(dst.toString()));
         }catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
     }
     public static String getAndroidVersion() {

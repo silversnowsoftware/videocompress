@@ -12,7 +12,7 @@ import com.silversnowsoftware.vc.utils.SharedPref;
 import com.silversnowsoftware.vc.utils.Utility;
 import com.silversnowsoftware.vc.utils.constants.Constants;
 import com.silversnowsoftware.vc.utils.constants.Globals;
-import com.silversnowsoftware.vc.utils.helpers.LogHelper;
+import com.silversnowsoftware.vc.utils.helpers.LogManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +38,7 @@ public class VideoCompressApplication extends Application {
             SharedPref.Clear(this);
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
     }
 

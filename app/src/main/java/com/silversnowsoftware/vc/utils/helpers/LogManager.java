@@ -14,7 +14,7 @@ import retrofit.client.Response;
  * Created by burak on 12/16/2018.
  */
 
-public class LogHelper {
+public class LogManager {
     private static RestAdapter restAdapter;
 
     private static RestAdapter getRestAdapter() {

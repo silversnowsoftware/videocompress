@@ -49,7 +49,7 @@ import com.silversnowsoftware.vc.utils.Utility;
 import com.silversnowsoftware.vc.utils.constants.Constants;
 import com.silversnowsoftware.vc.utils.constants.Keys;
 import com.silversnowsoftware.vc.utils.enums.FileStatusEnum;
-import com.silversnowsoftware.vc.utils.helpers.LogHelper;
+import com.silversnowsoftware.vc.utils.helpers.LogManager;
 
 import java.io.File;
 import java.util.Arrays;
@@ -234,7 +234,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             });
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
 
     }
@@ -247,7 +247,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             setSeekBarPosition();
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
     }
 
@@ -290,7 +290,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             mViewHolder.txtVideoTrimSeconds.setText(String.format(Locale.US, "%02d:%02d - %02d:%02d", startMin, startSec, endMin, endSec));
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
     }
 
@@ -317,7 +317,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             //  exoPlayer.setPlayWhenReady(true);
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
 
     }
@@ -328,7 +328,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             mHandler.postDelayed(mUpdateTimeTask, 100);
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
     }
 
@@ -352,7 +352,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
                 }
             } catch (Exception ex) {
 
-                LogHelper.Log(className, ex);
+                LogManager.Log(className, ex);
             }
         }
     };
@@ -395,7 +395,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             finalTimerString = finalTimerString + minutesString + ":" + secondsString;
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
         // return timer string
         return finalTimerString;
@@ -436,7 +436,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             mViewHolder.txtVideoTrimSeconds.setText(String.format(Locale.US, "%02d:%02d - %02d:%02d", startMin, startSec, endMin, endSec));
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
     }
 
@@ -469,7 +469,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             );
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
         return dstFile;
     }
@@ -502,7 +502,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             responseModel.setSuccess(false);
             responseModel.setMessage(getContext().getString(R.string.error));
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
 
         return responseModel;
@@ -529,7 +529,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             setSelectedResolution(mDefaultResolutionId);
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
     }
 
@@ -539,7 +539,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             getRepositoryFileModel().update(model);
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
     }
 
@@ -568,7 +568,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             }
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         } finally {
             return "";
         }
@@ -605,7 +605,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             mViewHolder.rgResolution.check(id);
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
 
     }
@@ -638,7 +638,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             }
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
         return resolution;
     }
@@ -659,7 +659,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             }
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
         return resolution;
     }
@@ -691,7 +691,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             }
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
     }
 

@@ -6,7 +6,7 @@ import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.model.logger.LogModel;
 import com.silversnowsoftware.vc.utils.Utility;
 import com.silversnowsoftware.vc.utils.constants.Constants;
-import com.silversnowsoftware.vc.utils.helpers.LogHelper;
+import com.silversnowsoftware.vc.utils.helpers.LogManager;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -32,7 +32,7 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
         } catch (SQLException ex) {
 
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
 
     }
@@ -45,7 +45,7 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
                 db.getFileModel().createOrUpdate(item);
             } catch (SQLException ex) {
 
-                LogHelper.Log(className, ex);
+                LogManager.Log(className, ex);
             }
         }
     }
@@ -57,7 +57,7 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
         } catch (SQLException ex) {
 
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
     }
 
@@ -67,7 +67,7 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
             db.getFileModel().delete(item);
         } catch (SQLException ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
     }
 
@@ -78,7 +78,7 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
             db.getFileModel().delete(list);
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
     }
 
@@ -89,7 +89,7 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
             result = db.getFileModel().deleteIds(ids);
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
         return result;
     }
@@ -102,7 +102,7 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
         } catch (Exception ex) {
             result = false;
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
         return result;
     }
@@ -113,7 +113,7 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
             return db.getFileModel().queryForId(id);
         } catch (SQLException ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
         return null;
     }
@@ -125,7 +125,7 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
 
         } catch (SQLException ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
         return null;
     }
@@ -137,7 +137,7 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
             file = db.getFileModel().queryForSameId(item);
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
         return file;
     }
@@ -150,7 +150,7 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
 
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
         return b;
     }

@@ -25,7 +25,7 @@ import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.model.logger.LogModel;
 import com.silversnowsoftware.vc.utils.Utility;
 import com.silversnowsoftware.vc.utils.constants.Constants;
-import com.silversnowsoftware.vc.utils.helpers.LogHelper;
+import com.silversnowsoftware.vc.utils.helpers.LogManager;
 
 import java.io.File;
 
@@ -49,7 +49,7 @@ public class MainTrimmerActivity extends AppCompatActivity implements View.OnCli
             btnTrimVideo.setOnClickListener(this);
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
     }
 
@@ -70,7 +70,7 @@ public class MainTrimmerActivity extends AppCompatActivity implements View.OnCli
         } catch (Exception ex) {
 
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
     }
 
@@ -107,7 +107,7 @@ public class MainTrimmerActivity extends AppCompatActivity implements View.OnCli
         } catch (Exception ex) {
 
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
     }
 
@@ -119,7 +119,7 @@ public class MainTrimmerActivity extends AppCompatActivity implements View.OnCli
         } catch (Exception ex) {
 
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
     }
 
@@ -197,7 +197,7 @@ public class MainTrimmerActivity extends AppCompatActivity implements View.OnCli
             }
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         } finally {
             return "";
         }
@@ -243,7 +243,7 @@ public class MainTrimmerActivity extends AppCompatActivity implements View.OnCli
             return null;
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         } finally {
             if (cursor != null)
                 cursor.close();

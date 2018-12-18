@@ -52,7 +52,7 @@ import com.silversnowsoftware.vc.utils.Types;
 import com.silversnowsoftware.vc.utils.Utility;
 import com.silversnowsoftware.vc.utils.constants.Constants;
 import com.silversnowsoftware.vc.utils.constants.Keys;
-import com.silversnowsoftware.vc.utils.helpers.LogHelper;
+import com.silversnowsoftware.vc.utils.helpers.LogManager;
 
 import java.io.File;
 import java.util.Date;
@@ -221,7 +221,7 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
             });
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
 
     }
@@ -248,7 +248,7 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
         } catch (Exception ex) {
 
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
 
     }
@@ -308,7 +308,7 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
         } catch (Exception ex) {
 
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
     }
 
@@ -317,7 +317,7 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
             tileView.setVideo(mVideoUri);
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
     }
 
@@ -329,7 +329,7 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
         } catch (Exception ex) {
 
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
     }
 
@@ -339,7 +339,7 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
         } catch (Exception ex) {
 
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
     }
 
@@ -364,7 +364,7 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
             } catch (Exception ex) {
 
 
-                LogHelper.Log(className, ex);
+                LogManager.Log(className, ex);
             }
         }
     };
@@ -407,7 +407,7 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
         } catch (Exception ex) {
 
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
     }
 
@@ -423,7 +423,7 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
             imgPlay.setBackgroundResource(R.drawable.ic_white_play);
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
     }
 
@@ -467,7 +467,7 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
             txtVideoTrimSeconds.setText(String.format(Locale.US, "%02d:%02d - %02d:%02d", startMin, startSec, endMin, endSec));
         } catch (Exception ex) {
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         }
     }
 
@@ -502,7 +502,7 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
         } catch (Exception ex) {
 
 
-            LogHelper.Log(className, ex);
+            LogManager.Log(className, ex);
         } finally {
             return finalTimerString;
         }
