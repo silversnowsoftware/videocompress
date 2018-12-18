@@ -37,8 +37,8 @@ public class FileModel extends BaseResponse implements Serializable  {
     private String Path;
     @DatabaseField(columnName = "FileSize")
     private Long FileSize;
-    @DatabaseField(columnName = "ConvertTime")
-    private Date ConvertTime;
+    @DatabaseField(columnName = "CreateDate")
+    private Date CreateDate;
     @DatabaseField(columnName = "Thumbnail")
     private String Thumbnail;
     @DatabaseField(columnName = "Extension")
@@ -75,14 +75,6 @@ public class FileModel extends BaseResponse implements Serializable  {
 
     public void setFileSize(Long fileSize) {
         FileSize = fileSize;
-    }
-
-    public Date getConvertTime() {
-        return ConvertTime;
-    }
-
-    public void setConvertTime(Date convertTime) {
-        ConvertTime = convertTime;
     }
 
     public String getThumbnail() {
@@ -162,5 +154,13 @@ public class FileModel extends BaseResponse implements Serializable  {
     @Override
     public boolean equals(Object obj) {
         return this.Name.equals(((FileModel) obj).Name);
+    }
+
+    public Date getCreateDate() {
+        return CreateDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        CreateDate = createDate;
     }
 }

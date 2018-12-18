@@ -198,9 +198,9 @@ public class MainTrimmerActivity extends AppCompatActivity implements View.OnCli
         } catch (Exception ex) {
 
             LogManager.Log(className, ex);
-        } finally {
-            return "";
         }
+        return "";
+
 
     }
 

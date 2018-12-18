@@ -63,8 +63,6 @@ public class FileHelper {
                     type = MIME_MapTable[i][1];
             }
         } catch (Exception ex) {
-
-
             LogManager.Log(className, ex);
         } finally {
             return type;
@@ -73,19 +71,22 @@ public class FileHelper {
     }
 
     public static String getFileSize(String path) {
+        String size2="";
         try {
             File f = new File(path);
             if (!f.exists()) {
-                return "0 MB";
+                size2="0 MB";
+                return size2;
             } else {
                 long size = f.length();
-                return (size / 1024f) / 1024f + "MB";
+                size2 = (size / 1024f) / 1024f + "MB";
+                return size2;
             }
         } catch (Exception ex) {
 
             LogManager.Log(className, ex);
         } finally {
-            return "0 MB";
+            return size2;
         }
     }
 

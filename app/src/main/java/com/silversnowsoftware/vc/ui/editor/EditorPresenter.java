@@ -52,6 +52,8 @@ import com.silversnowsoftware.vc.utils.enums.FileStatusEnum;
 import com.silversnowsoftware.vc.utils.helpers.LogManager;
 
 import java.io.File;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -87,6 +89,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
     // set your max video trim seconds
     private int mMaxDuration = 60;
     private Handler mHandler = new Handler();
+    private  DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 
 
     String dstFile = null;
@@ -492,6 +495,8 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
                 String resolution = getFitResolution(width, height, videoResolution);
                 responseModel.setResolution(resolution);
                 responseModel.setFileStatus(FileStatusEnum.PREPEARING);
+                Date date = new Date();
+                responseModel.setCreateDate(date);
                 getRepositoryFileModel().add(responseModel);
 
             } else {
@@ -569,9 +574,9 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
         } catch (Exception ex) {
 
             LogManager.Log(className, ex);
-        } finally {
-            return "";
         }
+            return "";
+
 
     }
 
