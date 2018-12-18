@@ -86,7 +86,6 @@ public class EditorActivity extends BaseActivity implements IEditorView {
                 try {
                     FileModel result = mPresenter.addSelectedFile();
                     if (!result.getSuccess()) {
-                        showToastMethod(result.getMessage());
                         return;
                     }
 
