@@ -8,16 +8,21 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.MediaMetadataRetriever;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.widget.Toast;
 
 import com.silversnowsoftware.vc.R;
+import com.silversnowsoftware.vc.model.logger.LogModel;
 import com.silversnowsoftware.vc.ui.main.MainActivity;
+import com.silversnowsoftware.vc.utils.Utility;
+import com.silversnowsoftware.vc.utils.constants.Constants;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -25,8 +30,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import static com.silversnowsoftware.vc.utils.constants.Arrays.MIME_MapTable;
 
@@ -35,39 +42,57 @@ import static com.silversnowsoftware.vc.utils.constants.Arrays.MIME_MapTable;
  */
 
 public class FileHelper {
+    private static final String className = FileHelper.class.getSimpleName();
 
     public static String getMIMEType(File file) {
 
         String type = "*/*";
-        String fName = file.getName();
+        try {
+            String fName = file.getName();
 
-        int dotIndex = fName.lastIndexOf(".");
-        if (dotIndex < 0) {
+            int dotIndex = fName.lastIndexOf(".");
+            if (dotIndex < 0) {
+                return type;
+            }
+
+            String end = fName.substring(dotIndex, fName.length()).toLowerCase();
+            if (end == "") return type;
+
+            for (int i = 0; i < MIME_MapTable.length; i++) {
+                if (end.equals(MIME_MapTable[i][0]))
+                    type = MIME_MapTable[i][1];
+            }
+        } catch (Exception ex) {
+            LogManager.Log(className, ex);
+        } finally {
             return type;
         }
 
-        String end = fName.substring(dotIndex, fName.length()).toLowerCase();
-        if (end == "") return type;
-
-        for (int i = 0; i < MIME_MapTable.length; i++) {
-            if (end.equals(MIME_MapTable[i][0]))
-                type = MIME_MapTable[i][1];
-        }
-        return type;
     }
 
     public static String getFileSize(String path) {
-        File f = new File(path);
-        if (!f.exists()) {
-            return "0 MB";
-        } else {
-            long size = f.length();
-            return (size / 1024f) / 1024f + "MB";
+        String size2="";
+        try {
+            File f = new File(path);
+            if (!f.exists()) {
+                size2="0 MB";
+                return size2;
+            } else {
+                long size = f.length();
+                size2 = (size / 1024f) / 1024f + "MB";
+                return size2;
+            }
+        } catch (Exception ex) {
+
+            LogManager.Log(className, ex);
+        } finally {
+            return size2;
         }
     }
 
-    public static Intent openFile( File file) throws Exception {
+    public static Intent openFile(File file) throws Exception {
         Intent intent = null;
+
         try {
             intent = new Intent();
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -78,9 +103,10 @@ public class FileHelper {
 
             intent.setDataAndType(/*uri*/Uri.fromFile(file), type);
 
-        } catch (Exception e) {
+        } catch (Exception ex) {
             intent = null;
-            throw new Exception("Dosya Açılamadı.");
+
+            LogManager.Log(className, ex);
         }
         return intent;
     }
@@ -90,90 +116,101 @@ public class FileHelper {
 
 
         ArrayList<String> Paths = new ArrayList<>();
+        try {
+            if (data.getClipData() != null) {
+                int count = data.getClipData().getItemCount();
+                for (int i = 0; i < count; i++) {
+                    Paths.add(
+                            getRealPath(context, data.getClipData().getItemAt(i).getUri())
+                    );
+                }
+            }
 
-        if (data.getClipData() != null) {
-            int count = data.getClipData().getItemCount();
-            for (int i = 0; i < count; i++) {
+            if (data.getData() != null) {
                 Paths.add(
-                        getRealPath(context, data.getClipData().getItemAt(i).getUri())
+                        getRealPath(context, data.getData())
                 );
             }
+        } catch (Exception ex) {
+
+
+            LogManager.Log(className, ex);
+        } finally {
+            return Paths;
         }
 
-        if (data.getData() != null) {
-            Paths.add(
-                    getRealPath(context, data.getData())
-            );
-        }
-
-        return Paths;
     }
 
     public static String getRealPath(final Context context, final Uri uri) {
 
-        final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+        try {
+            final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
 
-        // DocumentProvider
-        if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
-            // ExternalStorageProvider
-            if (isExternalStorageDocument(uri)) {
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                final String type = split[0];
+            // DocumentProvider
+            if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
+                // ExternalStorageProvider
+                if (isExternalStorageDocument(uri)) {
+                    final String docId = DocumentsContract.getDocumentId(uri);
+                    final String[] split = docId.split(":");
+                    final String type = split[0];
 
-                if ("primary".equalsIgnoreCase(type)) {
-                    return Environment.getExternalStorageDirectory() + "/" + split[1];
+                    if ("primary".equalsIgnoreCase(type)) {
+                        return Environment.getExternalStorageDirectory() + "/" + split[1];
+                    }
+
+                    // TODO handle non-primary volumes
                 }
+                // DownloadsProvider
+                else if (isDownloadsDocument(uri)) {
 
-                // TODO handle non-primary volumes
-            }
-            // DownloadsProvider
-            else if (isDownloadsDocument(uri)) {
+                    final String id = DocumentsContract.getDocumentId(uri);
+                    final Uri contentUri = ContentUris.withAppendedId(
+                            Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
 
-                final String id = DocumentsContract.getDocumentId(uri);
-                final Uri contentUri = ContentUris.withAppendedId(
-                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
-
-                return getDataColumn(context, contentUri, null, null);
-            }
-            // MediaProvider
-            else if (isMediaDocument(uri)) {
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                final String type = split[0];
-
-                Uri contentUri = null;
-                if ("image".equals(type)) {
-                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                } else if ("video".equals(type)) {
-                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-                } else if ("audio".equals(type)) {
-                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                    return getDataColumn(context, contentUri, null, null);
                 }
+                // MediaProvider
+                else if (isMediaDocument(uri)) {
+                    final String docId = DocumentsContract.getDocumentId(uri);
+                    final String[] split = docId.split(":");
+                    final String type = split[0];
 
-                final String selection = "_id=?";
-                final String[] selectionArgs = new String[]{
-                        split[1]
-                };
+                    Uri contentUri = null;
+                    if ("image".equals(type)) {
+                        contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                    } else if ("video".equals(type)) {
+                        contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                    } else if ("audio".equals(type)) {
+                        contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                    }
 
-                return getDataColumn(context, contentUri, selection, selectionArgs);
+                    final String selection = "_id=?";
+                    final String[] selectionArgs = new String[]{
+                            split[1]
+                    };
+
+                    return getDataColumn(context, contentUri, selection, selectionArgs);
+                }
             }
-        }
-        // MediaStore (and general)
-        else if ("content".equalsIgnoreCase(uri.getScheme())) {
+            // MediaStore (and general)
+            else if ("content".equalsIgnoreCase(uri.getScheme())) {
 
-            // Return the remote address
-            if (isGooglePhotosUri(uri))
-                return uri.getLastPathSegment();
+                // Return the remote address
+                if (isGooglePhotosUri(uri))
+                    return uri.getLastPathSegment();
 
-            return getDataColumn(context, uri, null, null);
-        }
-        // File
-        else if ("file".equalsIgnoreCase(uri.getScheme())) {
-            return uri.getPath();
-        }
+                return getDataColumn(context, uri, null, null);
+            }
+            // File
+            else if ("file".equalsIgnoreCase(uri.getScheme())) {
+                return uri.getPath();
+            }
 
-        return null;
+        } catch (Exception ex) {
+
+
+            LogManager.Log(className, ex);
+        } return null;
     }
 
     /**
@@ -202,6 +239,10 @@ public class FileHelper {
                 final int index = cursor.getColumnIndexOrThrow(column);
                 return cursor.getString(index);
             }
+        } catch (Exception ex) {
+
+
+            LogManager.Log(className, ex);
         } finally {
             if (cursor != null)
                 cursor.close();
@@ -243,6 +284,7 @@ public class FileHelper {
     }
 
     public static String getBinaryOfImage(String filePath) {
+
         Bitmap bmp = null;
         ByteArrayOutputStream bos = null;
         byte[] bt = null;
@@ -253,8 +295,9 @@ public class FileHelper {
             bmp.compress(Bitmap.CompressFormat.JPEG, 100, bos);
             bt = bos.toByteArray();
             encodeString = Base64.encodeToString(bt, Base64.DEFAULT);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+
+            LogManager.Log(className, ex);
         }
         return encodeString;
     }
@@ -270,13 +313,11 @@ public class FileHelper {
         }
         try {
             dis.readFully(fileData);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
+
             dis.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+
+            LogManager.Log(className, ex);
         }
         return Base64.encodeToString(fileData, Base64.DEFAULT);
     }
@@ -290,14 +331,15 @@ public class FileHelper {
            /* if (Build.VERSION.SDK_INT >= 14)
                 mediaMetadataRetriever.setDataSource(videoPath, new HashMap<String, String>());*/
          /*   else*/
-                mediaMetadataRetriever.setDataSource(videoPath);
+            mediaMetadataRetriever.setDataSource(videoPath);
 
             bitmap = mediaMetadataRetriever.getFrameAtTime(25000000, MediaMetadataRetriever.OPTION_CLOSEST);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+
+            LogManager.Log(className, ex);
             throw new Throwable(
                     "Exception in retriveVideoFrameFromVideo(String videoPath)"
-                            + e.getMessage());
+                            + ex.getMessage());
 
         } finally {
             if (mediaMetadataRetriever != null) {
@@ -307,24 +349,109 @@ public class FileHelper {
         return bitmap;
     }
 
-    public static Bitmap getBitmapFromBase64(String encodedImage){
-        byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
-        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        return decodedByte;
+    public static Bitmap getBitmapFromBase64(String encodedImage) {
+
+        try {
+            byte[] decodedString = Base64.decode(encodedImage, Base64.DEFAULT);
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            return decodedByte;
+
+        } catch (Exception ex) {
+
+            LogManager.Log(className, ex);
+        }
+        return null;
     }
 
-    public static String getBase64FromBitmap(Bitmap bitmap)
-    {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-        byte[] byteArray = byteArrayOutputStream .toByteArray();
-        String encoded = Base64.encodeToString(byteArray,Base64.DEFAULT);
-        return encoded;
+    public static String getBase64FromBitmap(Bitmap bitmap) {
+        String encoded = "";
+        try {
+
+
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            byte[] byteArray = byteArrayOutputStream.toByteArray();
+            encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+        } catch (Exception ex) {
+
+            LogManager.Log(className, ex);
+        } finally {
+            return encoded;
+        }
+
     }
 
-    public static String getFileNameFromPath(String path)
-    {
-        String filename=path.substring(path.lastIndexOf("/")+1);
-        return filename;
+    public static String getFileNameFromPath(String path) {
+        String filename = "";
+        try {
+            filename = path.substring(path.lastIndexOf("/") + 1);
+        } catch (Exception ex) {
+
+            LogManager.Log(className, ex);
+        } finally {
+            return filename;
+        }
+
     }
+
+    public static int getVideoDuration(Activity activity, String path) {
+        int duration = 0;
+        try {
+            MediaPlayer mp = MediaPlayer.create(activity, Uri.parse(path));
+            duration = mp.getDuration() / 1000;
+        } catch (Exception ex) {
+
+            LogManager.Log(className, ex);
+        } finally {
+            return duration;
+        }
+
+    }
+
+
+    public static Map<String, Integer> getVideoResoution(String path) {
+        Map<String, Integer> values = new HashMap<String, Integer>();
+        try {
+
+            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+            retriever.setDataSource(path);
+            int width = Integer.valueOf(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH));
+            int height = Integer.valueOf(retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT));
+            values.put("width", width);
+            values.put("height", height);
+            retriever.release();
+        } catch (Exception ex) {
+
+            LogManager.Log(className, ex);
+        } finally {
+            return values;
+        }
+
+    }
+
+    private static void bugFixApi23ThanForShowMedia() {
+        if (Build.VERSION.SDK_INT >= 24) {
+            try {
+                Method m = StrictMode.class.getMethod("disableDeathOnFileUriExposure");
+                m.invoke(null);
+            } catch (Exception ex) {
+
+                LogManager.Log(className, ex);
+            }
+        }
+    }
+
+    public static void startVideoActivity(Context context, String path) {
+        try {
+            bugFixApi23ThanForShowMedia();
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent = intent.setDataAndType(Uri.parse(path), "video/*");
+            context.startActivity(intent);
+        } catch (Exception ex) {
+
+            LogManager.Log(className, ex);
+        }
+    }
+
 }

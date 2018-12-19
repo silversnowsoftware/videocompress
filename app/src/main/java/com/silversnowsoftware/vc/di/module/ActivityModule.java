@@ -6,6 +6,9 @@ import com.silversnowsoftware.vc.di.PerActivity;
 import com.silversnowsoftware.vc.ui.editor.EditorPresenter;
 import com.silversnowsoftware.vc.ui.editor.IEditorPresenter;
 import com.silversnowsoftware.vc.ui.editor.IEditorView;
+import com.silversnowsoftware.vc.ui.list.IListPresenter;
+import com.silversnowsoftware.vc.ui.list.IListView;
+import com.silversnowsoftware.vc.ui.list.ListPresenter;
 import com.silversnowsoftware.vc.ui.main.IMainPresenter;
 import com.silversnowsoftware.vc.ui.main.IMainView;
 import com.silversnowsoftware.vc.ui.main.MainPresenter;
@@ -33,6 +36,11 @@ public class ActivityModule {
     @Provides
     @PerActivity
     IEditorPresenter<IEditorView> provideEditorPresenter(EditorPresenter<IEditorView> presenter) {
+        return presenter;
+    }
+    @Provides
+    @PerActivity
+    IListPresenter<IListView> provideListPresenter(ListPresenter<IListView> presenter) {
         return presenter;
     }
 }

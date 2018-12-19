@@ -1,53 +1,56 @@
 package com.silversnowsoftware.vc.ui.list;
 
-
-import android.app.Fragment;
-import android.app.FragmentManager;
+import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v13.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
-import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ListView;
-import android.widget.TextView;
 
-import com.google.gson.reflect.TypeToken;
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.model.FileModel;
+import com.silversnowsoftware.vc.model.listener.OnEventListener;
+import com.silversnowsoftware.vc.model.logger.LogModel;
 import com.silversnowsoftware.vc.ui.base.BaseActivity;
-import com.silversnowsoftware.vc.ui.base.component.VideoCompressAdapter;
+import com.silversnowsoftware.vc.utils.SharedPref;
+import com.silversnowsoftware.vc.utils.Utility;
+import com.silversnowsoftware.vc.utils.constants.Constants;
 import com.silversnowsoftware.vc.utils.constants.Keys;
+import com.silversnowsoftware.vc.utils.helpers.LogManager;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.File;
 
-import static com.silversnowsoftware.vc.utils.SharedPref.getData;
+import javax.inject.Inject;
 
-
-public class ListActivity extends BaseActivity {
+import butterknife.ButterKnife;
 
 
-    ListView lvFileModel;
+public class ListActivity extends BaseActivity implements IListView {
+    private static final String className = ListActivity.class.getSimpleName();
+
+    @Inject
+    IListPresenter<IListView> mPresenter;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResourceId());
-        lvFileModel = (ListView) findViewById(R.id.lvFileModel);
+        getActivityComponent().inject(this);
+        ButterKnife.bind(this);
 
+        try {
+            SharedPref.RemoveKey(Keys.SELECTED_FILE_LIST, this);
+            SharedPref.RemoveKey(Keys.SELECTION_MODE, this);
 
-        List<FileModel> files = (List<FileModel>) getData(Keys.FILE_LIST_KEY, new TypeToken<ArrayList<FileModel>>() {
-        }.getType(), getApplicationContext());
+            mPresenter.onAttach(this);
+            mPresenter.setViewHolder();
+            mPresenter.fillListView();
+        }catch (Exception ex) {
 
-        VideoCompressAdapter videoCompressAdapter = new VideoCompressAdapter(getApplicationContext(), R.layout.file_model_list, files);
-        lvFileModel = (ListView) findViewById(R.id.lvFileModel);
-        lvFileModel.setAdapter(videoCompressAdapter);
+            LogManager.Log(className, ex);
+        }
+
 
     }
 
@@ -56,5 +59,97 @@ public class ListActivity extends BaseActivity {
         return R.layout.activity_list;
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.clear();
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_list, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.action_delete:
+                deleteFilesOperation();
+                break;
+            case R.id.action_share:
+                    mPresenter.shareVideoFiles(getSelectedFiles());
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private class DeleteFilesOperationAsync extends AsyncTask<Void, Void, Boolean> {
+
+        private OnEventListener<String> mCallBack;
+        private Context mContext;
+        public Exception mException;
+
+        DeleteFilesOperationAsync(Context context, OnEventListener callback) {
+            mCallBack = callback;
+            mContext = context;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            boolean result = true;
+            try {
+                for (FileModel fileModel : getSelectedFiles()) {
+                    File file = new File(fileModel.getPath());
+                    if (file.exists()) {
+                        file.delete();
+
+
+                    }
+                    mPresenter.deleteSelectedFile(fileModel);
+                }
+
+            } catch (Exception ex) {
+                mException = ex;
+                result = false;
+            }
+            return result;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            showProgressDialog(ListActivity.this, getString(R.string.deleting));
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+
+            dismissProgressDialog();
+            if (mCallBack != null) {
+                if (mException == null) {
+                    mCallBack.onSuccess(result);
+                }
+            } else {
+                mCallBack.onFailure(mException);
+            }
+        }
+    }
+
+    private void deleteFilesOperation() {
+
+        if (getSelectedFiles() != null) {
+
+            DeleteFilesOperationAsync deleteFilesOperationAsync = new DeleteFilesOperationAsync(getContext(), new OnEventListener() {
+                @Override
+                public void onSuccess(Boolean object) {
+                    mPresenter.fillListView();
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    showToastMethod(getString(R.string.error));
+                }
+            });
+            deleteFilesOperationAsync.execute();
+        }
+    }
 }

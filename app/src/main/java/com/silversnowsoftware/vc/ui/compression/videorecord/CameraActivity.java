@@ -30,7 +30,6 @@ import android.media.CamcorderProfile;
 import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.SystemClock;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -46,7 +45,6 @@ import android.widget.Toast;
 
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.databinding.ActivityCameraBinding;
-import com.silversnowsoftware.vc.ui.main.MainActivity;
 import com.silversnowsoftware.vc.utils.constants.Constants;
 import com.silversnowsoftware.vc.utils.constants.Globals;
 
@@ -57,11 +55,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by chenzhihui on 2016/08/18
- * 由于Camera在SDK 21的版本被标为Deprecated,建议使用新的Camera2类来实现
- * 但是由于Camera2这个类要求minSDK大于21,所以依旧使用Camera这个类进行实现
- */
+
 public class CameraActivity extends AppCompatActivity {
     private ActivityCameraBinding mBinding;
     private static final String TAG = CameraActivity.class.getSimpleName();
@@ -90,14 +84,10 @@ public class CameraActivity extends AppCompatActivity {
     }
 
 
-    /**
-     * 找前置摄像头,没有则返回-1
-     *
-     * @return cameraId
-     */
+
     private int findFrontFacingCamera() {
         int cameraId = -1;
-        //获取摄像头个数
+
         int numberOfCameras = Camera.getNumberOfCameras();
         for (int i = 0; i < numberOfCameras; i++) {
             Camera.CameraInfo info = new Camera.CameraInfo();
@@ -111,14 +101,10 @@ public class CameraActivity extends AppCompatActivity {
         return cameraId;
     }
 
-    /**
-     * 找后置摄像头,没有则返回-1
-     *
-     * @return cameraId
-     */
+
     private int findBackFacingCamera() {
         int cameraId = -1;
-        //获取摄像头个数
+
         int numberOfCameras = Camera.getNumberOfCameras();
         for (int i = 0; i < numberOfCameras; i++) {
             Camera.CameraInfo info = new Camera.CameraInfo();
@@ -135,7 +121,7 @@ public class CameraActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
         if (!hasCamera(getApplicationContext())) {
-            //这台设备没有发现摄像头
+
             Toast.makeText(getApplicationContext(), R.string.dont_have_camera_error
                     , Toast.LENGTH_SHORT).show();
             setResult(Constants.RESULT_CODE_FOR_RECORD_VIDEO_FAILED);
@@ -149,7 +135,7 @@ public class CameraActivity extends AppCompatActivity {
 
             int cameraId = findFrontFacingCamera();
             if (cameraId < 0) {
-                //前置摄像头不存在
+
                 switchCameraListener = new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -157,7 +143,7 @@ public class CameraActivity extends AppCompatActivity {
                     }
                 };
 
-                //尝试寻找后置摄像头
+
                 cameraId = findBackFacingCamera();
                 if (flash) {
                     mPreview.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
@@ -178,7 +164,7 @@ public class CameraActivity extends AppCompatActivity {
         }
     }
 
-    //点击对焦
+
     public void initialize() {
         mPreview = new CameraPreview(CameraActivity.this, mCamera);
         mBinding.cameraPreview.addView(mPreview);
@@ -203,7 +189,7 @@ public class CameraActivity extends AppCompatActivity {
 
     }
 
-    //reload成像质量
+
     private void reloadQualities(int idCamera) {
         SharedPreferences prefs = getSharedPreferences("RECORDING", Context.MODE_PRIVATE);
 
@@ -298,7 +284,7 @@ public class CameraActivity extends AppCompatActivity {
         }
     };
 
-    //闪光灯
+
     View.OnClickListener flashListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -316,7 +302,7 @@ public class CameraActivity extends AppCompatActivity {
         }
     };
 
-    //切换前置后置摄像头
+
     View.OnClickListener switchCameraListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -326,7 +312,7 @@ public class CameraActivity extends AppCompatActivity {
                     releaseCamera();
                     chooseCamera();
                 } else {
-                    //只有一个摄像头不允许切换
+
                     Toast.makeText(getApplicationContext(), R.string.only_have_one_camera
                             , Toast.LENGTH_SHORT).show();
                 }
@@ -335,10 +321,10 @@ public class CameraActivity extends AppCompatActivity {
     };
 
 
-    //选择摄像头
+
     public void chooseCamera() {
         if (cameraFront) {
-            //当前是前置摄像头
+
             int cameraId = findBackFacingCamera();
             if (cameraId >= 0) {
                 // open the backFacingCamera
@@ -350,7 +336,7 @@ public class CameraActivity extends AppCompatActivity {
                 reloadQualities(cameraId);
             }
         } else {
-            //当前为后置摄像头
+
             int cameraId = findFrontFacingCamera();
             if (cameraId >= 0) {
                 // open the backFacingCamera
@@ -375,7 +361,7 @@ public class CameraActivity extends AppCompatActivity {
         releaseCamera();
     }
 
-    //检查设备是否有摄像头
+
     private boolean hasCamera(Context context) {
         if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
             return true;
@@ -389,8 +375,8 @@ public class CameraActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             if (recording) {
-                //如果正在录制点击这个按钮表示录制完成
-                mediaRecorder.stop(); //停止
+
+                mediaRecorder.stop();
                 stopChronometer();
                 mBinding.buttonCapture.setImageResource(R.mipmap.player_record);
                 changeRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
@@ -405,7 +391,7 @@ public class CameraActivity extends AppCompatActivity {
                 releaseMediaRecorder();
                 finish();
             } else {
-                //准备开始录制视频
+
                 if (!prepareMediaRecorder()) {
                     Toast.makeText(CameraActivity.this, getString(R.string.camera_init_fail), Toast.LENGTH_SHORT).show();
                     setResult(Constants.RESULT_CODE_FOR_RECORD_VIDEO_FAILED);
@@ -413,7 +399,7 @@ public class CameraActivity extends AppCompatActivity {
                     releaseMediaRecorder();
                     finish();
                 }
-                //开始录制视频
+
                 runOnUiThread(new Runnable() {
                     public void run() {
                         // If there are stories, add them to the table
@@ -485,10 +471,7 @@ public class CameraActivity extends AppCompatActivity {
 
         mediaRecorder.setOutputFile(url_file);
 
-//        https://developer.android.com/reference/android/media/MediaRecorder.html#setMaxDuration(int) 不设置则没有限制
-//        mediaRecorder.setMaxDuration(CameraConfig.MAX_DURATION_RECORD); //设置视频文件最长时间 60s.
-//        https://developer.android.com/reference/android/media/MediaRecorder.html#setMaxFileSize(int) 不设置则没有限制
-//        mediaRecorder.setMaxFileSize(CameraConfig.MAX_FILE_SIZE_RECORD); //设置视频文件最大size 1G
+
 
         try {
             mediaRecorder.prepare();
@@ -512,7 +495,7 @@ public class CameraActivity extends AppCompatActivity {
         }
     }
 
-    //修改录像质量
+
     private void changeVideoQuality(int quality) {
         SharedPreferences prefs = getSharedPreferences("RECORDING", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = prefs.edit();
@@ -557,7 +540,7 @@ public class CameraActivity extends AppCompatActivity {
 
     }
 
-    //闪光灯
+
     public void setFlashMode(String mode) {
         try {
             if (getPackageManager().hasSystemFeature(
@@ -576,7 +559,7 @@ public class CameraActivity extends AppCompatActivity {
         }
     }
 
-    //计时器
+
     private void startChronometer() {
         mBinding.textChrono.setVisibility(View.VISIBLE);
         final long startTime = SystemClock.elapsedRealtime();

@@ -10,6 +10,10 @@ import com.j256.ormlite.dao.RuntimeExceptionDao;
 import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.silversnowsoftware.vc.model.FileModel;
+import com.silversnowsoftware.vc.model.logger.LogModel;
+import com.silversnowsoftware.vc.utils.Utility;
+import com.silversnowsoftware.vc.utils.constants.Constants;
+import com.silversnowsoftware.vc.utils.helpers.LogManager;
 
 /**
  * Created by burak on 10/21/2018.
@@ -17,6 +21,8 @@ import com.silversnowsoftware.vc.model.FileModel;
 
 public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
 
+
+    private static final String className = DatabaseHelper.class.getSimpleName();
     private static final String DATABASE_NAME = "VideoCompress.db";
     private static final int DATABASE_VERSION = 1;
 
@@ -32,8 +38,10 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
     public void onCreate(SQLiteDatabase database, ConnectionSource connectionSource) {
         try {
             TableUtils.createTable(connectionSource,FileModel.class);
-        } catch (SQLException | java.sql.SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException | java.sql.SQLException ex) {
+
+
+            LogManager.Log(className, ex);
         }
     }
 
@@ -42,8 +50,9 @@ public class DatabaseHelper extends OrmLiteSqliteOpenHelper {
         try {
             TableUtils.dropTable(connectionSource,FileModel.class,true);
             onCreate(database,connectionSource);
-        } catch (SQLException | java.sql.SQLException e) {
-            e.printStackTrace();
+        } catch (SQLException | java.sql.SQLException ex) {
+
+            LogManager.Log(className, ex);
         }
     }
 

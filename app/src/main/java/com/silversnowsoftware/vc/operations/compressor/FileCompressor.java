@@ -10,16 +10,20 @@ import com.github.hiteshsondhi88.libffmpeg.FFmpegInterface;
 import com.github.hiteshsondhi88.libffmpeg.LoadBinaryResponseHandler;
 import com.github.hiteshsondhi88.libffmpeg.exceptions.FFmpegNotSupportedException;
 import com.silversnowsoftware.vc.model.FileModel;
+import com.silversnowsoftware.vc.model.logger.LogModel;
 import com.silversnowsoftware.vc.ui.compression.videocompress.CompressListener;
 import com.silversnowsoftware.vc.ui.compression.videocompress.Compressor;
 import com.silversnowsoftware.vc.ui.compression.videocompress.InitListener;
+import com.silversnowsoftware.vc.utils.Utility;
+import com.silversnowsoftware.vc.utils.constants.Constants;
 import com.silversnowsoftware.vc.utils.constants.Globals;
+import com.silversnowsoftware.vc.utils.helpers.FileHelper;
+import com.silversnowsoftware.vc.utils.helpers.LogManager;
 
 import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.silversnowsoftware.vc.utils.constants.Globals.FileModelList;
 
 /**
  * Created by burak on 10/15/2018.
@@ -27,7 +31,7 @@ import static com.silversnowsoftware.vc.utils.constants.Globals.FileModelList;
 
 public class FileCompressor implements IFileCompressor {
 
-
+    private static final String className = FileCompressor.class.getSimpleName();
     private Compressor mCompressor;
     private Context context;
     private FFmpegInterface ffmpeg;
@@ -42,42 +46,53 @@ public class FileCompressor implements IFileCompressor {
     }
 
 
-    public void Compress() {
-        if (FileModelList.size() < 1)
-            return;
+    public void Compress(final FileModel fileModel) {
+        try {
+            if (fileModel == null)
+                return;
 
-        final FileModel fileModel = FileModelList.get(0);
-        File mFile = new File(Globals.currentOutputVideoPath + fileModel.getPath());
-        if (mFile.exists()) {
-            mFile.delete();
+
+            File mFile = new File(Globals.currentOutputVideoPath + fileModel.getName());
+            if (mFile.exists()) {
+                mFile.delete();
+            }
+            Log.i("Progress ", fileModel.getName() + "--" + fileModel.getVideoLength());
+            mCompressor.execCommand(fileModel.getCompressCmd(), new CompressListener() {
+                int counter = 0;
+
+                @Override
+                public void onExecSuccess(String message) {
+                    File trimFile = new File(fileModel.getPath());
+                    if (trimFile.exists()) {
+                        trimFile.delete();
+                    }
+                    fileModel.listener.onSuccess(100.0);
+                }
+
+                @Override
+                public void onExecFail(String reason) {
+                    Toast.makeText(context, reason, Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onExecProgress(String message) {
+
+                    Double progress = getProgress(message, fileModel.getVideoLength()) * 100;
+                    fileModel.setProgress(progress);
+                    fileModel.listener.onProgress(progress);
+
+
+                    counter++;
+
+                }
+            });
+        } catch (Exception ex) {
+
+            LogManager.Log(className, ex);
         }
-        Log.i("Progress " , fileModel.getName() + "--" +  fileModel.getVideoLength());
-        mCompressor.execCommand(fileModel.getCompressCmd(), new CompressListener() {
-            @Override
-            public void onExecSuccess(String message) {
-                Toast.makeText(context, "Video Compressed", Toast.LENGTH_SHORT).show();
-                fileModel.setProgress(100.0);
-                Log.i(TAG,"--->" + 100);
-                FileModelList.remove(0);
-                Compress();
-
-            }
-
-            @Override
-            public void onExecFail(String reason) {
-                Toast.makeText(context, reason, Toast.LENGTH_SHORT).show();
-                Compress();
-            }
-
-            @Override
-            public void onExecProgress(String message) {
-                fileModel.setProgress(getProgress(message, fileModel.getVideoLength()) * 100);
-                fileModel.listener.onProgress(getProgress(message, fileModel.getVideoLength()) * 100);
-                Log.i(TAG,"--->" + getProgress(message, fileModel.getVideoLength()) * 100);
-            }
-        });
 
     }
+
 
     public void loadBinary(final InitListener mListener) {
         try {
@@ -101,8 +116,9 @@ public class FileCompressor implements IFileCompressor {
 
                 }
             });
-        } catch (FFmpegNotSupportedException e) {
-            e.printStackTrace();
+        } catch (FFmpegNotSupportedException ex) {
+
+            LogManager.Log(className, ex);
         }
     }
 
@@ -117,8 +133,12 @@ public class FileCompressor implements IFileCompressor {
             String temp[] = result.split(":");
             Double seconds = Double.parseDouble(temp[1]) * 60 + Double.parseDouble(temp[2]);
 
-            if (0 != videoLength) {
-                return (seconds / videoLength);
+           /*  if (seconds.intValue() == videoLength.intValue()){
+                 return 0.0;
+             }*/
+            if (0.0 != videoLength) {
+                Log.i("VideoLen", String.valueOf(seconds) + "/" + String.valueOf(videoLength));
+                return seconds / videoLength;
             }
             return 0.0;
         }

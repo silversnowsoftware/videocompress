@@ -1,7 +1,11 @@
 package com.silversnowsoftware.vc.ui.editor;
 
 import android.content.Intent;
+import android.net.Uri;
 
+import com.silversnowsoftware.vc.model.FileModel;
+import com.silversnowsoftware.vc.model.listener.OnVideoTrimListener;
+import com.silversnowsoftware.vc.ui.base.BaseResponse;
 import com.silversnowsoftware.vc.ui.base.IBasePresenter;
 
 /**
@@ -11,5 +15,31 @@ import com.silversnowsoftware.vc.ui.base.IBasePresenter;
 public interface IEditorPresenter<V extends IEditorView> extends IBasePresenter<V> {
     void ActivityResult(int requestCode, int resultCode, Intent data);
 
-    void VideoCompress();
+    void videoCompress();
+
+    void setViewHolder();
+
+    void setVideoToVideoView();
+
+    void onVideoPrepared();
+
+    void setSeekBarPosition();
+
+    void setExoPlayer();
+
+    void updateProgressBar();
+
+    void setBitmap(Uri mVideoUri);
+
+    String milliSecondsToTimer(long milliseconds);
+
+    void onSeekThumbs(int index, float value);
+
+    String trimVideo(OnVideoTrimListener mOnVideoTrimListener);
+
+    FileModel addSelectedFile();
+
+    void setDefaultEditor();
+
+    void updateModel(FileModel model);
 }

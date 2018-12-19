@@ -1,9 +1,19 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.silversnowsoftware.vc.ui.list.ListActivity">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_delete"
+        android:orderInCategory="150"
+        android:title="@string/action_delete"
+        android:icon="@mipmap/clear2"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_share"
         android:orderInCategory="100"
-        android:showAsAction="never"
-        android:title="@string/action_settings" />
+        android:title="@string/action_share"
+        android:icon="@mipmap/share"
+        app:showAsAction="ifRoom"/>
+
+
 </menu>

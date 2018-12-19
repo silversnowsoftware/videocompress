@@ -18,6 +18,17 @@ public interface IRepository<T> {
 
     void remove(T item);
 
-    T getbyId(Integer id);
+    void removeAll();
+
+    int removeIds(List<Integer> ids);
+
+    boolean removeItems(List<T> items);
+
+    T getById(Integer id);
+
     List<T> getAll();
+
+    T getByObject(T item);
+
+    boolean exist(Integer id);
 }

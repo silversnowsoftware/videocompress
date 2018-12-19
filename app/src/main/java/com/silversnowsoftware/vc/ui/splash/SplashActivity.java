@@ -1,15 +1,41 @@
 package com.silversnowsoftware.vc.ui.splash;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import com.silversnowsoftware.vc.R;
+import android.os.Handler;
 
-public class SplashActivity extends AppCompatActivity {
+import com.silversnowsoftware.vc.R;
+import com.silversnowsoftware.vc.model.logger.LogModel;
+import com.silversnowsoftware.vc.ui.base.BaseActivity;
+import com.silversnowsoftware.vc.ui.main.MainActivity;
+import com.silversnowsoftware.vc.utils.Utility;
+import com.silversnowsoftware.vc.utils.constants.Constants;
+import com.silversnowsoftware.vc.utils.helpers.LogManager;
+
+public class SplashActivity extends BaseActivity {
+    private static final String className = SplashActivity.class.getSimpleName();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
+        setContentView(getLayoutResourceId());
+        try {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    redirectToActivity(MainActivity.class);
+                    finish();
+                }
+            }, 3000);
+        } catch (Exception ex) {
 
+            LogManager.Log(className, ex);
+        }
     }
+
+    @Override
+    protected int getLayoutResourceId() {
+        return R.layout.activity_splash;
+    }
+
+
 }

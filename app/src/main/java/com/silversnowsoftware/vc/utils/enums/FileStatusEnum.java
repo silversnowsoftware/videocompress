@@ -6,7 +6,7 @@ package com.silversnowsoftware.vc.utils.enums;
 
 public enum FileStatusEnum {
 
-
+    NONE(0),
     PREPEARING(1),
     PROGRESSING(2),
     SUCCESS(3),

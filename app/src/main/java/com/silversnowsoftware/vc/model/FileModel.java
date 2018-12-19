@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.silversnowsoftware.vc.model.listener.ICustomListener;
+import com.silversnowsoftware.vc.ui.base.BaseResponse;
 import com.silversnowsoftware.vc.utils.constants.Globals;
 import com.silversnowsoftware.vc.utils.enums.FileStatusEnum;
 import com.silversnowsoftware.vc.utils.enums.MediaTypeEnum;
@@ -17,11 +18,11 @@ import java.util.Date;
  * Created by burak on 10/17/2018.
  */
 
-public class FileModel implements Serializable {
+public class FileModel extends BaseResponse implements Serializable  {
     public ICustomListener listener;
 
     public FileModel() {
-
+        FileStatus = FileStatusEnum.NONE;
     }
 
     public void getCustomListener(ICustomListener listener) {
@@ -36,8 +37,8 @@ public class FileModel implements Serializable {
     private String Path;
     @DatabaseField(columnName = "FileSize")
     private Long FileSize;
-    @DatabaseField(columnName = "ConvertTime")
-    private Date ConvertTime;
+    @DatabaseField(columnName = "CreateDate")
+    private Date CreateDate;
     @DatabaseField(columnName = "Thumbnail")
     private String Thumbnail;
     @DatabaseField(columnName = "Extension")
@@ -46,11 +47,14 @@ public class FileModel implements Serializable {
     private FileStatusEnum FileStatus;
     @DatabaseField(columnName = "MediaType")
     private MediaTypeEnum MediaType;
-    private String ResolutionX;
-    private String ResolutionY;
+    @DatabaseField(columnName = "Resolution")
+    private String Resolution;
     private Double VideoLength;
     private Double Progress;
-
+    @DatabaseField(columnName = "IsCrop")
+    private Integer IsCrop;
+    @DatabaseField(columnName = "IsCompress")
+    private Integer IsCompress;
 
     public String getName() {
         return Name;
@@ -74,14 +78,6 @@ public class FileModel implements Serializable {
 
     public void setFileSize(Long fileSize) {
         FileSize = fileSize;
-    }
-
-    public Date getConvertTime() {
-        return ConvertTime;
-    }
-
-    public void setConvertTime(Date convertTime) {
-        ConvertTime = convertTime;
     }
 
     public String getThumbnail() {
@@ -120,7 +116,7 @@ public class FileModel implements Serializable {
 
     public String getCompressCmd() {
         return "-y -i " + this.Path + " -strict -2 -vcodec libx264 -preset ultrafast " +
-                "-crf 24 -acodec aac -ar 44100 -ac 2 -b:a 96k -s " + getResolutionX() + "x" + getResolutionY() + " -aspect 16:9 " + Globals.currentOutputVideoPath + this.Name;
+                "-crf 24 -acodec aac -ar 44100 -ac 2 -b:a 96k -s " + getResolution() + " -aspect 16:9 " + Globals.currentOutputVideoPath + this.Name;
     }
 
     public Double getVideoLength() {
@@ -139,21 +135,14 @@ public class FileModel implements Serializable {
         this.id = id;
     }
 
-    public String getResolutionX() {
-        return ResolutionX;
+    public String getResolution() {
+        return Resolution;
     }
 
-    public void setResolutionX(String resolutionX) {
-        ResolutionX = resolutionX;
+    public void setResolution(String resolution) {
+        Resolution = resolution;
     }
 
-    public String getResolutionY() {
-        return ResolutionY;
-    }
-
-    public void setResolutionY(String resolutionY) {
-        ResolutionY = resolutionY;
-    }
 
     public Double getProgress() {
         return Progress;
@@ -168,5 +157,29 @@ public class FileModel implements Serializable {
     @Override
     public boolean equals(Object obj) {
         return this.Name.equals(((FileModel) obj).Name);
+    }
+
+    public Date getCreateDate() {
+        return CreateDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        CreateDate = createDate;
+    }
+
+    public Integer getIsCrop() {
+        return IsCrop;
+    }
+
+    public void setIsCrop(Integer isCrop) {
+        IsCrop = isCrop;
+    }
+
+    public Integer getIsCompress() {
+        return IsCompress;
+    }
+
+    public void setIsCompress(Integer isCompress) {
+        IsCompress = isCompress;
     }
 }
