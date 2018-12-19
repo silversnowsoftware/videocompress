@@ -123,9 +123,13 @@ public class VideoCompressAdapter extends ArrayAdapter {
         final FileModel model = (FileModel) getItem(position);
         if (model != null) {
             viewHolder.setId(model.getId());
+            if (model.getName() != null)
             viewHolder.tvVideoName.setText(model.getName());
+            if (model.getThumbnail() != null)
             viewHolder.ivVideoTumbnail.setImageBitmap(FileHelper.getBitmapFromBase64(model.getThumbnail()));
+            if (model.getResolution() != null)
             viewHolder.tvResolution.setText(model.getResolution());
+            if (model.getCreateDate() != null)
             viewHolder.tvCreateDate.setText(DateFormat.getDateTimeInstance(DateFormat.DEFAULT,DateFormat.SHORT).format(model.getCreateDate()));
         }
 
