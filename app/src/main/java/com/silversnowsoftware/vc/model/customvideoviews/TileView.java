@@ -109,9 +109,7 @@ public class TileView extends View {
                                          long frame = i * interval;
 
                                          Bitmap bitmap = mediaMetadataRetriever.getFrameAtTime(frame, FFmpegMediaMetadataRetriever.OPTION_CLOSEST); // frame at 2 seconds
-
-
-                                         String xy = FileHelper.getBase64FromBitmap(bitmap);
+                                         
                                          try {
                                              bitmap = Bitmap.createScaledBitmap(bitmap, thumbWidth, thumbHeight, false);
                                          } catch (Exception e) {
