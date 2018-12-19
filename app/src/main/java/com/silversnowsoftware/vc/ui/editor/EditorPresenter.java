@@ -490,6 +490,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             responseModel.setCreateDate(date);
             responseModel.setIsCrop(isCrop);
             responseModel.setIsCompress(isCompress);
+            responseModel.setResolutionKey(videoResolution);
             return responseModel;
 
 

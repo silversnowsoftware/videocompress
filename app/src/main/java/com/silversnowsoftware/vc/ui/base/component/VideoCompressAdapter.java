@@ -34,6 +34,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.silversnowsoftware.vc.utils.Utility.GetTrimmedIcon;
+
 /**
  * Created by burak on 10/29/2018.
  */
@@ -124,13 +126,24 @@ public class VideoCompressAdapter extends ArrayAdapter {
         if (model != null) {
             viewHolder.setId(model.getId());
             if (model.getName() != null)
-            viewHolder.tvVideoName.setText(model.getName());
+                viewHolder.tvVideoName.setText(model.getName());
             if (model.getThumbnail() != null)
-            viewHolder.ivVideoTumbnail.setImageBitmap(FileHelper.getBitmapFromBase64(model.getThumbnail()));
+                viewHolder.ivVideoTumbnail.setImageBitmap(FileHelper.getBitmapFromBase64(model.getThumbnail()));
             if (model.getResolution() != null)
-            viewHolder.tvResolution.setText(model.getResolution());
+                viewHolder.tvResolution.setText(model.getResolution());
             if (model.getCreateDate() != null)
-            viewHolder.tvCreateDate.setText(DateFormat.getDateTimeInstance(DateFormat.DEFAULT,DateFormat.SHORT).format(model.getCreateDate()));
+                viewHolder.tvCreateDate.setText(DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.SHORT).format(model.getCreateDate()));
+            if (model.getIsCompress() && model.getResolutionKey() != "")
+            {
+                int icon = GetTrimmedIcon(model.getResolutionKey());
+                viewHolder.ivCompressed.setImageResource(icon);
+                viewHolder.ivCompressed.setVisibility(View.VISIBLE);
+            }
+            if (model.getIsCrop())
+            {
+                viewHolder.ivCompressed.setVisibility(View.VISIBLE);
+            }
+
         }
 
 
@@ -191,6 +204,10 @@ public class VideoCompressAdapter extends ArrayAdapter {
         LinearLayout selectRow;
         @BindView(R.id.playButton)
         ImageView playButton;
+        @BindView(R.id.ivTrimmed)
+        ImageView ivTrimmed;
+        @BindView(R.id.ivCompressed)
+        ImageView ivCompressed;
         private boolean isSelected;
 
         public ViewHolder(View view) {

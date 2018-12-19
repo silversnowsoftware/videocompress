@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.Switch;
 
 import com.coremedia.iso.boxes.Container;
 import com.googlecode.mp4parser.FileDataSourceViaHeapImpl;
@@ -13,9 +14,11 @@ import com.googlecode.mp4parser.authoring.builder.DefaultMp4Builder;
 import com.googlecode.mp4parser.authoring.container.mp4.MovieCreator;
 import com.googlecode.mp4parser.authoring.tracks.AppendTrack;
 import com.googlecode.mp4parser.authoring.tracks.CroppedTrack;
+import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.model.listener.OnVideoTrimListener;
 import com.silversnowsoftware.vc.model.logger.LogModel;
 import com.silversnowsoftware.vc.utils.constants.Constants;
+import com.silversnowsoftware.vc.utils.constants.Globals;
 import com.silversnowsoftware.vc.utils.helpers.LogManager;
 
 import java.io.File;
@@ -140,5 +143,26 @@ public class Utility {
         final StackTraceElement e = Thread.currentThread().getStackTrace()[2];
         final String s = e.getClassName();
         return s.substring(s.lastIndexOf('.') + 1, s.length()) + "." + e.getMethodName();
+    }
+
+    public static int GetTrimmedIcon(String resolutionKey)
+    {
+        switch(resolutionKey)
+        {
+            case "144p":
+                return R.mipmap.res144p;
+            case "240p":
+                return R.mipmap.res240p;
+            case "360p":
+                return R.mipmap.res360p;
+            case "480p":
+                return R.mipmap.res480p;
+            case "720p":
+                return R.mipmap.res720p;
+            case "1044p":
+                return R.mipmap.res1044p;
+           default:
+                return -1;
+        }
     }
 }
