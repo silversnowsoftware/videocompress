@@ -84,14 +84,15 @@ public class EditorActivity extends BaseActivity implements IEditorView {
             @Override
             public void onClick(View view) {
                 try {
-                    FileModel result = mPresenter.addSelectedFile();
-                    if (!result.getSuccess()) {
-                        return;
-                    }
+                    FileModel result = mPresenter.processFile();
+                    if (!result.getIsCompress())
+                            showToastMethod("Compress işlemi yapılmadı...");
+
+                    mPresenter.addFileModel(result);
 
                     String dest = mPresenter.trimVideo(mOnVideoTrimListener);
                     result.setPath(dest);
-                    mPresenter.updateModel(result);
+                    mPresenter.updateFileModel(result);
                 }
                 catch (Exception ex){
 

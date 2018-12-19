@@ -37,9 +37,10 @@ public interface IEditorPresenter<V extends IEditorView> extends IBasePresenter<
 
     String trimVideo(OnVideoTrimListener mOnVideoTrimListener);
 
-    FileModel addSelectedFile();
+    FileModel processFile();
 
     void setDefaultEditor();
 
-    void updateModel(FileModel model);
+    void updateFileModel(FileModel model);
+    boolean addFileModel(FileModel model);
 }

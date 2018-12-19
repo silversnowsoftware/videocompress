@@ -54,7 +54,7 @@ public class FileModel extends BaseResponse implements Serializable  {
     @DatabaseField(columnName = "IsCrop")
     private Boolean IsCrop;
     @DatabaseField(columnName = "IsCompress")
-    private Integer IsCompress;
+    private Boolean IsCompress;
 
     public String getName() {
         return Name;
@@ -175,11 +175,11 @@ public class FileModel extends BaseResponse implements Serializable  {
         IsCrop = isCrop;
     }
 
-    public Integer getIsCompress() {
+    public boolean getIsCompress() {
         return IsCompress;
     }
 
-    public void setIsCompress(Integer isCompress) {
+    public void setIsCompress(boolean isCompress) {
         IsCompress = isCompress;
     }
 }

@@ -91,7 +91,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
     private Handler mHandler = new Handler();
     private DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     private boolean isCrop;
-    private boolean isCompress;
+    private boolean isCompress = true;
     String dstFile = null;
     FileModel responseModel;
 
@@ -392,7 +392,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
                 }
                 case BarThumb.RIGHT: {
                     mEndPosition = (int) ((mDuration * value) / 100L);
-                    if (mEndPosition < mDuration )
+                    if (mEndPosition < mDuration)
                         isCrop = true;
                     else
                         isCrop = false;
@@ -459,8 +459,17 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
         return dstFile;
     }
 
+    public boolean addFileModel(FileModel model) {
+        boolean result = true;
+        try {
+            getRepositoryFileModel().add(model);
+        } catch (Exception ex) {
+        }
+        return result;
+    }
+
     @Override
-    public FileModel addSelectedFile() {
+    public FileModel processFile() {
 
 
         try {
@@ -473,19 +482,17 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             int height = videoResolutions.get("height");
 
             String videoResolution = getSelectedResolution();
-            if (!videoResolution.isEmpty()) {
-                String resolution = getFitResolution(width, height, videoResolution);
-                responseModel.setResolution(resolution);
-                responseModel.setFileStatus(FileStatusEnum.PREPEARING);
-                Date date = new Date();
-                responseModel.setCreateDate(date);
-                responseModel.setIsCrop(isCrop);
-                getRepositoryFileModel().add(responseModel);
 
-            } else {
-                responseModel.setSuccess(false);
-                responseModel.setMessage(getContext().getString(R.string.choose_format));
-            }
+            String resolution = getFitResolution(width, height, videoResolution);
+            responseModel.setResolution(resolution);
+            responseModel.setFileStatus(FileStatusEnum.PREPEARING);
+            Date date = new Date();
+            responseModel.setCreateDate(date);
+            responseModel.setIsCrop(isCrop);
+            responseModel.setIsCompress(isCompress);
+            return responseModel;
+
+
         } catch (Exception ex) {
             responseModel.setSuccess(false);
             responseModel.setMessage(getContext().getString(R.string.error));
@@ -522,7 +529,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
     }
 
     @Override
-    public void updateModel(FileModel model) {
+    public void updateFileModel(FileModel model) {
         try {
             getRepositoryFileModel().update(model);
         } catch (Exception ex) {
@@ -551,6 +558,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
                 case R.id.rb1080p:
                     return (String) mViewHolder.rb1080p.getText();
                 default:
+                    isCompress = false;
                     return "";
 
             }
