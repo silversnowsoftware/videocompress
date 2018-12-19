@@ -89,10 +89,9 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
     // set your max video trim seconds
     private int mMaxDuration = 60;
     private Handler mHandler = new Handler();
-    private  DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    private DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     private boolean isCrop;
     private boolean isCompress;
-
     String dstFile = null;
     FileModel responseModel;
 
@@ -384,10 +383,19 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
                 case BarThumb.LEFT: {
                     mStartPosition = (int) ((mDuration * value) / 100L);
                     mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
+
+                    if (mStartPosition > 0)
+                        isCrop = true;
+                    else
+                        isCrop = false;
                     break;
                 }
                 case BarThumb.RIGHT: {
                     mEndPosition = (int) ((mDuration * value) / 100L);
+                    if (mEndPosition < mDuration )
+                        isCrop = true;
+                    else
+                        isCrop = false;
                     break;
                 }
             }
@@ -409,10 +417,8 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             int endMin = Integer.parseInt(mEnd) / 60;
             int endSec = Integer.parseInt(mEnd) % 60;
 
-            if (endSec<mDuration || startSec > startMin)
 
-
-                mViewHolder.txtVideoTrimSeconds.setText(String.format(Locale.US, "%02d:%02d - %02d:%02d", startMin, startSec, endMin, endSec));
+            mViewHolder.txtVideoTrimSeconds.setText(String.format(Locale.US, "%02d:%02d - %02d:%02d", startMin, startSec, endMin, endSec));
         } catch (Exception ex) {
 
             LogManager.Log(className, ex);
@@ -473,6 +479,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
                 responseModel.setFileStatus(FileStatusEnum.PREPEARING);
                 Date date = new Date();
                 responseModel.setCreateDate(date);
+                responseModel.setIsCrop(isCrop);
                 getRepositoryFileModel().add(responseModel);
 
             } else {
@@ -551,7 +558,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
 
             LogManager.Log(className, ex);
         }
-            return "";
+        return "";
 
 
     }
@@ -675,5 +682,6 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             LogManager.Log(className, ex);
         }
     }
+
 
 }
