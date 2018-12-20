@@ -48,5 +48,6 @@ public interface IEditorPresenter<V extends IEditorView> extends IBasePresenter<
     boolean addFileModel(FileModel model);
 
     void customRangeSeekBarNewInit();
+
     void seekBarVideoInit();
 }

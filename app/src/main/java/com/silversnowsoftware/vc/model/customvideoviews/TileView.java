@@ -30,6 +30,7 @@ import android.view.View;
 
 
 import com.silversnowsoftware.vc.R;
+import com.silversnowsoftware.vc.ui.editor.EditorViewHolder;
 import com.silversnowsoftware.vc.utils.helpers.FileHelper;
 
 import java.util.HashMap;
@@ -44,6 +45,7 @@ public class TileView extends View {
     private LongSparseArray<Bitmap> mBitmapList = null;
     private int viewWidth = 0;
     private int viewHeight = 0;
+    private EditorViewHolder viewHolder;
 
     public TileView(@NonNull Context context, AttributeSet attrs) {
         this(context, attrs, 0);
@@ -109,7 +111,7 @@ public class TileView extends View {
                                          long frame = i * interval;
 
                                          Bitmap bitmap = mediaMetadataRetriever.getFrameAtTime(frame, FFmpegMediaMetadataRetriever.OPTION_CLOSEST); // frame at 2 seconds
-                                         
+
                                          try {
                                              bitmap = Bitmap.createScaledBitmap(bitmap, thumbWidth, thumbHeight, false);
                                          } catch (Exception e) {
@@ -154,11 +156,14 @@ public class TileView extends View {
                     x = x + bitmap.getWidth();
                 }
             }
+            if (this.viewHolder != null)
+                this.viewHolder.tvPreviewThumb.setVisibility(GONE);
         }
     }
 
-    public void setVideo(@NonNull Uri data) {
+    public void setVideo(@NonNull Uri data, EditorViewHolder viewHolder) {
         mVideoUri = data;
+        this.viewHolder = viewHolder;
         getBitmap();
     }
 

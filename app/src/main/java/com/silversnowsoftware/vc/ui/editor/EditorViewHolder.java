@@ -61,6 +61,8 @@ public final class EditorViewHolder {
     public RadioGroup rgResolution;
     @BindView(R.id.btnClear)
     public Button btnClear;
+    @BindView(R.id.tvPreviewThumb)
+    public TextView tvPreviewThumb;
 
     public SimpleExoPlayer exoPlayer;
 

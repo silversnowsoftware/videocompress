@@ -314,7 +314,7 @@ public class VideoTimmerActivity extends AppCompatActivity implements View.OnCli
 
     private void setBitmap(Uri mVideoUri) {
         try {
-            tileView.setVideo(mVideoUri);
+            //tileView.setVideo(mVideoUri);
         } catch (Exception ex) {
 
             LogManager.Log(className, ex);

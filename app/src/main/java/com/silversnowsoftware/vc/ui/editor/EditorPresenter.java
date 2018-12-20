@@ -270,7 +270,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
 
     @Override
     public void setBitmap(Uri mVideoUri) {
-        mViewHolder.tileView.setVideo(mVideoUri);
+        mViewHolder.tileView.setVideo(mVideoUri, mViewHolder);
     }
 
     @Override
