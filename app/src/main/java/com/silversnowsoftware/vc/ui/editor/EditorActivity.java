@@ -8,6 +8,7 @@ import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
@@ -70,12 +71,15 @@ public class EditorActivity extends BaseActivity implements IEditorView {
         meditorViewHolder = new EditorViewHolder(this);
         getActivityComponent().inject(this);
         try {
+
             mPresenter.onAttach(this);
             mPresenter.setViewHolder();
-            mPresenter.setVideoToVideoView();
-        }
-        catch (Exception ex)
-        {
+            mPresenter.setExoPlayer();
+            mPresenter.setVideoPrepared();
+            mPresenter.customRangeSeekBarNewInit();
+            mPresenter.seekBarVideoInit();
+
+        } catch (Exception ex) {
 
             LogManager.Log(className, ex);
         }
@@ -86,25 +90,40 @@ public class EditorActivity extends BaseActivity implements IEditorView {
                 try {
                     FileModel result = mPresenter.processFile();
                     if (!result.getIsCompress())
-                            showToastMethod("Compress işlemi yapılmadı...");
+                        showToastMethod("Compress işlemi yapılmadı...");
 
                     mPresenter.addFileModel(result);
 
                     String dest = mPresenter.trimVideo(mOnVideoTrimListener);
                     result.setPath(dest);
                     mPresenter.updateFileModel(result);
-                }
-                catch (Exception ex){
+                } catch (Exception ex) {
 
                     LogManager.Log(className, ex);
                 }
 
             }
         });
+
         meditorViewHolder.btnClear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mPresenter.setDefaultEditor();
+            }
+        });
+
+        meditorViewHolder.imgPlay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mPresenter.playPauseVideo();
+            }
+        });
+
+        meditorViewHolder.exoPlayerView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                mPresenter.playPauseVideo();
+                return false;
             }
         });
     }

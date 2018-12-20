@@ -19,13 +19,15 @@ public interface IEditorPresenter<V extends IEditorView> extends IBasePresenter<
 
     void setViewHolder();
 
-    void setVideoToVideoView();
+    void setVideoPrepared();
 
     void onVideoPrepared();
 
     void setSeekBarPosition();
 
     void setExoPlayer();
+
+    void playPauseVideo();
 
     void updateProgressBar();
 
@@ -42,5 +44,9 @@ public interface IEditorPresenter<V extends IEditorView> extends IBasePresenter<
     void setDefaultEditor();
 
     void updateFileModel(FileModel model);
+
     boolean addFileModel(FileModel model);
+
+    void customRangeSeekBarNewInit();
+    void seekBarVideoInit();
 }

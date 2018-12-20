@@ -95,6 +95,10 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
     String dstFile = null;
     FileModel responseModel;
 
+    private List<FileModel> getFileModelList() {
+        return getRepositoryFileModel().getAll();
+    }
+
     @Inject
     public EditorPresenter() {
         super();
@@ -119,11 +123,10 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
 
 
     @Override
-    public void setVideoToVideoView() {
+    public void setVideoPrepared() {
         try {
-            List<FileModel> fileModelList = getRepositoryFileModel().getAll();
 
-            srcFile = fileModelList.get(fileModelList.size() - 1).getPath();
+            srcFile = getFileModelList().get(getFileModelList().size() - 1).getPath();
             mMaxDuration = getVideoDuration((Activity) getView(), srcFile);
             mDefaultResolutionId = findVideoResolution(srcFile);
             setSelectedResolution(mDefaultResolutionId);
@@ -131,82 +134,11 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             mViewHolder.tileView.post(new Runnable() {
                 @Override
                 public void run() {
-
                     setBitmap(Uri.parse(srcFile));
-                    setExoPlayer();
-                }
-            });
-
-            mViewHolder.imgPlay.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    playPauseVideo();
-                }
-            });
-
-            mViewHolder.exoPlayerView.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View view, MotionEvent motionEvent) {
-                    playPauseVideo();
-                    return false;
-                }
-            });
-
-            mViewHolder.mCustomRangeSeekBarNew.addOnRangeSeekBarListener(new OnRangeSeekBarChangeListener() {
-                @Override
-                public void onCreate(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
-                    // Do nothing
-                }
-
-                @Override
-                public void onSeek(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
-                    onSeekThumbs(index, value);
-                }
-
-                @Override
-                public void onSeekStart(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
-                    if (mViewHolder.exoPlayer != null) {
-                        mHandler.removeCallbacks(mUpdateTimeTask);
-                        mViewHolder.seekBarVideo.setProgress(0);
-                        mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
-                        mViewHolder.exoPlayer.setPlayWhenReady(false);
-                        mViewHolder.imgPlay.setBackgroundResource(R.drawable.ic_white_play);
-                    }
-                }
-
-                @Override
-                public void onSeekStop(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
-
                 }
             });
 
 
-            mViewHolder.seekBarVideo.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
-
-            {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-
-                }
-
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-                    if (mViewHolder.exoPlayer != null) {
-                        mHandler.removeCallbacks(mUpdateTimeTask);
-                        mViewHolder.seekBarVideo.setMax(mTimeVideo * 1000);
-                        mViewHolder.seekBarVideo.setProgress(0);
-                        mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
-                        mViewHolder.exoPlayer.setPlayWhenReady(false);
-                        mViewHolder.imgPlay.setBackgroundResource(R.drawable.ic_white_play);
-                    }
-                }
-
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-                    mHandler.removeCallbacks(mUpdateTimeTask);
-                    mViewHolder.exoPlayer.seekTo((mStartPosition * 1000) - mViewHolder.seekBarVideo.getProgress());
-                }
-            });
         } catch (Exception ex) {
 
             LogManager.Log(className, ex);
@@ -271,30 +203,34 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
 
     @Override
     public void setExoPlayer() {
+        mViewHolder.tileView.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    srcFile = getFileModelList().get(getFileModelList().size() - 1).getPath();
+                    BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+                    TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(bandwidthMeter));
+                    mViewHolder.exoPlayer = ExoPlayerFactory.newSimpleInstance((Activity) getView(), trackSelector);
 
-        try {
-            BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-            TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(bandwidthMeter));
-            mViewHolder.exoPlayer = ExoPlayerFactory.newSimpleInstance((Activity) getView(), trackSelector);
+                    DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(getContext(), "exoplayer_video");
+                    ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+                    MediaSource mediaSource = new ExtractorMediaSource(
+                            Uri.parse(srcFile),
+                            dataSourceFactory,
+                            new DefaultExtractorsFactory(),
+                            null,
+                            null);
 
-            DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(getContext(), "exoplayer_video");
-            ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-            MediaSource mediaSource = new ExtractorMediaSource(
-                    Uri.parse(srcFile),
-                    dataSourceFactory,
-                    new DefaultExtractorsFactory(),
-                    null,
-                    null);
+                    mViewHolder.exoPlayerView.setPlayer(mViewHolder.exoPlayer);
+                    mViewHolder.exoPlayer.prepare(mediaSource);
+                    onVideoPrepared();
 
-            mViewHolder.exoPlayerView.setPlayer(mViewHolder.exoPlayer);
-            mViewHolder.exoPlayer.prepare(mediaSource);
-            onVideoPrepared();
-            //  exoPlayer.setPlayWhenReady(true);
-        } catch (Exception ex) {
+                } catch (Exception ex) {
 
-            LogManager.Log(className, ex);
-        }
-
+                    LogManager.Log(className, ex);
+                }
+            }
+        });
     }
 
     @Override
@@ -466,6 +402,69 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
         } catch (Exception ex) {
         }
         return result;
+    }
+
+    @Override
+    public void customRangeSeekBarNewInit() {
+
+        mViewHolder.mCustomRangeSeekBarNew.addOnRangeSeekBarListener(new OnRangeSeekBarChangeListener() {
+            @Override
+            public void onCreate(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
+                // Do nothing
+            }
+
+            @Override
+            public void onSeek(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
+                onSeekThumbs(index, value);
+            }
+
+            @Override
+            public void onSeekStart(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
+                if (mViewHolder.exoPlayer != null) {
+                    mHandler.removeCallbacks(mUpdateTimeTask);
+                    mViewHolder.seekBarVideo.setProgress(0);
+                    mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
+                    mViewHolder.exoPlayer.setPlayWhenReady(false);
+                    mViewHolder.imgPlay.setBackgroundResource(R.drawable.ic_white_play);
+                }
+            }
+
+            @Override
+            public void onSeekStop(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
+
+            }
+        });
+    }
+
+    @Override
+    public void seekBarVideoInit() {
+
+        mViewHolder.seekBarVideo.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
+
+        {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                if (mViewHolder.exoPlayer != null) {
+                    mHandler.removeCallbacks(mUpdateTimeTask);
+                    mViewHolder.seekBarVideo.setMax(mTimeVideo * 1000);
+                    mViewHolder.seekBarVideo.setProgress(0);
+                    mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
+                    mViewHolder.exoPlayer.setPlayWhenReady(false);
+                    mViewHolder.imgPlay.setBackgroundResource(R.drawable.ic_white_play);
+                }
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                mHandler.removeCallbacks(mUpdateTimeTask);
+                mViewHolder.exoPlayer.seekTo((mStartPosition * 1000) - mViewHolder.seekBarVideo.getProgress());
+            }
+        });
     }
 
     @Override
@@ -661,7 +660,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
         return resolution;
     }
 
-    void playPauseVideo() {
+    public void playPauseVideo() {
         try {
 
 

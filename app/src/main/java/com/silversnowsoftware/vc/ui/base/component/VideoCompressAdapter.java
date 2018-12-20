@@ -141,7 +141,7 @@ public class VideoCompressAdapter extends ArrayAdapter {
             }
             if (model.getIsCrop())
             {
-                viewHolder.ivCompressed.setVisibility(View.VISIBLE);
+                viewHolder.ivTrimmed.setVisibility(View.VISIBLE);
             }
 
         }
