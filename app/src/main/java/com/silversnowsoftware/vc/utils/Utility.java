@@ -166,12 +166,12 @@ public class Utility {
         }
     }
 
-    public static String ConvertToVideoTime(Double value) {
+    public static String ConvertToVideoTime(Integer value) {
         String hour = "";
         String min = "";
         String doubleDot = ":";
         String sec = "";
-
+        String zero = "0:";
 
         if (value > 3600) {
             hour = String.valueOf(value / 3600);
@@ -187,11 +187,12 @@ public class Utility {
             int vestigalSec = (int) (value % 60);
             sec = String.valueOf(vestigalSec);
             return min + doubleDot + sec;
-        } else if (value > 9) {
+        } else if (value > 9 && value < 60) {
             sec = String.valueOf(value);
-            return sec;
+            min = "00";
+            return min + doubleDot + sec;
         }
+        return zero + sec;
 
-        return String.valueOf(value);
     }
 }

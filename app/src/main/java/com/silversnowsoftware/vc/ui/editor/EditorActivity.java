@@ -54,7 +54,8 @@ public class EditorActivity extends BaseActivity implements IEditorView {
             finish();
 
             result.setPath(uri.getPath());
-            result.setVideoLength(Utility.ConvertToVideoTime(Double.valueOf(String.valueOf(getVideoDuration(EditorActivity.this, result.getPath())))));
+            result.setVideoLength(Utility.ConvertToVideoTime(Integer.valueOf(String.valueOf(getVideoDuration(EditorActivity.this, result.getPath())))));
+
             mPresenter.updateFileModel(result);
 
             redirectToActivity(ListActivity.class);
