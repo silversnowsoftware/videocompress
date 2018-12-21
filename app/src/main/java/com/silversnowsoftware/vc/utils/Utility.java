@@ -49,7 +49,7 @@ public class Utility {
             file.getParentFile().mkdirs();
             Log.d(TAG, "Generated file path " + dst);
             generateVideo(src, file, startMs, endMs, callback);
-        }catch (Exception ex) {
+        } catch (Exception ex) {
 
 
             LogManager.Log(className, ex);
@@ -129,26 +129,26 @@ public class Utility {
 
             if (callback != null)
                 callback.getResult(Uri.parse(dst.toString()));
-        }catch (Exception ex) {
+        } catch (Exception ex) {
 
             LogManager.Log(className, ex);
         }
     }
+
     public static String getAndroidVersion() {
         String release = Build.VERSION.RELEASE;
         int sdkVersion = Build.VERSION.SDK_INT;
-        return "Android SDK: " + sdkVersion + " (" + release +")";
+        return "Android SDK: " + sdkVersion + " (" + release + ")";
     }
+
     public static String getCurrentClassAndMethodNames() {
         final StackTraceElement e = Thread.currentThread().getStackTrace()[2];
         final String s = e.getClassName();
         return s.substring(s.lastIndexOf('.') + 1, s.length()) + "." + e.getMethodName();
     }
 
-    public static int GetTrimmedIcon(String resolutionKey)
-    {
-        switch(resolutionKey)
-        {
+    public static int GetTrimmedIcon(String resolutionKey) {
+        switch (resolutionKey) {
             case "144p":
                 return R.mipmap.res144p;
             case "240p":
@@ -161,8 +161,37 @@ public class Utility {
                 return R.mipmap.res720p;
             case "1044p":
                 return R.mipmap.res1044p;
-           default:
+            default:
                 return -1;
         }
+    }
+
+    public static String ConvertToVideoTime(Double value) {
+        String hour = "";
+        String min = "";
+        String doubleDot = ":";
+        String sec = "";
+
+
+        if (value > 3600) {
+            hour = String.valueOf(value / 3600);
+            int vestigalMin = (int) (value % 3600);
+            if (vestigalMin > 60) {
+                min = String.valueOf(vestigalMin / 60);
+                int vestigalSec = (int) (vestigalMin % 60);
+                sec = String.valueOf(vestigalSec);
+            }
+            return hour + doubleDot + min + doubleDot + sec;
+        } else if (value > 60) {
+            min = String.valueOf(value / 60);
+            int vestigalSec = (int) (value % 60);
+            sec = String.valueOf(vestigalSec);
+            return min + doubleDot + sec;
+        } else if (value > 9) {
+            sec = String.valueOf(value);
+            return sec;
+        }
+
+        return String.valueOf(value);
     }
 }

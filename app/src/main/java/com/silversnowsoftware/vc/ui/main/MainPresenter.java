@@ -113,7 +113,7 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
 
                 LogManager.Log(className, ex);
             }
-            fileModel.setVideoLength(videoLength);
+            fileModel.setVideoLength(String.valueOf(videoLength));
 
         } catch (Exception ex) {
 

@@ -90,7 +90,7 @@ public class TileView extends View {
                                  try {
 
                                      FFmpegMediaMetadataRetriever mediaMetadataRetriever = new FFmpegMediaMetadataRetriever();
-                                     mediaMetadataRetriever.setDataSource(String.valueOf(mVideoUri));
+                                     mediaMetadataRetriever.setDataSource(mVideoUri.getPath());
 
 
                                      LongSparseArray<Bitmap> thumbnailList = new LongSparseArray<>();

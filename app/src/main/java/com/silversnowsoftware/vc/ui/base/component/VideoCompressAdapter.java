@@ -141,8 +141,7 @@ public class VideoCompressAdapter extends ArrayAdapter {
             if (model.getIsCrop()) {
                 viewHolder.ivTrimmed.setVisibility(View.VISIBLE);
             }
-            if (model.getVideoLength() > 0.0)
-                viewHolder.tvVideoDuration.setText(String.valueOf(model.getVideoLength()));
+            viewHolder.tvVideoDuration.setText(String.valueOf(model.getVideoLength()));
 
         }
 
