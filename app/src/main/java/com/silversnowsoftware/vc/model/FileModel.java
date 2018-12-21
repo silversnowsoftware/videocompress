@@ -170,6 +170,8 @@ public class FileModel extends BaseResponse implements Serializable  {
     }
 
     public Boolean getIsCrop() {
+        if (IsCrop == null)
+            return false;
         return IsCrop;
     }
 
@@ -178,6 +180,8 @@ public class FileModel extends BaseResponse implements Serializable  {
     }
 
     public boolean getIsCompress() {
+        if (IsCompress == null)
+            return false;
         return IsCompress;
     }
 

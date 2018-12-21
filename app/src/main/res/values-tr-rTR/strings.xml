@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">Video Compress</string>
+    <string name="editor_activity">Editor</string>
+    <string name="take_video">Video Çek</string>
+    <string name="load_from_gallery">Galeriden Seç</string>
+    <string name="list">Listele</string>
+    <string name="deleting">Siliniyor</string>
+    <string name="error">Hata</string>
+    <string name="title_activity_list">Videolar</string>
+    <string name="action_settings">Ayarlar</string>
+    <string name="action_share">Paylaş</string>
+    <string name="action_delete">Sil</string>
+    <string name="title_activity_editor">Video Düzenle</string>
+    <string name="upload">Yükle</string>
+    <string name="cancel">İptal</string>
+    <string name="select_video_text">En az 1 dk"lık video seçin.</string>
+    <string name="video_length_validation">Video en az 3 sn. olmalı.</string>
+    <string name="choose_format">Lütfen format seçin.</string>
+    <string name="video_trim">Kırpılıyor</string>
+    <string name="app_provider">com.demo.videotrimmer.provider</string>
+    <string name="resolution_144p">144p</string>
+    <string name="resolution_240p">240p</string>
+    <string name="resolution_360p">360p</string>
+    <string name="resolution_480p">480p</string>
+    <string name="resolution_720p">720p</string>
+    <string name="resolution_1080p">1080p</string>
+</resources>
