@@ -50,4 +50,6 @@ public interface IEditorPresenter<V extends IEditorView> extends IBasePresenter<
     void customRangeSeekBarNewInit();
 
     void seekBarVideoInit();
+
+    void loadAd();
 }

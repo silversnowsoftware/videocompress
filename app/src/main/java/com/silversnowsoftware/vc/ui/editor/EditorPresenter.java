@@ -31,6 +31,7 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.google.android.gms.ads.AdRequest;
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.model.customvideoviews.BackgroundTask;
@@ -538,6 +539,13 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
         }
     }
 
+    @Override
+    public void loadAd()
+    {
+        initializeAds();
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice("B3E228E2A3DF6402D6DCF40712D066F6").build();
+        mViewHolder.adViewEditor.loadAd(adRequest);
+    }
 
     String getSelectedResolution() {
         try {

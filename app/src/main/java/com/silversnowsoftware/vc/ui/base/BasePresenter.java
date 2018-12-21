@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import com.google.android.gms.ads.MobileAds;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.silversnowsoftware.vc.data.db.DbFileModel;
@@ -36,6 +37,12 @@ public class BasePresenter<V extends IBaseView> implements IBasePresenter<V> {
         return mView;
     }
 
+    @Override
+    public void initializeAds()
+    {
+        MobileAds.initialize(((Activity) getView()).getApplicationContext(), "ca-app-pub-9069451453527664~1459246129");
+    }
+
 
     protected Context getContext() {
         return ((Activity) getView()).getApplicationContext();
@@ -45,4 +52,6 @@ public class BasePresenter<V extends IBaseView> implements IBasePresenter<V> {
     protected IRepository<FileModel> getRepositoryFileModel() {
         return new DbFileModel(getContext());
     }
+
+
 }

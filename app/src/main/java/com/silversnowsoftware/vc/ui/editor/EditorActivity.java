@@ -13,6 +13,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
+import com.google.android.gms.ads.AdRequest;
 import com.googlecode.mp4parser.authoring.Edit;
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.model.FileModel;
@@ -80,11 +81,14 @@ public class EditorActivity extends BaseActivity implements IEditorView {
         try {
 
             mPresenter.onAttach(this);
+            mPresenter.loadAd();
             mPresenter.setViewHolder();
             mPresenter.setExoPlayer();
             mPresenter.setVideoPrepared();
             mPresenter.customRangeSeekBarNewInit();
             mPresenter.seekBarVideoInit();
+
+
 
         } catch (Exception ex) {
 

@@ -49,6 +49,9 @@
             android:name="android.support.VERSION"
             android:value="26.1.0"
             tools:replace="android:value" />
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-9069451453527664~1459246129"/>
 
         <activity
             android:theme="@style/AppTheme.NoActionBar"
