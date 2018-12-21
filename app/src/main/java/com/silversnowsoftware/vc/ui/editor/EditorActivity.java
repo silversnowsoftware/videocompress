@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -29,12 +30,15 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import static com.silversnowsoftware.vc.utils.helpers.FileHelper.getVideoDuration;
+
 public class EditorActivity extends BaseActivity implements IEditorView {
 
     private static final String className = EditorActivity.class.getSimpleName();
     @Inject
     IEditorPresenter<IEditorView> mPresenter;
     EditorViewHolder meditorViewHolder;
+    FileModel result = null;
 
     OnVideoTrimListener mOnVideoTrimListener = new OnVideoTrimListener() {
         @Override
@@ -49,6 +53,9 @@ public class EditorActivity extends BaseActivity implements IEditorView {
 
             finish();
 
+            result.setPath(uri.getPath());
+            result.setVideoLength((double) getVideoDuration(EditorActivity.this, result.getPath()));
+            mPresenter.updateFileModel(result);
 
             redirectToActivity(ListActivity.class);
         }
@@ -88,15 +95,14 @@ public class EditorActivity extends BaseActivity implements IEditorView {
             @Override
             public void onClick(View view) {
                 try {
-                    FileModel result = mPresenter.processFile();
+                    result = mPresenter.processFile();
                     if (!result.getIsCompress())
                         showToastMethod("Compress işlemi yapılmadı...");
 
                     mPresenter.addFileModel(result);
 
-                    String dest = mPresenter.trimVideo(mOnVideoTrimListener);
-                    result.setPath(dest);
-                    mPresenter.updateFileModel(result);
+                    mPresenter.trimVideo(mOnVideoTrimListener);
+
                 } catch (Exception ex) {
 
                     LogManager.Log(className, ex);

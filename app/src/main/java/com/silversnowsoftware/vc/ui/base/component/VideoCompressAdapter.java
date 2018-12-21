@@ -133,16 +133,16 @@ public class VideoCompressAdapter extends ArrayAdapter {
                 viewHolder.tvResolution.setText(model.getResolution());
             if (model.getCreateDate() != null)
                 viewHolder.tvCreateDate.setText(DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.SHORT).format(model.getCreateDate()));
-            if (model.getIsCompress() && model.getResolutionKey() != "")
-            {
+            if (model.getIsCompress() && model.getResolutionKey() != "") {
                 int icon = GetTrimmedIcon(model.getResolutionKey());
                 viewHolder.ivCompressed.setImageResource(icon);
                 viewHolder.ivCompressed.setVisibility(View.VISIBLE);
             }
-            if (model.getIsCrop())
-            {
+            if (model.getIsCrop()) {
                 viewHolder.ivTrimmed.setVisibility(View.VISIBLE);
             }
+            if (model.getVideoLength() > 0.0)
+                viewHolder.tvVideoDuration.setText(String.valueOf(model.getVideoLength()));
 
         }
 
@@ -209,6 +209,8 @@ public class VideoCompressAdapter extends ArrayAdapter {
         @BindView(R.id.ivCompressed)
         ImageView ivCompressed;
         private boolean isSelected;
+        @BindView(R.id.tvVideoDuration)
+        TextView tvVideoDuration;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);

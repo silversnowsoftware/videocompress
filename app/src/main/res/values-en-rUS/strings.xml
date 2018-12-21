@@ -3,7 +3,7 @@
     <string name="editor_activity">Editor</string>
     <string name="take_video">Video Record</string>
     <string name="load_from_gallery">Choose From Gallery</string>
-    <string name="list">List</string>
+    <string name="list">Videos</string>
     <string name="deleting">Deleting</string>
     <string name="error">Error</string>
     <string name="title_activity_list">Vidoes</string>
@@ -13,6 +13,7 @@
     <string name="title_activity_editor">Editor</string>
     <string name="upload">Upload</string>
     <string name="cancel">Cancel</string>
+    <string name="no_data">No Data</string>
     <string name="select_video_text">Select 1 min video</string>
     <string name="video_length_validation">Video should be of minimum 3 seconds</string>
     <string name="choose_format">Please choose format!</string>

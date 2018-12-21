@@ -122,6 +122,8 @@ public class FileModel extends BaseResponse implements Serializable  {
     }
 
     public Double getVideoLength() {
+        if (VideoLength == null)
+            return 0.0;
         return VideoLength;
     }
 

@@ -3,7 +3,7 @@
     <string name="editor_activity">Editor</string>
     <string name="take_video">Video Çek</string>
     <string name="load_from_gallery">Galeriden Seç</string>
-    <string name="list">Listele</string>
+    <string name="list">Videolar</string>
     <string name="deleting">Siliniyor</string>
     <string name="error">Hata</string>
     <string name="title_activity_list">Videolar</string>
@@ -13,6 +13,7 @@
     <string name="title_activity_editor">Video Düzenle</string>
     <string name="upload">Yükle</string>
     <string name="cancel">İptal</string>
+    <string name="no_data">Kayıt Yok</string>
     <string name="select_video_text">En az 1 dk"lık video seçin.</string>
     <string name="video_length_validation">Video en az 3 sn. olmalı.</string>
     <string name="choose_format">Lütfen format seçin.</string>
