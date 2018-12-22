@@ -37,11 +37,6 @@ public class BasePresenter<V extends IBaseView> implements IBasePresenter<V> {
         return mView;
     }
 
-    @Override
-    public void initializeAds()
-    {
-        MobileAds.initialize(((Activity) getView()).getApplicationContext(), "ca-app-pub-9069451453527664~1459246129");
-    }
 
 
     protected Context getContext() {

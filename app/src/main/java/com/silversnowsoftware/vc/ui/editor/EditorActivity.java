@@ -9,11 +9,14 @@ import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
+import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.MobileAds;
 import com.googlecode.mp4parser.authoring.Edit;
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.model.FileModel;
@@ -82,7 +85,37 @@ public class EditorActivity extends BaseActivity implements IEditorView {
         try {
 
             mPresenter.onAttach(this);
-            mPresenter.loadAd();
+            MobileAds.initialize(this, "ca-app-pub-9069451453527664~1459246129");
+            AdRequest adRequest = new AdRequest.Builder().addTestDevice("B3E228E2A3DF6402D6DCF40712D066F6").build();
+            meditorViewHolder.adViewEditor.loadAd(adRequest);
+            meditorViewHolder.adViewEditor.setAdListener(new AdListener() {
+                @Override
+                public void onAdLoaded() {
+                    Log.i("ADS:","onAdLoaded");
+                }
+
+                @Override
+                public void onAdFailedToLoad(int errorCode) {
+                    Log.i("ADS:","onAdFailedToLoad");
+                }
+
+                @Override
+                public void onAdOpened() {
+                    Log.i("ADS:","onAdOpened");
+                }
+
+                @Override
+                public void onAdLeftApplication() {
+                    Log.i("ADS:","onAdLeftApplication");
+                }
+
+                @Override
+                public void onAdClosed() {
+                    Log.i("ADS:","onAdClosed");
+                }
+            });
+
+
             mPresenter.setViewHolder();
             mPresenter.setExoPlayer();
             mPresenter.setVideoPrepared();
