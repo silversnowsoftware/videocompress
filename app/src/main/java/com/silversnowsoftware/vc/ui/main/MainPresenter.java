@@ -101,7 +101,6 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
                 fileModel.setThumbnail(byteThumb);
             }
 
-
             MediaMetadataRetriever retr = new MediaMetadataRetriever();
             retr.setDataSource(fileModel.getPath());
             String time = retr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
@@ -116,13 +115,8 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
             fileModel.setVideoLength(String.valueOf(videoLength));
 
         } catch (Exception ex) {
-
-
             LogManager.Log(className, ex);
-
         }
-
-
         return fileModel;
     }
 

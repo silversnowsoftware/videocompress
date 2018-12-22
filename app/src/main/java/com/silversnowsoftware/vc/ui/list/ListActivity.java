@@ -171,8 +171,6 @@ public class ListActivity extends BaseActivity implements IListView {
                     File file = new File(fileModel.getPath());
                     if (file.exists()) {
                         file.delete();
-
-
                     }
                     mPresenter.deleteSelectedFile(fileModel);
                 }

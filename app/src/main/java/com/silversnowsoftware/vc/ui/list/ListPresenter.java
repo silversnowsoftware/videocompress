@@ -61,7 +61,6 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
         try {
             viewHolder = new ListViewHolder(getView());
         } catch (Exception ex) {
-
             LogManager.Log(className, ex);
         }
     }
@@ -74,9 +73,7 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
             response.setSuccess(true);
         } catch (Exception ex) {
             response.setSuccess(false);
-
             LogManager.Log(className, ex);
-
         }
         return response;
     }
@@ -114,7 +111,6 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
     public void fillListView() {
         try {
 
-
             List<FileModel> fileModelList = getFileModelList();
             Collections.reverse(fileModelList);
             VideoCompressAdapter videoCompressAdapter = getVideoCompressAdapter(fileModelList);
@@ -124,7 +120,6 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
             if (fileModelList != null) {
                 videoCompressAdapter.notifyDataSetChanged();
                 viewHolder.lvFileModel.setAdapter(videoCompressAdapter);
-
             }
             viewHolder.lvFileModel.setEmptyView(viewHolder.tvNoDataFound);
         } catch (Exception ex) {
@@ -139,10 +134,7 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
             list = getRepositoryFileModel().getAll();
 
         } catch (Exception ex) {
-
-
             LogManager.Log(className, ex);
-
         }
         return list;
     }
@@ -151,11 +143,9 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
         VideoCompressAdapter adapter = null;
         try {
             adapter = new VideoCompressAdapter(getContext(), R.layout.file_model_list, fileModelList);
-
         } catch (Exception ex) {
 
             LogManager.Log(className, ex);
-
         }
         return adapter;
     }
