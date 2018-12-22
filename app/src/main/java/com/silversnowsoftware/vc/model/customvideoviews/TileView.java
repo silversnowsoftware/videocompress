@@ -89,7 +89,7 @@ public class TileView extends View {
                              public void execute() {
                                  try {
 
-                                     FFmpegMediaMetadataRetriever mediaMetadataRetriever = new FFmpegMediaMetadataRetriever();
+                                     MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
                                      mediaMetadataRetriever.setDataSource(mVideoUri.getPath());
 
 
@@ -156,8 +156,11 @@ public class TileView extends View {
                     x = x + bitmap.getWidth();
                 }
             }
-            if (this.viewHolder != null)
+            if (this.viewHolder != null) {
                 this.viewHolder.tvPreviewThumb.setVisibility(GONE);
+                this.viewHolder.mCustomRangeSeekBarNew.setVisibility(VISIBLE);
+            }
+
         }
     }
 

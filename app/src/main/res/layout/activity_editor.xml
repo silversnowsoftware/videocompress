@@ -93,13 +93,14 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal" />
             <TextView
-                android:text="Ön izleme yükleniyor..."
+                android:text="@string/previewLoading"
                 android:id="@+id/tvPreviewThumb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"/>
             <com.silversnowsoftware.vc.model.customvideoviews.CustomRangeSeekBar
                 android:id="@+id/timeLineBar"
+                android:visibility="invisible"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true" />
@@ -171,7 +172,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Clear"
-            android:drawableStart="@mipmap/clear"
             android:paddingRight="10dp"
             android:layout_marginRight="5dp"/>
         <Button

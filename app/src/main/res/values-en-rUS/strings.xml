@@ -1,4 +1,5 @@
 <resources>
+    <string name="previewLoading">Preview is loading...</string>
     <string name="ChooseAnyVideoForShare">Please select min 1 video for share!</string>
     <string name="ChooseAnyVideoForDelete">Please select min 1 video for delete!</string>
     <string name="Alert">Alert!</string>
