@@ -1,11 +1,13 @@
 <resources>
+    <string name="video_compress">Sıkıştır</string>
+    <string name="clear">Temizle</string>
     <string name="previewLoading">Önizleme yükleniyor...</string>
     <string name="ChooseAnyVideoForShare">Lütfen paylaşmak için en az 1 video seçin!</string>
     <string name="ChooseAnyVideoForDelete">Lütfen silmek için en az 1 video seçin!</string>
     <string name="Alert">Uyarı!</string>
     <string name="Ok">Tamam</string>
     <string name="app_name">Video Compress</string>
-    <string name="editor_activity">Editor</string>
+    <string name="editor_activity">Düzenle</string>
     <string name="take_video">Video Çek</string>
     <string name="load_from_gallery">Galeriden Seç</string>
     <string name="list">Videolar</string>
