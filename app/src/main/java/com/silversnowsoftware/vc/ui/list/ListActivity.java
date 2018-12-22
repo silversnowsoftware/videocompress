@@ -3,10 +3,14 @@ package com.silversnowsoftware.vc.ui.list;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.model.listener.OnEventListener;
@@ -30,7 +34,7 @@ public class ListActivity extends BaseActivity implements IListView {
 
     @Inject
     IListPresenter<IListView> mPresenter;
-
+    ListViewHolder mListViewHolder;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,13 +44,47 @@ public class ListActivity extends BaseActivity implements IListView {
         ButterKnife.bind(this);
 
         try {
+
+            mListViewHolder.mInterstitialAd = new InterstitialAd(this);
+            mListViewHolder.mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+            mListViewHolder.mInterstitialAd.loadAd(new AdRequest.Builder().addTestDevice("B3E228E2A3DF6402D6DCF40712D066F6").build());
+
+
+            mListViewHolder.mInterstitialAd.setAdListener(new AdListener() {
+                @Override
+                public void onAdLoaded() {
+                    mListViewHolder.mInterstitialAd.show();
+                    Log.i("ADSInter:", "onAdLoaded");
+                }
+
+                @Override
+                public void onAdFailedToLoad(int errorCode) {
+                    Log.i("ADSInter:", "onAdFailedToLoad-" + errorCode);
+                }
+
+                @Override
+                public void onAdOpened() {
+                    Log.i("ADSInter:", "onAdOpened");
+                }
+
+                @Override
+                public void onAdLeftApplication() {
+                    Log.i("ADSInter:", "onAdLeftApplication");
+                }
+
+                @Override
+                public void onAdClosed() {
+                    Log.i("ADSInter:", "onAdClosed");
+                }
+            });
+
             SharedPref.RemoveKey(Keys.SELECTED_FILE_LIST, this);
             SharedPref.RemoveKey(Keys.SELECTION_MODE, this);
 
             mPresenter.onAttach(this);
             mPresenter.setViewHolder();
             mPresenter.fillListView();
-        }catch (Exception ex) {
+        } catch (Exception ex) {
 
             LogManager.Log(className, ex);
         }
@@ -75,7 +113,7 @@ public class ListActivity extends BaseActivity implements IListView {
                 deleteFilesOperation();
                 break;
             case R.id.action_share:
-                    mPresenter.shareVideoFiles(getSelectedFiles());
+                mPresenter.shareVideoFiles(getSelectedFiles());
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -150,9 +188,7 @@ public class ListActivity extends BaseActivity implements IListView {
                 }
             });
             deleteFilesOperationAsync.execute();
-        }
-        else
-        {
+        } else {
             alertDialog(ListActivity.this,getString(R.string.Alert),getString(R.string.ChooseAnyVideoForDelete));
         }
     }

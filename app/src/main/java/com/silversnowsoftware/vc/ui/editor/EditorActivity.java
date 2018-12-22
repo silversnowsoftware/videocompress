@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
 import com.googlecode.mp4parser.authoring.Edit;
 import com.silversnowsoftware.vc.R;
@@ -116,6 +117,8 @@ public class EditorActivity extends BaseActivity implements IEditorView {
             });
 
 
+
+
             mPresenter.setViewHolder();
             mPresenter.setExoPlayer();
             mPresenter.setVideoPrepared();
@@ -140,6 +143,7 @@ public class EditorActivity extends BaseActivity implements IEditorView {
                     mPresenter.addFileModel(result);
 
                     mPresenter.trimVideo(mOnVideoTrimListener);
+
 
                 } catch (Exception ex) {
 
