@@ -5,6 +5,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.InterstitialAd;
 import com.silversnowsoftware.vc.R;
 
 import butterknife.BindView;
@@ -22,7 +23,7 @@ public class ListViewHolder<V extends IListView> {
 
     @BindView(R.id.lvFileModel)
     public ListView lvFileModel;
-
+    public InterstitialAd mInterstitialAd;
 
     public ListViewHolder(V activity) {
         this.activity = (Activity) activity;
