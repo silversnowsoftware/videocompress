@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.model.listener.OnEventListener;
@@ -45,11 +46,10 @@ public class ListActivity extends BaseActivity implements IListView {
 
         try {
 
+            mListViewHolder = new ListViewHolder(this);
+
+            MobileAds.initialize(this, "ca-app-pub-9069451453527664~1459246129");
             mListViewHolder.mInterstitialAd = new InterstitialAd(this);
-            mListViewHolder.mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
-            mListViewHolder.mInterstitialAd.loadAd(new AdRequest.Builder().addTestDevice("B3E228E2A3DF6402D6DCF40712D066F6").build());
-
-
             mListViewHolder.mInterstitialAd.setAdListener(new AdListener() {
                 @Override
                 public void onAdLoaded() {
@@ -77,6 +77,39 @@ public class ListActivity extends BaseActivity implements IListView {
                     Log.i("ADSInter:", "onAdClosed");
                 }
             });
+            mListViewHolder.mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+            mListViewHolder.mInterstitialAd.loadAd(new AdRequest.Builder().addTestDevice("B3E228E2A3DF6402D6DCF40712D066F6").build());
+
+            AdRequest adRequest = new AdRequest.Builder().addTestDevice("B3E228E2A3DF6402D6DCF40712D066F6").build();
+            mListViewHolder.adViewList.loadAd(adRequest);
+            mListViewHolder.adViewList.setAdListener(new AdListener() {
+                @Override
+                public void onAdLoaded() {
+                    Log.i("ADS:","onAdLoaded");
+                }
+
+                @Override
+                public void onAdFailedToLoad(int errorCode) {
+                    Log.i("ADS:","onAdFailedToLoad");
+                }
+
+                @Override
+                public void onAdOpened() {
+                    Log.i("ADS:","onAdOpened");
+                }
+
+                @Override
+                public void onAdLeftApplication() {
+                    Log.i("ADS:","onAdLeftApplication");
+                }
+
+                @Override
+                public void onAdClosed() {
+                    Log.i("ADS:","onAdClosed");
+                }
+            });
+
+
 
             SharedPref.RemoveKey(Keys.SELECTED_FILE_LIST, this);
             SharedPref.RemoveKey(Keys.SELECTION_MODE, this);
