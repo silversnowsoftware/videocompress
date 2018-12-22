@@ -1,14 +1,17 @@
 package com.silversnowsoftware.vc.ui.base;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.VideoCompressApplication;
 import com.silversnowsoftware.vc.di.component.ActivityComponent;
 import com.silversnowsoftware.vc.di.component.DaggerActivityComponent;
@@ -94,5 +97,20 @@ public class BaseActivity extends AppCompatActivity implements IBaseView {
             mProgressDialog.dismiss();
     }
 
+    public void alertDialog(final Activity context, final String title, final String message) {
 
+        if (!isFinishing()) {
+            new AlertDialog.Builder(context)
+                    .setTitle(title)
+                    .setMessage(message)
+                    .setCancelable(false)
+                    .setPositiveButton(getString(R.string.Ok), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                            dialog.dismiss();
+                        }
+                    }).show();
+        }
+    }
 }

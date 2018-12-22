@@ -1,4 +1,7 @@
 <resources>
+    <string name="ChooseAnyVideo">Please choose min 1 video for delete!</string>
+    <string name="Alert">Alert!</string>
+    <string name="Ok">Ok</string>
     <string name="app_name">Video Compress</string>
     <string name="editor_activity">Editor</string>
     <string name="take_video">Video Record</string>

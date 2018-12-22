@@ -1,4 +1,7 @@
 <resources>
+    <string name="ChooseAnyVideo">Lütfen silmek için en az bir video seçin!</string>
+    <string name="Alert">Uyarı!</string>
+    <string name="Ok">Tamam</string>
     <string name="app_name">Video Compress</string>
     <string name="editor_activity">Editor</string>
     <string name="take_video">Video Çek</string>

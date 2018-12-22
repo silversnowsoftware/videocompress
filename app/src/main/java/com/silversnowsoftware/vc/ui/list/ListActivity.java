@@ -136,7 +136,7 @@ public class ListActivity extends BaseActivity implements IListView {
 
     private void deleteFilesOperation() {
 
-        if (getSelectedFiles() != null) {
+        if (getSelectedFiles() != null && getSelectedFiles().size() > 0) {
 
             DeleteFilesOperationAsync deleteFilesOperationAsync = new DeleteFilesOperationAsync(getContext(), new OnEventListener() {
                 @Override
@@ -151,5 +151,10 @@ public class ListActivity extends BaseActivity implements IListView {
             });
             deleteFilesOperationAsync.execute();
         }
+        else
+        {
+            alertDialog(ListActivity.this,getString(R.string.Alert),getString(R.string.ChooseAnyVideo));
+        }
     }
+
 }
