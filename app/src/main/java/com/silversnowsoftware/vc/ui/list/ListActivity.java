@@ -153,7 +153,7 @@ public class ListActivity extends BaseActivity implements IListView {
         }
         else
         {
-            alertDialog(ListActivity.this,getString(R.string.Alert),getString(R.string.ChooseAnyVideo));
+            alertDialog(ListActivity.this,getString(R.string.Alert),getString(R.string.ChooseAnyVideoForDelete));
         }
     }
 

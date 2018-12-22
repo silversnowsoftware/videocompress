@@ -85,22 +85,25 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
     public void shareVideoFiles(List<FileModel> fileModelList) {
         try {
 
+            if (fileModelList != null && fileModelList.size() > 0) {
+                StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+                StrictMode.setVmPolicy(builder.build());
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_SEND_MULTIPLE);
+                intent.setType("video/*");
+                ArrayList<Uri> files = new ArrayList<Uri>();
 
-            StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-            StrictMode.setVmPolicy(builder.build());
-            Intent intent = new Intent();
-            intent.setAction(Intent.ACTION_SEND_MULTIPLE);
-            intent.setType("video/*");
-            ArrayList<Uri> files = new ArrayList<Uri>();
-
-            for (FileModel fileModel : fileModelList) {
-                File file = new File(fileModel.getPath());
-                Uri uri = Uri.fromFile(file);
-                files.add(uri);
+                for (FileModel fileModel : fileModelList) {
+                    File file = new File(fileModel.getPath());
+                    Uri uri = Uri.fromFile(file);
+                    files.add(uri);
+                }
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
+                getContext().startActivity(intent);
+            } else {
+                alertDialog(((Activity) getView()), getContext().getString(R.string.Alert), getContext().getString(R.string.ChooseAnyVideoForShare));
             }
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
-            getContext().startActivity(intent);
         } catch (Exception ex) {
 
             LogManager.Log(className, ex);

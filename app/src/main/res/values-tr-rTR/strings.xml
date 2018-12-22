@@ -1,5 +1,6 @@
 <resources>
-    <string name="ChooseAnyVideo">Lütfen silmek için en az bir video seçin!</string>
+    <string name="ChooseAnyVideoForShare">Lütfen paylaşmak için en az 1 video seçin!</string>
+    <string name="ChooseAnyVideoForDelete">Lütfen silmek için en az 1 video seçin!</string>
     <string name="Alert">Uyarı!</string>
     <string name="Ok">Tamam</string>
     <string name="app_name">Video Compress</string>
