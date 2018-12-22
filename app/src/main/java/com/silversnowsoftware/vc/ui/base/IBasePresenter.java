@@ -16,5 +16,4 @@ public interface IBasePresenter<V extends IBaseView> {
 
     public V getView();
 
-    public void initializeAds();
 }
