@@ -29,6 +29,8 @@ import com.silversnowsoftware.vc.utils.helpers.LogManager;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -111,6 +113,7 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
 
 
             List<FileModel> fileModelList = getFileModelList();
+            Collections.reverse(fileModelList);
             VideoCompressAdapter videoCompressAdapter = getVideoCompressAdapter(fileModelList);
             videoCompressAdapter.setActivity((Activity) getView());
             Globals.selectionMode = false;
