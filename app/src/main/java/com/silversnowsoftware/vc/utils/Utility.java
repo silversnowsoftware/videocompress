@@ -171,7 +171,7 @@ public class Utility {
         String min = "";
         String doubleDot = ":";
         String sec = "";
-        String zero = "0:";
+        String zero = "0";
 
         if (value > 3600) {
             hour = String.valueOf(value / 3600);
@@ -192,7 +192,7 @@ public class Utility {
             min = "00";
             return min + doubleDot + sec;
         }
-        return zero + sec;
+        return zero + doubleDot + zero + value;
 
     }
 }
