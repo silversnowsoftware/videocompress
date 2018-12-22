@@ -442,6 +442,19 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
     }
 
     @Override
+    public boolean removeLastVideo() {
+        Boolean result = true;
+        try {
+            FileModel fileModel = getFileModelList().get(getFileModelList().size() - 1);
+            getRepositoryFileModel().remove(fileModel);
+        } catch (Exception ex) {
+            LogManager.Log(className, ex);
+            result = false;
+        }
+        return result;
+    }
+
+    @Override
     public FileModel processFile() {
 
 

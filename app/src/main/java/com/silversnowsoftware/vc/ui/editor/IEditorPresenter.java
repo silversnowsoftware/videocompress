@@ -51,4 +51,5 @@ public interface IEditorPresenter<V extends IEditorView> extends IBasePresenter<
 
     void seekBarVideoInit();
 
+    boolean removeLastVideo();
 }

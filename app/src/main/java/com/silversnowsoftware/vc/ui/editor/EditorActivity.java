@@ -68,11 +68,13 @@ public class EditorActivity extends BaseActivity implements IEditorView {
 
         @Override
         public void cancelAction() {
+            mPresenter.removeLastVideo();
             dismissProgressDialog();
         }
 
         @Override
         public void onError(String message) {
+            mPresenter.removeLastVideo();
             dismissProgressDialog();
         }
     };
