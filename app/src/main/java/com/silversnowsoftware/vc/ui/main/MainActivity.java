@@ -49,6 +49,7 @@ public class MainActivity extends BaseActivity implements IMainView {
             mainViewHolder = new MainViewHolder(this);
             getActivityComponent().inject(this);
             mPresenter.onAttach(this);
+            mPresenter.deleteErrorFileModel();
 
             PermissionsChecker mChecker = new PermissionsChecker(getApplicationContext());
             if (mChecker.lacksPermissions(ManifestUtil.PERMISSIONS)) {

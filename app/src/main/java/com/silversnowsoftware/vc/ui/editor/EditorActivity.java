@@ -2,6 +2,7 @@ package com.silversnowsoftware.vc.ui.editor;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.silversnowsoftware.vc.model.listener.OnVideoTrimListener;
 import com.silversnowsoftware.vc.operations.compressor.FileCompressor;
 import com.silversnowsoftware.vc.ui.base.BaseActivity;
 import com.silversnowsoftware.vc.ui.list.ListActivity;
+import com.silversnowsoftware.vc.ui.main.MainActivity;
 import com.silversnowsoftware.vc.utils.Utility;
 import com.silversnowsoftware.vc.utils.constants.Globals;
 import com.silversnowsoftware.vc.utils.enums.FileStatusEnum;
@@ -55,6 +57,7 @@ public class EditorActivity extends BaseActivity implements IEditorView {
             fileModel.setFileStatus(FileStatusEnum.CANCELED);
             mPresenter.updateFileModel(fileModel);
             dismissProgressDialog();
+            redirectToMainActivity();
         }
 
         @Override
@@ -62,6 +65,7 @@ public class EditorActivity extends BaseActivity implements IEditorView {
             fileModel.setFileStatus(FileStatusEnum.ERROR);
             mPresenter.updateFileModel(fileModel);
             dismissProgressDialog();
+            redirectToMainActivity();
         }
     };
     ICustomListener mCustomListener = new ICustomListener() {
@@ -78,19 +82,21 @@ public class EditorActivity extends BaseActivity implements IEditorView {
         @Override
         public void onProgress(Double rate) {
             if (rate > 0) {
-                Log.i("Rate: ", String.valueOf(rate.intValue()));
                 meditorViewHolder.pbCompressTrimmingBar.setProgress(rate.intValue());
             }
-            }
+        }
 
         @Override
         public void onFailure(String error) {
+
             fileModel.setFileStatus(FileStatusEnum.ERROR);
             fileModel.setPath(Globals.currentOutputVideoPath + fileModel.getName());
             fileModel.setVideoLength(Utility.ConvertToVideoTime(Integer.valueOf(String.valueOf(getVideoDuration(EditorActivity.this, fileModel.getPath())))));
             mPresenter.updateFileModel(fileModel);
             meditorViewHolder.pbCompressTrimmingBar.setProgress(0);
             showToastMethod(getString(R.string.compression_failed));
+            redirectToMainActivity();
+
         }
     };
     AdListener mAdListener = new AdListener() {
@@ -183,5 +189,21 @@ public class EditorActivity extends BaseActivity implements IEditorView {
     @Override
     protected int getLayoutResourceId() {
         return R.layout.activity_editor;
+    }
+
+    private void redirectToMainActivity() {
+        try {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    finish();
+                    redirectToActivity(MainActivity.class);
+
+                }
+            }, 2000);
+        } catch (Exception ex) {
+
+            LogManager.Log(className, ex);
+        }
     }
 }

@@ -15,6 +15,7 @@ import com.silversnowsoftware.vc.data.db.DbFileModel;
 import com.silversnowsoftware.vc.data.db.IRepository;
 import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.utils.enums.FileStatusEnum;
+import com.silversnowsoftware.vc.utils.helpers.LogManager;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -67,6 +68,15 @@ public class BasePresenter<V extends IBaseView> implements IBasePresenter<V> {
                             dialog.dismiss();
                         }
                     }).show();
+        }
+    }
+    public void deleteErrorFileModel() {
+        try {
+            List<FileModel> fileModelList = getRepositoryFileModel().getFileModelListWithFileStatus();
+
+            getRepositoryFileModel().removeItems(fileModelList);
+        } catch (Exception ex) {
+            LogManager.Log("BasePresenter", ex);
         }
     }
 

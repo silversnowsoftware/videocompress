@@ -108,18 +108,6 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
         }
     }
 
-    @Override
-    public void removeErrorFileModel() {
-        try {
-            List<FileModel> fileModelList = getRepositoryFileModel().getFileModelListWithFileStatus();
-
-            getRepositoryFileModel().removeItems(fileModelList);
-        } catch (Exception ex) {
-            LogManager.Log(className, ex);
-        }
-    }
-
-
     public void fillListView() {
         try {
 
@@ -135,7 +123,6 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
                 videoCompressAdapter.notifyDataSetChanged();
                 viewHolder.lvFileModel.setAdapter(videoCompressAdapter);
             }
-
 
             viewHolder.lvFileModel.setEmptyView(viewHolder.tvNoDataFound);
         } catch (Exception ex) {
