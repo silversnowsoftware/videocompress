@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
@@ -67,6 +68,8 @@ public final class EditorViewHolder {
     public TextView tvPreviewThumb;
     @BindView(R.id.adViewEditor)
     public AdView adViewEditor;
+    @BindView(R.id.pbCompressTrimmingBar)
+    public ProgressBar pbCompressTrimmingBar;
 
     public SimpleExoPlayer exoPlayer;
 

@@ -1,37 +1,25 @@
 package com.silversnowsoftware.vc.ui.editor;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ArrayAdapter;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
-import com.googlecode.mp4parser.authoring.Edit;
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.model.FileModel;
+import com.silversnowsoftware.vc.model.listener.ICustomListener;
 import com.silversnowsoftware.vc.model.listener.OnVideoTrimListener;
-import com.silversnowsoftware.vc.model.logger.LogModel;
+import com.silversnowsoftware.vc.operations.compressor.FileCompressor;
 import com.silversnowsoftware.vc.ui.base.BaseActivity;
-import com.silversnowsoftware.vc.ui.base.BaseResponse;
 import com.silversnowsoftware.vc.ui.list.ListActivity;
 import com.silversnowsoftware.vc.utils.Utility;
-import com.silversnowsoftware.vc.utils.constants.Constants;
 import com.silversnowsoftware.vc.utils.constants.Globals;
+import com.silversnowsoftware.vc.utils.enums.FileStatusEnum;
 import com.silversnowsoftware.vc.utils.helpers.LogManager;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -43,7 +31,7 @@ public class EditorActivity extends BaseActivity implements IEditorView {
     @Inject
     IEditorPresenter<IEditorView> mPresenter;
     EditorViewHolder meditorViewHolder;
-    FileModel result = null;
+    FileModel fileModel = null;
 
     OnVideoTrimListener mOnVideoTrimListener = new OnVideoTrimListener() {
         @Override
@@ -53,16 +41,12 @@ public class EditorActivity extends BaseActivity implements IEditorView {
 
         @Override
         public void getResult(Uri uri) {
-
             dismissProgressDialog();
 
             finish();
-
-            result.setPath(uri.getPath());
-            result.setVideoLength(Utility.ConvertToVideoTime(Integer.valueOf(String.valueOf(getVideoDuration(EditorActivity.this, result.getPath())))));
-
-            mPresenter.updateFileModel(result);
-
+            fileModel.setPath(uri.getPath());
+            fileModel.setVideoLength(Utility.ConvertToVideoTime(Integer.valueOf(String.valueOf(getVideoDuration(EditorActivity.this, fileModel.getPath())))));
+            mPresenter.updateFileModel(fileModel);
             redirectToActivity(ListActivity.class);
         }
 
@@ -78,6 +62,34 @@ public class EditorActivity extends BaseActivity implements IEditorView {
             dismissProgressDialog();
         }
     };
+    ICustomListener mCustomListener = new ICustomListener() {
+        @Override
+        public void onSuccess(Double rate) {
+
+            meditorViewHolder.pbCompressTrimmingBar.setProgress(100);
+            fileModel.setFileStatus(FileStatusEnum.SUCCESS);
+            fileModel.setPath(Globals.currentOutputVideoPath + fileModel.getName());
+            mPresenter.updateFileModel(fileModel);
+        }
+
+        @Override
+        public void onProgress(Double rate) {
+            if (rate > 0) {
+                Log.i("Rate: ", String.valueOf(rate.intValue()));
+                meditorViewHolder.pbCompressTrimmingBar.setProgress(rate.intValue());
+            }
+            }
+
+        @Override
+        public void onFailure(String error) {
+            fileModel.setFileStatus(FileStatusEnum.ERROR);
+            mPresenter.updateFileModel(fileModel);
+            meditorViewHolder.pbCompressTrimmingBar.setProgress(0);
+        }
+    };
+    AdListener mAdListener = new AdListener() {
+
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -91,34 +103,7 @@ public class EditorActivity extends BaseActivity implements IEditorView {
             MobileAds.initialize(this, "ca-app-pub-9069451453527664~1459246129");
             AdRequest adRequest = new AdRequest.Builder().addTestDevice("B3E228E2A3DF6402D6DCF40712D066F6").build();
             meditorViewHolder.adViewEditor.loadAd(adRequest);
-            meditorViewHolder.adViewEditor.setAdListener(new AdListener() {
-                @Override
-                public void onAdLoaded() {
-                    Log.i("ADS:","onAdLoaded");
-                }
-
-                @Override
-                public void onAdFailedToLoad(int errorCode) {
-                    Log.i("ADS:","onAdFailedToLoad");
-                }
-
-                @Override
-                public void onAdOpened() {
-                    Log.i("ADS:","onAdOpened");
-                }
-
-                @Override
-                public void onAdLeftApplication() {
-                    Log.i("ADS:","onAdLeftApplication");
-                }
-
-                @Override
-                public void onAdClosed() {
-                    Log.i("ADS:","onAdClosed");
-                }
-            });
-
-
+            meditorViewHolder.adViewEditor.setAdListener(mAdListener);
 
 
             mPresenter.setViewHolder();
@@ -126,7 +111,6 @@ public class EditorActivity extends BaseActivity implements IEditorView {
             mPresenter.setVideoPrepared();
             mPresenter.customRangeSeekBarNewInit();
             mPresenter.seekBarVideoInit();
-
 
 
         } catch (Exception ex) {
@@ -138,19 +122,26 @@ public class EditorActivity extends BaseActivity implements IEditorView {
             @Override
             public void onClick(View view) {
                 try {
-                    result = mPresenter.processFile();
 
+                    fileModel = mPresenter.processFile();
 
-                    if (!result.getIsCompress() && !result.getIsCrop())
-                    {
-                        alertDialog(EditorActivity.this,getString(R.string.Alert),getString(R.string.not_crop_or_compress));
+                    if (!fileModel.getIsCompress() && !fileModel.getIsCrop()) {
+                        alertDialog(EditorActivity.this, getString(R.string.Alert), getString(R.string.not_crop_or_compress));
                         return;
                     }
 
-                    mPresenter.addFileModel(result);
+                    mPresenter.addFileModel(fileModel);
+                    if (fileModel.getIsCrop())
+                        mPresenter.trimVideo(mOnVideoTrimListener);
 
-                    mPresenter.trimVideo(mOnVideoTrimListener);
-
+                    if (fileModel.getIsCompress()) {
+                        if (fileModel.getFileStatus() == FileStatusEnum.PREPEARING) {
+                            fileModel.setFileStatus(FileStatusEnum.PROGRESSING);
+                            FileCompressor fc = new FileCompressor(EditorActivity.this);
+                            fc.Compress(fileModel);
+                            fileModel.getCustomListener(mCustomListener);
+                        }
+                    }
 
                 } catch (Exception ex) {
 

@@ -122,6 +122,7 @@ public class VideoCompressAdapter extends ArrayAdapter {
                 }
             }
         });
+
         final FileModel model = (FileModel) getItem(position);
         if (model != null) {
             viewHolder.setId(model.getId());
@@ -142,43 +143,6 @@ public class VideoCompressAdapter extends ArrayAdapter {
                 viewHolder.ivTrimmed.setVisibility(View.VISIBLE);
             }
             viewHolder.tvVideoDuration.setText(String.valueOf(model.getVideoLength()));
-
-        }
-
-
-        if (model.getFileStatus() == FileStatusEnum.PREPEARING) {
-            model.setFileStatus(FileStatusEnum.PROGRESSING);
-            final ViewHolder finalViewHolder = viewHolder;
-            FileCompressor fc = new FileCompressor(mActivity);
-
-            model.getCustomListener(new ICustomListener() {
-                @Override
-                public void onSuccess(Double rate) {
-                    Log.i("Success Rate: ", String.valueOf(rate.intValue()));
-                    finalViewHolder.tvProgress.setText("100%");
-                    model.setFileStatus(FileStatusEnum.SUCCESS);
-                    model.setPath(Globals.currentOutputVideoPath + model.getName());
-                    DbFileModel dbFileModel = new DbFileModel(getContext());
-                    dbFileModel.update(model);
-                    notifyDataSetChanged();
-                }
-
-                @Override
-                public void onProgress(Double rate) {
-
-                    if (rate.intValue() > 0) {
-                        Log.i("Rate: ", String.valueOf(rate.intValue()));
-                        finalViewHolder.tvProgress.setText(rate.intValue() + "%");
-                    }
-                    notifyDataSetChanged();
-                }
-
-                @Override
-                public void onFailure(String error) {
-                    model.setFileStatus(FileStatusEnum.ERROR);
-                }
-            });
-            fc.Compress(model);
         }
         return view;
     }

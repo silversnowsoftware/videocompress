@@ -43,11 +43,9 @@ public class Utility {
     public static void startTrim(@NonNull File src, @NonNull String dst, long startMs, long endMs,
                                  @NonNull OnVideoTrimListener callback) throws IOException {
         try {
-            final String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
 
             File file = new File(dst);
             file.getParentFile().mkdirs();
-            Log.d(TAG, "Generated file path " + dst);
             generateVideo(src, file, startMs, endMs, callback);
         } catch (Exception ex) {
 
