@@ -1,6 +1,10 @@
 package com.silversnowsoftware.vc.ui.editor;
 
 import android.app.Activity;
+import android.app.DialogFragment;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
@@ -68,6 +72,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
     private boolean isCompress = true;
     String dstFile = null;
     FileModel responseModel;
+    DialogFragment dialogFragment;
 
     private List<FileModel> getFileModelList() {
         return getRepositoryFileModel().getAll();
@@ -684,5 +689,24 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
         }
     }
 
+    @Override
+    public void showEditorProgressDialog(FragmentManager fragmentManager)
+    {
+        FragmentTransaction ft = fragmentManager.beginTransaction();
+        Fragment prev = fragmentManager.findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+        dialogFragment = new EditorDialogFragment();
+        dialogFragment.show(ft, "dialog");
+    }
+
+    @Override
+    public void dismissEditorProgressDialog()
+    {
+        if(dialogFragment != null)
+            dialogFragment.dismiss();
+    }
 
 }

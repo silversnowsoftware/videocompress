@@ -38,7 +38,7 @@ public class EditorActivity extends BaseActivity implements IEditorView {
     OnVideoTrimListener mOnVideoTrimListener = new OnVideoTrimListener() {
         @Override
         public void onTrimStarted() {
-            showProgressDialog(EditorActivity.this, getString(R.string.video_trim));
+            mPresenter.showEditorProgressDialog(getFragmentManager());
         }
 
         @Override
@@ -47,7 +47,7 @@ public class EditorActivity extends BaseActivity implements IEditorView {
             fileModel.setPath(uri.getPath());
             fileModel.setVideoLength(Utility.ConvertToVideoTime(Integer.valueOf(String.valueOf(getVideoDuration(EditorActivity.this, fileModel.getPath())))));
             mPresenter.updateFileModel(fileModel);
-            dismissProgressDialog();
+            mPresenter.dismissEditorProgressDialog();
             finish();
             redirectToActivity(ListActivity.class);
         }
@@ -56,7 +56,7 @@ public class EditorActivity extends BaseActivity implements IEditorView {
         public void cancelAction() {
             fileModel.setFileStatus(FileStatusEnum.CANCELED);
             mPresenter.updateFileModel(fileModel);
-            dismissProgressDialog();
+            mPresenter.dismissEditorProgressDialog();
             redirectToMainActivity();
         }
 
@@ -64,7 +64,7 @@ public class EditorActivity extends BaseActivity implements IEditorView {
         public void onError(String message) {
             fileModel.setFileStatus(FileStatusEnum.ERROR);
             mPresenter.updateFileModel(fileModel);
-            dismissProgressDialog();
+            mPresenter.dismissEditorProgressDialog();
             redirectToMainActivity();
         }
     };

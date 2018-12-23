@@ -1,5 +1,6 @@
 package com.silversnowsoftware.vc.ui.editor;
 
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.net.Uri;
 
@@ -52,4 +53,9 @@ public interface IEditorPresenter<V extends IEditorView> extends IBasePresenter<
     void seekBarVideoInit();
 
     boolean removeLastVideo();
+
+    void showEditorProgressDialog(FragmentManager fragmentManager);
+
+    void dismissEditorProgressDialog();
+
 }

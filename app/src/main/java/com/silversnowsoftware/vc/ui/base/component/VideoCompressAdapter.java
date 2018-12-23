@@ -134,14 +134,7 @@ public class VideoCompressAdapter extends ArrayAdapter {
                 viewHolder.tvResolution.setText(model.getResolution());
             if (model.getCreateDate() != null)
                 viewHolder.tvCreateDate.setText(DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.SHORT).format(model.getCreateDate()));
-            if (model.getIsCompress() && model.getResolutionKey() != "") {
-                int icon = GetTrimmedIcon(model.getResolutionKey());
-                viewHolder.ivCompressed.setImageResource(icon);
-                viewHolder.ivCompressed.setVisibility(View.VISIBLE);
-            }
-            if (model.getIsCrop()) {
-                viewHolder.ivTrimmed.setVisibility(View.VISIBLE);
-            }
+
             viewHolder.tvVideoDuration.setText(String.valueOf(model.getVideoLength()));
         }
         return view;
@@ -167,10 +160,6 @@ public class VideoCompressAdapter extends ArrayAdapter {
         LinearLayout selectRow;
         @BindView(R.id.playButton)
         ImageView playButton;
-        @BindView(R.id.ivTrimmed)
-        ImageView ivTrimmed;
-        @BindView(R.id.ivCompressed)
-        ImageView ivCompressed;
         private boolean isSelected;
         @BindView(R.id.tvVideoDuration)
         TextView tvVideoDuration;
