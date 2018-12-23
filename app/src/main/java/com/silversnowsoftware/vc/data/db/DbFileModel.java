@@ -121,9 +121,10 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
 
     @Override
     public List<FileModel> getAll() {
+        List<FileModel> fileModelsList = null;
         try {
-            List<FileModel> fileModelsList = db.getFileModel().queryForAll();
-            for (FileModel fileModel : fileModelsList)
+            fileModelsList = db.getFileModel().queryForAll();
+           /* for (FileModel fileModel : fileModelsList)
             {
                 if (    fileModel.getFileStatus() == FileStatusEnum.NONE ||
                         fileModel.getFileStatus() == FileStatusEnum.ERROR ||
@@ -131,13 +132,13 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
                 {
                     remove(fileModel);
                 }
-            }
+            }*/
             return  fileModelsList;
         } catch (SQLException ex) {
 
             LogManager.Log(className, ex);
         }
-        return null;
+        return fileModelsList;
     }
 
     @Override
