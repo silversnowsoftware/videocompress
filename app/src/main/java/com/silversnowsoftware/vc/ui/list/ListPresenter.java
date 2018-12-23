@@ -25,6 +25,7 @@ import com.silversnowsoftware.vc.utils.Utility;
 import com.silversnowsoftware.vc.utils.constants.Constants;
 import com.silversnowsoftware.vc.utils.constants.Globals;
 import com.silversnowsoftware.vc.utils.constants.Keys;
+import com.silversnowsoftware.vc.utils.enums.FileStatusEnum;
 import com.silversnowsoftware.vc.utils.helpers.LogManager;
 
 import java.io.File;
@@ -105,6 +106,20 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
 
             LogManager.Log(className, ex);
         }
+    }
+
+    @Override
+    public void removeErrorFileModel() {
+        List<FileModel> fileModelList = getFileModelListWithFileStatus("FileStatus", FileStatusEnum.NONE);
+        for (FileModel fileModel : fileModelList)
+            {
+                if (    fileModel.getFileStatus() == FileStatusEnum.NONE ||
+                        fileModel.getFileStatus() == FileStatusEnum.ERROR ||
+                        fileModel.getFileStatus() == FileStatusEnum.CANCELED )
+                {
+                  getRepositoryFileModel().remove(fileModel);
+                }
+            }
     }
 
 

@@ -61,6 +61,7 @@ public class ListActivity extends BaseActivity implements IListView {
 
             mPresenter.onAttach(this);
             mPresenter.setViewHolder();
+            mPresenter.removeErrorFileModel();
             mPresenter.fillListView();
         } catch (Exception ex) {
 

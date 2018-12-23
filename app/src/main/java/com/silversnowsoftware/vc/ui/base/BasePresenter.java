@@ -14,8 +14,11 @@ import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.data.db.DbFileModel;
 import com.silversnowsoftware.vc.data.db.IRepository;
 import com.silversnowsoftware.vc.model.FileModel;
+import com.silversnowsoftware.vc.utils.enums.FileStatusEnum;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by burak on 10/14/2018.
@@ -50,7 +53,10 @@ public class BasePresenter<V extends IBaseView> implements IBasePresenter<V> {
     protected IRepository<FileModel> getRepositoryFileModel() {
         return new DbFileModel(getContext());
     }
+    protected List<FileModel> getFileModelListWithFileStatus(String field,FileStatusEnum value){
 
+       return getRepositoryFileModel().getFileModelListWithFileStatus(field,value);
+    }
     public void alertDialog(final Activity context, final String title, final String message) {
 
         if (!context.isFinishing()) {
@@ -67,4 +73,5 @@ public class BasePresenter<V extends IBaseView> implements IBasePresenter<V> {
                     }).show();
         }
     }
+
 }

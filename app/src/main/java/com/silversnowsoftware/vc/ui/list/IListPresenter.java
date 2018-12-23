@@ -21,4 +21,5 @@ public interface IListPresenter<V extends IListView> extends IBasePresenter<V> {
 
     public BaseResponse deleteSelectedFile(FileModel fileModel);
     public void shareVideoFiles(List<FileModel> fileModelList);
+    public void removeErrorFileModel();
 }

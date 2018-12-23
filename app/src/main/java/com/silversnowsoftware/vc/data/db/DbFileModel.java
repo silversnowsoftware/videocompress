@@ -9,6 +9,7 @@ import com.silversnowsoftware.vc.utils.constants.Constants;
 import com.silversnowsoftware.vc.utils.enums.FileStatusEnum;
 import com.silversnowsoftware.vc.utils.helpers.LogManager;
 
+import java.io.File;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -124,16 +125,7 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
         List<FileModel> fileModelsList = null;
         try {
             fileModelsList = db.getFileModel().queryForAll();
-           /* for (FileModel fileModel : fileModelsList)
-            {
-                if (    fileModel.getFileStatus() == FileStatusEnum.NONE ||
-                        fileModel.getFileStatus() == FileStatusEnum.ERROR ||
-                        fileModel.getFileStatus() == FileStatusEnum.CANCELED )
-                {
-                    remove(fileModel);
-                }
-            }*/
-            return  fileModelsList;
+            return fileModelsList;
         } catch (SQLException ex) {
 
             LogManager.Log(className, ex);
@@ -164,5 +156,15 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
             LogManager.Log(className, ex);
         }
         return b;
+    }
+
+    public List<FileModel> getFileModelListWithFileStatus(String field, FileStatusEnum value) {
+        List<FileModel> fileModels = null;
+        try {
+            fileModels = db.getFileModel().queryForEq(field, value);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return fileModels;
     }
 }
