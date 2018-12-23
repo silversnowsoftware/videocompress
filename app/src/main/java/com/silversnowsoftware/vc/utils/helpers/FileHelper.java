@@ -397,8 +397,10 @@ public class FileHelper {
     public static int getVideoDuration(Activity activity, String path) {
         int duration = 0;
         try {
-            MediaPlayer mp = MediaPlayer.create(activity, Uri.parse(path));
-            duration = mp.getDuration() / 1000;
+            if (activity != null) {
+                MediaPlayer mp = MediaPlayer.create(activity, Uri.parse(path));
+                duration = mp.getDuration() / 1000;
+            }
         } catch (Exception ex) {
 
             LogManager.Log(className, ex);

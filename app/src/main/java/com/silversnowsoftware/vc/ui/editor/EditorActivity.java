@@ -152,6 +152,11 @@ public class EditorActivity extends BaseActivity implements IEditorView {
                             FileCompressor fc = new FileCompressor(EditorActivity.this);
                             fc.Compress(fileModel);
                             fileModel.getCustomListener(mCustomListener);
+                        }else if (fileModel.getFileStatus() == FileStatusEnum.CANCELED ||
+                                  fileModel.getFileStatus() == FileStatusEnum.ERROR ||
+                                  fileModel.getFileStatus() == FileStatusEnum.NONE){
+
+                            redirectToMainActivity();
                         }
                     }
 
