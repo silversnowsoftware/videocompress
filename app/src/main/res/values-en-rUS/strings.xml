@@ -1,4 +1,15 @@
 <resources>
+    <string name="changing_flashLight_mode">Flash mode is changed.</string>
+    <string name="camera_init_fail">Camera is init fail.</string>
+    <string name="video_captured">Video is captured</string>
+    <string name="only_have_one_camera">Only have one camera</string>
+    <string name="fail_when_camera_try_autofocus">Fail when camera try autofocus</string>
+    <string name="dont_have_front_camera">Don"t have front camera</string>
+    <string name="dont_have_camera_error">Don"t have camera error</string>
+    <string name="deny_and_quit">Deny and quit</string>
+    <string name="go_and_grant_permission">Go and grant permissions</string>
+    <string name="tips_permission_request_content">Tips permission request content</string>
+    <string name="tips_permission_request_title">Tips permission request title</string>
     <string name="compression_failed">Compression failed! Try again!</string>
     <string name="not_crop_or_compress">Please you should make crop or compress!</string>
     <string name="video_compress">Video Compress</string>

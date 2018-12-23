@@ -1,4 +1,15 @@
 <resources>
+    <string name="changing_flashLight_mode">Flash modu açık.</string>
+    <string name="camera_init_fail">Kamera yüklenemedi.</string>
+    <string name="video_captured">Video kaydedildi.</string>
+    <string name="only_have_one_camera">Yalnızca 1 kamera var.</string>
+    <string name="fail_when_camera_try_autofocus">Otomatik odaklanma başarısız.</string>
+    <string name="dont_have_front_camera">Ön kamera yok.</string>
+    <string name="dont_have_camera_error">Arka kamera yok.</string>
+    <string name="deny_and_quit">Yetkiyi kaldır ve çık.</string>
+    <string name="go_and_grant_permission">Yetki ver.</string>
+    <string name="tips_permission_request_content">Yetkiye izin ver.</string>
+    <string name="tips_permission_request_title">İzin ver</string>
     <string name="compression_failed">Sıkıştırma yapılamadı! Tekrar deneyin!</string>
     <string name="not_crop_or_compress">Lütfen kırpma veya sıkıştırma yapın!</string>
     <string name="video_compress">Sıkıştır</string>
