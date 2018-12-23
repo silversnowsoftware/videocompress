@@ -110,13 +110,12 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
 
     @Override
     public void removeErrorFileModel() {
-        List<FileModel> fileModelList = getFileModelListWithFileStatus("FileStatus", FileStatusEnum.NONE);
-        for (FileModel fileModel : fileModelList) {
-            if (fileModel.getFileStatus() == FileStatusEnum.NONE ||
-                    fileModel.getFileStatus() == FileStatusEnum.ERROR ||
-                    fileModel.getFileStatus() == FileStatusEnum.CANCELED) {
-                getRepositoryFileModel().remove(fileModel);
-            }
+        try {
+            List<FileModel> fileModelList = getRepositoryFileModel().getFileModelListWithFileStatus();
+
+            getRepositoryFileModel().removeItems(fileModelList);
+        } catch (Exception ex) {
+            LogManager.Log(className, ex);
         }
     }
 

@@ -33,5 +33,5 @@ public interface IRepository<T> {
 
     boolean exist(Integer id);
 
-    public List<FileModel> getFileModelListWithFileStatus(String field,FileStatusEnum value);
+    public List<FileModel> getFileModelListWithFileStatus();
 }

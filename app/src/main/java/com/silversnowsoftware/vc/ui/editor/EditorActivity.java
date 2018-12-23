@@ -41,24 +41,26 @@ public class EditorActivity extends BaseActivity implements IEditorView {
 
         @Override
         public void getResult(Uri uri) {
-            dismissProgressDialog();
-
-            finish();
+            fileModel.setFileStatus(FileStatusEnum.SUCCESS);
             fileModel.setPath(uri.getPath());
             fileModel.setVideoLength(Utility.ConvertToVideoTime(Integer.valueOf(String.valueOf(getVideoDuration(EditorActivity.this, fileModel.getPath())))));
             mPresenter.updateFileModel(fileModel);
+            dismissProgressDialog();
+            finish();
             redirectToActivity(ListActivity.class);
         }
 
         @Override
         public void cancelAction() {
-            mPresenter.removeLastVideo();
+            fileModel.setFileStatus(FileStatusEnum.CANCELED);
+            mPresenter.updateFileModel(fileModel);
             dismissProgressDialog();
         }
 
         @Override
         public void onError(String message) {
-            mPresenter.removeLastVideo();
+            fileModel.setFileStatus(FileStatusEnum.ERROR);
+            mPresenter.updateFileModel(fileModel);
             dismissProgressDialog();
         }
     };
@@ -68,6 +70,7 @@ public class EditorActivity extends BaseActivity implements IEditorView {
 
             meditorViewHolder.pbCompressTrimmingBar.setProgress(100);
             fileModel.setFileStatus(FileStatusEnum.SUCCESS);
+            fileModel.setVideoLength(Utility.ConvertToVideoTime(Integer.valueOf(String.valueOf(getVideoDuration(EditorActivity.this, fileModel.getPath())))));
             fileModel.setPath(Globals.currentOutputVideoPath + fileModel.getName());
             mPresenter.updateFileModel(fileModel);
         }
@@ -84,6 +87,7 @@ public class EditorActivity extends BaseActivity implements IEditorView {
         public void onFailure(String error) {
             fileModel.setFileStatus(FileStatusEnum.ERROR);
             fileModel.setPath(Globals.currentOutputVideoPath + fileModel.getName());
+            fileModel.setVideoLength(Utility.ConvertToVideoTime(Integer.valueOf(String.valueOf(getVideoDuration(EditorActivity.this, fileModel.getPath())))));
             mPresenter.updateFileModel(fileModel);
             meditorViewHolder.pbCompressTrimmingBar.setProgress(0);
             showToastMethod(getString(R.string.compression_failed));

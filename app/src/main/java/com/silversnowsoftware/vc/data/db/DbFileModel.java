@@ -2,6 +2,7 @@ package com.silversnowsoftware.vc.data.db;
 
 import android.content.Context;
 
+import com.j256.ormlite.stmt.PreparedQuery;
 import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.model.logger.LogModel;
 import com.silversnowsoftware.vc.utils.Utility;
@@ -158,10 +159,13 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
         return b;
     }
 
-    public List<FileModel> getFileModelListWithFileStatus(String field, FileStatusEnum value) {
+    public List<FileModel> getFileModelListWithFileStatus() {
         List<FileModel> fileModels = null;
         try {
-            fileModels = db.getFileModel().queryForEq(field, value);
+            fileModels = db.getFileModel().query((PreparedQuery<FileModel>) db.getFileModel().queryBuilder().where()
+                    .eq("FileStatus", FileStatusEnum.NONE).or()
+                    .eq("FileStatus", FileStatusEnum.ERROR).or()
+                    .eq("FileStatus", FileStatusEnum.CANCELED).prepare());
         } catch (SQLException e) {
             e.printStackTrace();
         }

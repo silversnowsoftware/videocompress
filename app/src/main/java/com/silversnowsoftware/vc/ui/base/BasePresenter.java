@@ -53,10 +53,6 @@ public class BasePresenter<V extends IBaseView> implements IBasePresenter<V> {
     protected IRepository<FileModel> getRepositoryFileModel() {
         return new DbFileModel(getContext());
     }
-    protected List<FileModel> getFileModelListWithFileStatus(String field,FileStatusEnum value){
-
-       return getRepositoryFileModel().getFileModelListWithFileStatus(field,value);
-    }
     public void alertDialog(final Activity context, final String title, final String message) {
 
         if (!context.isFinishing()) {
