@@ -28,7 +28,7 @@ public class LogManager {
 
 
     public static void Log(String className, Exception ex) {
-
+        ex.printStackTrace();
         LogModel logModel = new LogModel.LogBuilder()
                 .apiVersion(Utility.getAndroidVersion())
                 .appName(Constants.APP_NAME)
