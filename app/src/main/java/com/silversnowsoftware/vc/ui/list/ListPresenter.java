@@ -111,15 +111,13 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
     @Override
     public void removeErrorFileModel() {
         List<FileModel> fileModelList = getFileModelListWithFileStatus("FileStatus", FileStatusEnum.NONE);
-        for (FileModel fileModel : fileModelList)
-            {
-                if (    fileModel.getFileStatus() == FileStatusEnum.NONE ||
-                        fileModel.getFileStatus() == FileStatusEnum.ERROR ||
-                        fileModel.getFileStatus() == FileStatusEnum.CANCELED )
-                {
-                  getRepositoryFileModel().remove(fileModel);
-                }
+        for (FileModel fileModel : fileModelList) {
+            if (fileModel.getFileStatus() == FileStatusEnum.NONE ||
+                    fileModel.getFileStatus() == FileStatusEnum.ERROR ||
+                    fileModel.getFileStatus() == FileStatusEnum.CANCELED) {
+                getRepositoryFileModel().remove(fileModel);
             }
+        }
     }
 
 
@@ -129,15 +127,17 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
             List<FileModel> fileModelList = getFileModelList();
             if (fileModelList != null && fileModelList.size() > 0) {
                 Collections.reverse(fileModelList);
-                VideoCompressAdapter videoCompressAdapter = getVideoCompressAdapter(fileModelList);
-                videoCompressAdapter.setActivity((Activity) getView());
-                Globals.selectionMode = false;
-                Globals.selectedFiles.clear();
-                if (fileModelList != null) {
-                    videoCompressAdapter.notifyDataSetChanged();
-                    viewHolder.lvFileModel.setAdapter(videoCompressAdapter);
-                }
             }
+            VideoCompressAdapter videoCompressAdapter = getVideoCompressAdapter(fileModelList);
+            videoCompressAdapter.setActivity((Activity) getView());
+            Globals.selectionMode = false;
+            Globals.selectedFiles.clear();
+            if (fileModelList != null) {
+                videoCompressAdapter.notifyDataSetChanged();
+                viewHolder.lvFileModel.setAdapter(videoCompressAdapter);
+            }
+
+
             viewHolder.lvFileModel.setEmptyView(viewHolder.tvNoDataFound);
         } catch (Exception ex) {
 

@@ -1,4 +1,5 @@
 <resources>
+    <string name="compression_failed">Sıkıştırma yapılamadı! Tekrar deneyin!</string>
     <string name="not_crop_or_compress">Lütfen kırpma veya sıkıştırma yapın!</string>
     <string name="video_compress">Sıkıştır</string>
     <string name="clear">Temizle</string>

@@ -83,8 +83,10 @@ public class EditorActivity extends BaseActivity implements IEditorView {
         @Override
         public void onFailure(String error) {
             fileModel.setFileStatus(FileStatusEnum.ERROR);
+            fileModel.setPath(Globals.currentOutputVideoPath + fileModel.getName());
             mPresenter.updateFileModel(fileModel);
             meditorViewHolder.pbCompressTrimmingBar.setProgress(0);
+            showToastMethod(getString(R.string.compression_failed));
         }
     };
     AdListener mAdListener = new AdListener() {

@@ -1,4 +1,5 @@
 <resources>
+    <string name="compression_failed">Compression failed! Try again!</string>
     <string name="not_crop_or_compress">Please you should make crop or compress!</string>
     <string name="video_compress">Video Compress</string>
     <string name="clear">Clear</string>
