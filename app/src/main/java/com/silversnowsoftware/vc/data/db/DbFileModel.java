@@ -6,6 +6,7 @@ import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.model.logger.LogModel;
 import com.silversnowsoftware.vc.utils.Utility;
 import com.silversnowsoftware.vc.utils.constants.Constants;
+import com.silversnowsoftware.vc.utils.enums.FileStatusEnum;
 import com.silversnowsoftware.vc.utils.helpers.LogManager;
 
 import java.sql.SQLException;
@@ -121,8 +122,17 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
     @Override
     public List<FileModel> getAll() {
         try {
-            return db.getFileModel().queryForAll();
-
+            List<FileModel> fileModelsList = db.getFileModel().queryForAll();
+            for (FileModel fileModel : fileModelsList)
+            {
+                if (    fileModel.getFileStatus() == FileStatusEnum.NONE ||
+                        fileModel.getFileStatus() == FileStatusEnum.ERROR ||
+                        fileModel.getFileStatus() == FileStatusEnum.CANCELED )
+                {
+                    remove(fileModel);
+                }
+            }
+            return  fileModelsList;
         } catch (SQLException ex) {
 
             LogManager.Log(className, ex);

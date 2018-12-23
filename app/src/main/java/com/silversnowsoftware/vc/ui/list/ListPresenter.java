@@ -112,14 +112,16 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
         try {
 
             List<FileModel> fileModelList = getFileModelList();
-            Collections.reverse(fileModelList);
-            VideoCompressAdapter videoCompressAdapter = getVideoCompressAdapter(fileModelList);
-            videoCompressAdapter.setActivity((Activity) getView());
-            Globals.selectionMode = false;
-            Globals.selectedFiles.clear();
-            if (fileModelList != null) {
-                videoCompressAdapter.notifyDataSetChanged();
-                viewHolder.lvFileModel.setAdapter(videoCompressAdapter);
+            if (fileModelList != null && fileModelList.size() > 0) {
+                Collections.reverse(fileModelList);
+                VideoCompressAdapter videoCompressAdapter = getVideoCompressAdapter(fileModelList);
+                videoCompressAdapter.setActivity((Activity) getView());
+                Globals.selectionMode = false;
+                Globals.selectedFiles.clear();
+                if (fileModelList != null) {
+                    videoCompressAdapter.notifyDataSetChanged();
+                    viewHolder.lvFileModel.setAdapter(videoCompressAdapter);
+                }
             }
             viewHolder.lvFileModel.setEmptyView(viewHolder.tvNoDataFound);
         } catch (Exception ex) {

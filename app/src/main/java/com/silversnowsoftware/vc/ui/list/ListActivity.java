@@ -50,64 +50,13 @@ public class ListActivity extends BaseActivity implements IListView {
 
             MobileAds.initialize(this, "ca-app-pub-9069451453527664~1459246129");
             mListViewHolder.mInterstitialAd = new InterstitialAd(this);
-            mListViewHolder.mInterstitialAd.setAdListener(new AdListener() {
-                @Override
-                public void onAdLoaded() {
-                    mListViewHolder.mInterstitialAd.show();
-                    Log.i("ADSInter:", "onAdLoaded");
-                }
-
-                @Override
-                public void onAdFailedToLoad(int errorCode) {
-                    Log.i("ADSInter:", "onAdFailedToLoad-" + errorCode);
-                }
-
-                @Override
-                public void onAdOpened() {
-                    Log.i("ADSInter:", "onAdOpened");
-                }
-
-                @Override
-                public void onAdLeftApplication() {
-                    Log.i("ADSInter:", "onAdLeftApplication");
-                }
-
-                @Override
-                public void onAdClosed() {
-                    Log.i("ADSInter:", "onAdClosed");
-                }
-            });
+            mListViewHolder.mInterstitialAd.setAdListener(new AdListener());
             mListViewHolder.mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
             mListViewHolder.mInterstitialAd.loadAd(new AdRequest.Builder().addTestDevice("B3E228E2A3DF6402D6DCF40712D066F6").build());
 
             AdRequest adRequest = new AdRequest.Builder().addTestDevice("B3E228E2A3DF6402D6DCF40712D066F6").build();
             mListViewHolder.adViewList.loadAd(adRequest);
-            mListViewHolder.adViewList.setAdListener(new AdListener() {
-                @Override
-                public void onAdLoaded() {
-                    Log.i("ADS:","onAdLoaded");
-                }
-
-                @Override
-                public void onAdFailedToLoad(int errorCode) {
-                    Log.i("ADS:","onAdFailedToLoad");
-                }
-
-                @Override
-                public void onAdOpened() {
-                    Log.i("ADS:","onAdOpened");
-                }
-
-                @Override
-                public void onAdLeftApplication() {
-                    Log.i("ADS:","onAdLeftApplication");
-                }
-
-                @Override
-                public void onAdClosed() {
-                    Log.i("ADS:","onAdClosed");
-                }
-            });
+            mListViewHolder.adViewList.setAdListener(new AdListener());
 
 
             mPresenter.onAttach(this);
