@@ -139,8 +139,13 @@ public class EditorActivity extends BaseActivity implements IEditorView {
             public void onClick(View view) {
                 try {
                     result = mPresenter.processFile();
-                    if (!result.getIsCompress())
-                        showToastMethod("Compress işlemi yapılmadı...");
+
+
+                    if (!result.getIsCompress() && !result.getIsCrop())
+                    {
+                        alertDialog(EditorActivity.this,getString(R.string.Alert),getString(R.string.not_crop_or_compress));
+                        return;
+                    }
 
                     mPresenter.addFileModel(result);
 

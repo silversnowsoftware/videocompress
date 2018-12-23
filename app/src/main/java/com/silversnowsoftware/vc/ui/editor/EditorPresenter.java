@@ -533,16 +533,22 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             int id = mViewHolder.rgResolution.getCheckedRadioButtonId();
             switch (id) {
                 case R.id.rb144p:
+                    isCompress = true;
                     return (String) mViewHolder.rb144p.getText();
                 case R.id.rb240p:
+                    isCompress = true;
                     return (String) mViewHolder.rb240p.getText();
                 case R.id.rb360p:
+                    isCompress = true;
                     return (String) mViewHolder.rb360p.getText();
                 case R.id.rb480p:
+                    isCompress = true;
                     return (String) mViewHolder.rb480p.getText();
                 case R.id.rb720p:
+                    isCompress = true;
                     return (String) mViewHolder.rb720p.getText();
                 case R.id.rb1080p:
+                    isCompress = true;
                     return (String) mViewHolder.rb1080p.getText();
                 default:
                     isCompress = false;
