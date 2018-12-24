@@ -56,8 +56,6 @@ public class FileModel extends BaseResponse implements Serializable  {
     private Boolean IsCrop;
     @DatabaseField(columnName = "IsCompress")
     private Boolean IsCompress;
-    @DatabaseField(columnName = "ResolutionKey")
-    private String ResolutionKey;
 
     public String getName() {
         return Name;
@@ -192,11 +190,4 @@ public class FileModel extends BaseResponse implements Serializable  {
         IsCompress = isCompress;
     }
 
-    public String getResolutionKey() {
-        return ResolutionKey;
-    }
-
-    public void setResolutionKey(String resolutionKey) {
-        ResolutionKey = resolutionKey;
-    }
 }

@@ -145,24 +145,6 @@ public class Utility {
         return s.substring(s.lastIndexOf('.') + 1, s.length()) + "." + e.getMethodName();
     }
 
-    public static int GetTrimmedIcon(String resolutionKey) {
-        switch (resolutionKey) {
-            case "144p":
-                return R.mipmap.res144p;
-            case "240p":
-                return R.mipmap.res240p;
-            case "360p":
-                return R.mipmap.res360p;
-            case "480p":
-                return R.mipmap.res480p;
-            case "720p":
-                return R.mipmap.res720p;
-            case "1044p":
-                return R.mipmap.res1044p;
-            default:
-                return -1;
-        }
-    }
 
     public static String ConvertToVideoTime(Integer value) {
         String hour = "";

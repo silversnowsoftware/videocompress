@@ -5,29 +5,19 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.silversnowsoftware.vc.R;
-import com.silversnowsoftware.vc.data.db.DbFileModel;
 import com.silversnowsoftware.vc.model.FileModel;
-import com.silversnowsoftware.vc.model.listener.ICustomListener;
-import com.silversnowsoftware.vc.operations.compressor.FileCompressor;
 import com.silversnowsoftware.vc.utils.constants.Globals;
-import com.silversnowsoftware.vc.utils.enums.FileStatusEnum;
 import com.silversnowsoftware.vc.utils.helpers.FileHelper;
 
-import org.w3c.dom.Text;
-
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +25,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.silversnowsoftware.vc.utils.Utility.GetTrimmedIcon;
 
 /**
  * Created by burak on 10/29/2018.

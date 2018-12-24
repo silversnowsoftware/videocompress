@@ -69,7 +69,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
     private Handler mHandler = new Handler();
     private DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     private boolean isCrop;
-    private boolean isCompress = true;
+    private boolean isCompress = false;
     String dstFile = null;
     FileModel responseModel;
     DialogFragment dialogFragment;
@@ -474,14 +474,15 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
 
             String videoResolution = getSelectedResolution();
 
-            String resolution = getFitResolution(width, height, videoResolution);
-            responseModel.setResolution(resolution);
+            if(!videoResolution.isEmpty()) {
+                String resolution = getFitResolution(width, height, videoResolution);
+                responseModel.setResolution(resolution);
+            }
             responseModel.setFileStatus(FileStatusEnum.PREPEARING);
             Date date = new Date();
             responseModel.setCreateDate(date);
             responseModel.setIsCrop(isCrop);
             responseModel.setIsCompress(isCompress);
-            responseModel.setResolutionKey(videoResolution);
             return responseModel;
 
 

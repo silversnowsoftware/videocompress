@@ -17,6 +17,7 @@ import com.silversnowsoftware.vc.utils.helpers.LogManager;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -24,6 +25,7 @@ import static com.silversnowsoftware.vc.utils.SharedPref.getData;
 import static com.silversnowsoftware.vc.utils.SharedPref.putData;
 import static com.silversnowsoftware.vc.utils.helpers.FileHelper.getBase64FromBitmap;
 import static com.silversnowsoftware.vc.utils.helpers.FileHelper.getFileNameFromPath;
+import static com.silversnowsoftware.vc.utils.helpers.FileHelper.getVideoResoution;
 
 
 /**
@@ -88,6 +90,10 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
         try {
             fileModel.setPath(path);
             fileModel.setName(getFileNameFromPath(path));
+            Map<String, Integer> videoResolutions = getVideoResoution(path);
+            int width = videoResolutions.get("width");
+            int height = videoResolutions.get("height");
+            fileModel.setResolution(width + "x" + height);
 
             Bitmap bitmap = null;
             try {
