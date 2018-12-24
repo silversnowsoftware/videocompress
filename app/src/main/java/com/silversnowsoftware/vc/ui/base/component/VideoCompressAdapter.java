@@ -28,6 +28,7 @@ import com.silversnowsoftware.vc.utils.helpers.FileHelper;
 import org.w3c.dom.Text;
 
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -133,7 +134,7 @@ public class VideoCompressAdapter extends ArrayAdapter {
             if (model.getResolution() != null)
                 viewHolder.tvResolution.setText(model.getResolution());
             if (model.getCreateDate() != null)
-                viewHolder.tvCreateDate.setText(DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.SHORT).format(model.getCreateDate()));
+                viewHolder.tvCreateDate.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(model.getCreateDate()));
 
             viewHolder.tvVideoDuration.setText(String.valueOf(model.getVideoLength()));
         }
