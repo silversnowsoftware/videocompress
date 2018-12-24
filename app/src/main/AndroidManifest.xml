@@ -72,6 +72,9 @@
         <activity android:name=".ui.trimmer.VideoTimmerActivity"></activity>
 
         <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="25eeaa53a82d8ba87f9c6fc485b2529f5071d2fc" />
     </application>
 
 </manifest>
