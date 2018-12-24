@@ -107,8 +107,15 @@ public class EditorActivity extends BaseActivity implements IEditorView {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
+
         meditorViewHolder = new EditorViewHolder(this);
         getActivityComponent().inject(this);
+
+        meditorViewHolder.btnCompress.setAlpha(.5f);
+        meditorViewHolder.btnClear.setAlpha(.5f);
+        meditorViewHolder.btnCompress.setEnabled(false);
+        meditorViewHolder.btnClear.setEnabled(false);
+
         try {
 
             mPresenter.onAttach(this);

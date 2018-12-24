@@ -159,6 +159,10 @@ public class TileView extends View {
             if (this.viewHolder != null) {
                 this.viewHolder.tvPreviewThumb.setVisibility(GONE);
                 this.viewHolder.mCustomRangeSeekBarNew.setVisibility(VISIBLE);
+                this.viewHolder.btnCompress.setEnabled(true);
+                this.viewHolder.btnClear.setEnabled(true);
+                this.viewHolder.btnCompress.setAlpha((float) 1.0);
+                this.viewHolder.btnClear.setAlpha((float) 1.0);
             }
 
         }

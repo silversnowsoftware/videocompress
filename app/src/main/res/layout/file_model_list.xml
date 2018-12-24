@@ -97,18 +97,6 @@
                 android:text="1024x768"
                 android:textColor="@color/listItemTextColor"
                 android:textSize="15sp" />
-
-
-
-            <TextView
-                android:id="@+id/tvProgress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:text="%78"
-                android:textColor="@color/listItemTextColor"
-                android:textSize="15sp" />
         </RelativeLayout>
 
 

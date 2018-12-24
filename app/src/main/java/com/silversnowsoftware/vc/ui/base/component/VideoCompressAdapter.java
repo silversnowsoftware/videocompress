@@ -146,8 +146,6 @@ public class VideoCompressAdapter extends ArrayAdapter {
         private int _id;
         @BindView(R.id.tvVideoName)
         TextView tvVideoName;
-        @BindView(R.id.tvProgress)
-        TextView tvProgress;
         @BindView(R.id.ivVideoTumbnail)
         ImageView ivVideoTumbnail;
         @BindView(R.id.tvResolution)

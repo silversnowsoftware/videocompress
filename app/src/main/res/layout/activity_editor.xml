@@ -179,6 +179,7 @@
         android:id="@+id/linearLayout">
 
         <Button
+            android:enabled="false"
             android:id="@+id/btnClear"
             style="@style/AppTheme.MainButton"
             android:layout_width="wrap_content"
