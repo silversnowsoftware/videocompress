@@ -101,8 +101,8 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
     }
 
 
-    @Override
-    public void setVideoPrepared() {
+
+    private void setVideoPrepared() {
         try {
 
             srcFile = getFileModelList().get(getFileModelList().size() - 1).getPath();
@@ -203,7 +203,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
                     mViewHolder.exoPlayerView.setPlayer(mViewHolder.exoPlayer);
                     mViewHolder.exoPlayer.prepare(mediaSource);
                     onVideoPrepared();
-
+                    setVideoPrepared();
                 } catch (Exception ex) {
 
                     LogManager.Log(className, ex);

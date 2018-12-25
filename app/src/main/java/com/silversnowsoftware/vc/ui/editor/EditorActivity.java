@@ -127,7 +127,6 @@ public class EditorActivity extends BaseActivity implements IEditorView {
 
             mPresenter.setViewHolder();
             mPresenter.setExoPlayer();
-            mPresenter.setVideoPrepared();
             mPresenter.customRangeSeekBarNewInit();
             mPresenter.seekBarVideoInit();
 

@@ -20,8 +20,6 @@ public interface IEditorPresenter<V extends IEditorView> extends IBasePresenter<
 
     void setViewHolder();
 
-    void setVideoPrepared();
-
     void onVideoPrepared();
 
     void setSeekBarPosition();
