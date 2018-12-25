@@ -3,11 +3,11 @@
 
 
     <!--appTheme-->
-    <color name="primaryColor">#545454</color>
+    <color name="primaryColor">#398e3c</color>
 
-    <color name="primaryLightColor">#808080</color>
+    <color name="primaryLightColor">#6bbf69</color>
 
-    <color name="primaryDarkColor">#2b2b2b</color>
+    <color name="primaryDarkColor">#00600f</color>
 
     <color name="primaryDangerColor">#ef5350</color>
 
@@ -15,7 +15,7 @@
 
     <color name="primaryDangerDarkColor">#b61827</color>
 
-    <color name="primaryTextColor">#ffffff</color>
+    <color name="primaryTextColor">#FFFFFF</color>
     <!--appTheme-->
 
     <!--Activity-->
@@ -33,9 +33,9 @@
 
 
 
-    <color name="colorPrimary">#545454</color>
-    <color name="colorPrimaryDark">#2b2b2b</color>
-    <color name="colorAccent">#808080</color>
+    <color name="colorPrimary">#398e3c</color>
+    <color name="colorPrimaryDark">#00600f</color>
+    <color name="colorAccent">#6bbf69</color>
 
 
 
