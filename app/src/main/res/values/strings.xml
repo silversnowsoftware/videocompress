@@ -21,9 +21,9 @@
     <string name="Ok">Ok</string>
     <string name="app_name">Video Compress</string>
     <string name="editor_activity">Editor</string>
-    <string name="take_video">Video Record</string>
-    <string name="load_from_gallery">Choose From Gallery</string>
-    <string name="list">Videos</string>
+    <string name="take_video">Camera</string>
+    <string name="load_from_gallery">Gallery</string>
+    <string name="list">Recents</string>
     <string name="deleting">Deleting</string>
     <string name="error">Error</string>
     <string name="title_activity_list">Vidoes</string>

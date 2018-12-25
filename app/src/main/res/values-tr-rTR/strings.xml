@@ -21,9 +21,9 @@
     <string name="Ok">Tamam</string>
     <string name="app_name">Video Compress</string>
     <string name="editor_activity">Düzenle</string>
-    <string name="take_video">Video Çek</string>
-    <string name="load_from_gallery">Galeriden Seç</string>
-    <string name="list">Videolar</string>
+    <string name="take_video">Kamera</string>
+    <string name="load_from_gallery">Galeri</string>
+    <string name="list">Geçmiş</string>
     <string name="deleting">Siliniyor</string>
     <string name="error">Hata</string>
     <string name="title_activity_list">Videolar</string>

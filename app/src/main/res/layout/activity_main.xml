@@ -26,6 +26,9 @@
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:drawableStart="@mipmap/camera"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
             android:text="@string/take_video"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="20dp"/>
@@ -36,6 +39,9 @@
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:drawableStart="@mipmap/gallery"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
             android:text="@string/load_from_gallery"
             android:layout_marginBottom="20dp"/>
 
@@ -45,6 +51,9 @@
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:drawableStart="@mipmap/recent"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
             android:layout_marginBottom="20dp"
             android:text="@string/list" />
     </LinearLayout>
