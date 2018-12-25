@@ -58,6 +58,9 @@ public class VideoCompressAdapter extends ArrayAdapter {
             @Override
             public boolean onLongClick(View view) {
 
+                if (Globals.selectedFiles == null)
+                    Globals.selectedFiles = new ArrayList<FileModel>();
+
                 FileModel model = (FileModel) getItem(position);
                 Globals.selectedFiles.add(model);
                 Globals.selectionMode = true;
@@ -65,7 +68,7 @@ public class VideoCompressAdapter extends ArrayAdapter {
                 viewHolder.ivSelectRow.setVisibility(View.VISIBLE);
                 viewHolder.selectRow.setBackgroundResource(R.color.selectedListItemColor);
                 viewHolder.setSelected(true);
-                notifyDataSetChanged();
+
                 return true;
             }
         });
