@@ -14,7 +14,8 @@
     <string name="not_crop_or_compress">Lütfen kırpma veya sıkıştırma yapın!</string>
     <string name="video_compress">Sıkıştır</string>
     <string name="clear">Temizle</string>
-    <string name="previewLoading">Önizleme yükleniyor...</string>
+    <string name="apply">Uygula</string>
+    <string name="previewLoading">Önizleme yükleniyor…</string>
     <string name="ChooseAnyVideoForShare">Lütfen paylaşmak için en az 1 video seçin!</string>
     <string name="ChooseAnyVideoForDelete">Lütfen silmek için en az 1 video seçin!</string>
     <string name="Alert">Uyarı!</string>

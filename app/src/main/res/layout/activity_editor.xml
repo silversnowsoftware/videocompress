@@ -181,18 +181,23 @@
         <Button
             android:enabled="false"
             android:id="@+id/btnClear"
-            style="@style/AppTheme.MainButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Clear"
-            android:paddingRight="10dp"
-            android:layout_marginRight="5dp"/>
+            style="@style/AppTheme.MainInfoButton"
+            android:layout_width="100dp"
+            android:layout_height="45dp"
+            android:text="@string/clear"
+            android:gravity="center_vertical"
+            android:drawableStart="@mipmap/clear"
+            android:layout_marginEnd="30dp"/>
+
         <Button
             android:id="@+id/btnCompress"
             style="@style/AppTheme.MainButton"
-            android:layout_width="150dp"
-            android:layout_height="50dp"
-            android:text="Compress" />
+            android:layout_width="120dp"
+            android:layout_height="45dp"
+            android:paddingStart="10dp"
+            android:text="@string/apply"
+            android:gravity="center_vertical"
+            android:drawableStart="@mipmap/apply" />
 
 
     </LinearLayout>

@@ -28,6 +28,12 @@
         <item name="android:textSize">18sp</item>
     </style>
 
+    <style name="AppTheme.MainInfoButton" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/button_main_info</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
     <style name="AppTheme.MainDangerButton" parent="Widget.AppCompat.Button">
         <item name="android:background">@drawable/button_main_danger</item>
         <item name="android:textColor">@color/primaryTextColor</item>

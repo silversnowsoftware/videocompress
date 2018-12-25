@@ -14,11 +14,12 @@
     <string name="not_crop_or_compress">Please you should make crop or compress!</string>
     <string name="video_compress">Video Compress</string>
     <string name="clear">Clear</string>
-    <string name="previewLoading">Preview is loading...</string>
-    <string name="ChooseAnyVideoForShare">Please share min 1 video for share!</string>
-    <string name="ChooseAnyVideoForDelete">Please choose min 1 video for delete!</string>
+    <string name="apply">Apply</string>
+    <string name="previewLoading">Preview is loading…</string>
+    <string name="ChooseAnyVideoForShare">Please select min 1 video for share!</string>
+    <string name="ChooseAnyVideoForDelete">Please select min 1 video for delete!</string>
     <string name="Alert">Alert!</string>
-    <string name="Ok">Ok</string>
+    <string name="Ok">OK</string>
     <string name="app_name">Video Compress</string>
     <string name="editor_activity">Editor</string>
     <string name="take_video">Camera</string>
