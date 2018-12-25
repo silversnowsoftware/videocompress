@@ -49,7 +49,8 @@ public class EditorActivity extends BaseActivity implements IEditorView {
             mPresenter.updateFileModel(fileModel);
             mPresenter.dismissEditorProgressDialog();
             finish();
-            redirectToActivity(ListActivity.class);
+            if (!fileModel.getIsCompress())
+                    redirectToActivity(ListActivity.class);
         }
 
         @Override
