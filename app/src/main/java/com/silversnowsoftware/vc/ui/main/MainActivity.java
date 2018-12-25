@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.MobileAds;
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.httpmodule.ILogger;
 import com.silversnowsoftware.vc.model.logger.LogModel;
@@ -38,15 +41,23 @@ public class MainActivity extends BaseActivity implements IMainView {
     IMainPresenter<IMainView> mPresenter;
     MainViewHolder mainViewHolder;
     private static final String className = MainActivity.class.getSimpleName();
+    AdListener mAdListener = new AdListener() {
 
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         handler = new Handler();
         super.onCreate(savedInstanceState);
+        mainViewHolder = new MainViewHolder(this);
+
+        MobileAds.initialize(this, "ca-app-pub-9069451453527664~1459246129");
+        AdRequest adRequest = new AdRequest.Builder().addTestDevice("B3E228E2A3DF6402D6DCF40712D066F6").build();
+        mainViewHolder.adViewMain.loadAd(adRequest);
+        mainViewHolder.adViewMain.setAdListener(mAdListener);
 
         try {
-            mainViewHolder = new MainViewHolder(this);
+
             getActivityComponent().inject(this);
             mPresenter.onAttach(this);
             mPresenter.deleteErrorFileModel();

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
+import com.google.android.gms.ads.AdView;
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.ui.base.IBaseViewHolder;
 import com.silversnowsoftware.vc.ui.list.ListActivity;
@@ -26,7 +27,8 @@ public class MainViewHolder {
     Button btnChoose;
     @BindView(R.id.btnListFile)
     Button btnListFile;
-
+    @BindView(R.id.adViewMain)
+    public AdView adViewMain;
 
     public MainViewHolder(Activity activity) {
         mView = (Activity) activity;
