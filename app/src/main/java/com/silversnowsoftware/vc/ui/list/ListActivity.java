@@ -50,9 +50,47 @@ public class ListActivity extends BaseActivity implements IListView {
 
             MobileAds.initialize(this, "ca-app-pub-9069451453527664~1459246129");
             mListViewHolder.mInterstitialAd = new InterstitialAd(this);
-            mListViewHolder.mInterstitialAd.setAdListener(new AdListener());
+            mListViewHolder.mInterstitialAd.setAdListener(new AdListener(){
+                @Override
+                public void onAdClosed() {
+                    super.onAdClosed();
+                }
+
+                @Override
+                public void onAdFailedToLoad(int i) {
+                    super.onAdFailedToLoad(i);
+                }
+
+                @Override
+                public void onAdLeftApplication() {
+                    super.onAdLeftApplication();
+                }
+
+                @Override
+                public void onAdOpened() {
+                    super.onAdOpened();
+
+                }
+
+                @Override
+                public void onAdLoaded() {
+                    super.onAdLoaded();
+                    mListViewHolder.mInterstitialAd.show();
+                }
+
+                @Override
+                public void onAdClicked() {
+                    super.onAdClicked();
+                }
+
+                @Override
+                public void onAdImpression() {
+                    super.onAdImpression();
+                }
+            });
             mListViewHolder.mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
             mListViewHolder.mInterstitialAd.loadAd(new AdRequest.Builder().addTestDevice("B3E228E2A3DF6402D6DCF40712D066F6").build());
+
 
             AdRequest adRequest = new AdRequest.Builder().addTestDevice("B3E228E2A3DF6402D6DCF40712D066F6").build();
             mListViewHolder.adViewList.loadAd(adRequest);
