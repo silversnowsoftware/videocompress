@@ -109,50 +109,66 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/txtResolutionTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/trimmerLayout"
+        android:textColor="@color/gray"
+        android:paddingStart="5dp"
+        android:layout_marginTop="5dp"
+        android:text="Resolution:"/>
     <RadioGroup
         android:id="@+id/rgResolution"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingStart="5dp"
+        android:paddingEnd="5dp"
         android:orientation="horizontal"
-        android:layout_below="@+id/trimmerLayout"
-        android:layout_marginTop="5dp"
+        android:layout_below="@+id/txtResolutionTitle"
+        android:background="@drawable/border"
         android:weightSum="120">
-
         <RadioButton
             android:id="@+id/rb144p"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="20"
+            android:textSize="10sp"
             android:text="@string/resolution_144p"/>
         <RadioButton
             android:id="@+id/rb240p"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="20"
+            android:textSize="10sp"
             android:text="@string/resolution_240p"/>
         <RadioButton
             android:id="@+id/rb360p"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="20"
+            android:textSize="10sp"
             android:text="@string/resolution_360p"/>
         <RadioButton
             android:id="@+id/rb480p"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="20"
+            android:textSize="10sp"
             android:text="@string/resolution_480p"/>
         <RadioButton
             android:id="@+id/rb720p"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="20"
+            android:textSize="10sp"
             android:text="@string/resolution_720p"/>
         <RadioButton
             android:id="@+id/rb1080p"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="20"
+            android:textSize="10sp"
             android:text="@string/resolution_1080p"/>
     </RadioGroup>
 
