@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -175,7 +176,7 @@ public class EditorActivity extends BaseActivity implements IEditorView {
                                 fileModel.getFileStatus() == FileStatusEnum.ERROR ||
                                 fileModel.getFileStatus() == FileStatusEnum.NONE) {
 
-                           redirectToActivity(MainActivity.class, Constants.DELLAY);
+                            redirectToActivity(MainActivity.class, Constants.DELLAY);
                         }
                     }
 
@@ -208,6 +209,17 @@ public class EditorActivity extends BaseActivity implements IEditorView {
                 return false;
             }
         });
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        super.onKeyDown(keyCode, event);
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (progressDialog != null && progressDialog.isShowing())
+                return false;
+            finish();
+        }
+        return true;
     }
 
     @Override
