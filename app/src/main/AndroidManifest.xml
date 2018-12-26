@@ -39,7 +39,9 @@
 
         </activity>
         <activity android:name=".ui.compression.permission.PermissionsActivity" />
-        <activity android:name=".ui.compression.videorecord.CameraActivity" />
+        <activity android:name=".ui.compression.videorecord.CameraActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
         <activity android:name=".ui.test.TestActivity" />
         <activity
             android:name=".ui.list.ListActivity"
