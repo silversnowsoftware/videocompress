@@ -12,7 +12,6 @@ public class Constants {
     public static final int RESULT_CODE_FOR_RECORD_VIDEO_FAILED = 3;
     public static final int RESULT_CODE_FOR_RECORD_VIDEO_CANCEL = 4;
     public static final String INTENT_EXTRA_VIDEO_PATH = "intent_extra_video_path";
-    public static final String REST_BASE_SERVICE = "https://s3-services.herokuapp.com";
     public static final String APP_NAME="Video Compress";
     public static final String DATE_FORMAT_ONE="yyyy-MM-dd HH:mm";
     public static final String DATE_FORMAT_TWO="yyyyMMdd-HHmmss";

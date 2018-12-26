@@ -55,9 +55,7 @@ public class BaseActivity extends AppCompatActivity implements IBaseView {
                 .activityModule(new ActivityModule(this))
                 .applicationComponent(((VideoCompressApplication) getApplication()).getComponent())
                 .build();
-        restAdapter = new RestAdapter.Builder()
-                .setEndpoint(Constants.REST_BASE_SERVICE)
-                .build();
+
     }
 
     public ActivityComponent getActivityComponent() {
@@ -111,5 +109,8 @@ public class BaseActivity extends AppCompatActivity implements IBaseView {
                         }
                     }).show();
         }
+    }
+    public void progressDialog(Context context){
+        
     }
 }

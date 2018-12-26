@@ -47,10 +47,11 @@ public class EditorActivity extends BaseActivity implements IEditorView {
             fileModel.setPath(uri.getPath());
             fileModel.setVideoLength(Utility.ConvertToVideoTime(Integer.valueOf(String.valueOf(getVideoDuration(EditorActivity.this, fileModel.getPath())))));
             mPresenter.updateFileModel(fileModel);
-            mPresenter.dismissEditorProgressDialog();
-            finish();
-            if (!fileModel.getIsCompress())
-                    redirectToActivity(ListActivity.class);
+
+            //  mPresenter.dismissEditorProgressDialog();
+           // finish();
+            //if (!fileModel.getIsCompress())
+              //      redirectToActivity(ListActivity.class);
         }
 
         @Override
@@ -73,7 +74,6 @@ public class EditorActivity extends BaseActivity implements IEditorView {
         @Override
         public void onSuccess(Double rate) {
 
-            meditorViewHolder.pbCompressTrimmingBar.setProgress(100);
             fileModel.setFileStatus(FileStatusEnum.SUCCESS);
             fileModel.setVideoLength(Utility.ConvertToVideoTime(Integer.valueOf(String.valueOf(getVideoDuration(EditorActivity.this, fileModel.getPath())))));
             fileModel.setPath(Globals.currentOutputVideoPath + fileModel.getName());
@@ -83,7 +83,7 @@ public class EditorActivity extends BaseActivity implements IEditorView {
         @Override
         public void onProgress(Double rate) {
             if (rate > 0) {
-                meditorViewHolder.pbCompressTrimmingBar.setProgress(rate.intValue());
+
             }
         }
 
@@ -94,7 +94,7 @@ public class EditorActivity extends BaseActivity implements IEditorView {
             fileModel.setPath(Globals.currentOutputVideoPath + fileModel.getName());
             fileModel.setVideoLength(Utility.ConvertToVideoTime(Integer.valueOf(String.valueOf(getVideoDuration(EditorActivity.this, fileModel.getPath())))));
             mPresenter.updateFileModel(fileModel);
-            meditorViewHolder.pbCompressTrimmingBar.setProgress(0);
+
             showToastMethod(getString(R.string.compression_failed));
             redirectToMainActivity();
 

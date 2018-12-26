@@ -69,7 +69,7 @@ public final class EditorViewHolder {
     @BindView(R.id.adViewEditor)
     public AdView adViewEditor;
     @BindView(R.id.pbCompressTrimmingBar)
-    public ProgressBar pbCompressTrimmingBar;
+
 
     public SimpleExoPlayer exoPlayer;
 
