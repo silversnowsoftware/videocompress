@@ -31,7 +31,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,6 +45,13 @@ import static com.silversnowsoftware.vc.utils.constants.Arrays.MIME_MapTable;
 
 public class FileHelper {
     private static final String className = FileHelper.class.getSimpleName();
+
+    public static String generateVideoName() {
+        String filename = null;
+        String dateFormat = new SimpleDateFormat(Constants.DATE_FORMAT_TWO).format(new Date());
+        filename = "V-" + dateFormat + ".mp4";
+        return filename;
+    }
 
     public static String getMIMEType(File file) {
 
@@ -71,11 +80,11 @@ public class FileHelper {
     }
 
     public static String getFileSize(String path) {
-        String size2="";
+        String size2 = "";
         try {
             File f = new File(path);
             if (!f.exists()) {
-                size2="0 MB";
+                size2 = "0 MB";
                 return size2;
             } else {
                 long size = f.length();
@@ -210,7 +219,8 @@ public class FileHelper {
 
 
             LogManager.Log(className, ex);
-        } return null;
+        }
+        return null;
     }
 
     /**

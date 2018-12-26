@@ -34,6 +34,7 @@ import com.silversnowsoftware.vc.operations.compressor.FileCompressor;
 import com.silversnowsoftware.vc.ui.base.BasePresenter;
 import com.silversnowsoftware.vc.utils.Utility;
 import com.silversnowsoftware.vc.utils.enums.FileStatusEnum;
+import com.silversnowsoftware.vc.utils.helpers.FileHelper;
 import com.silversnowsoftware.vc.utils.helpers.LogManager;
 
 import java.io.File;
@@ -480,6 +481,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             }
             responseModel.setFileStatus(FileStatusEnum.PREPEARING);
             Date date = new Date();
+            responseModel.setName(FileHelper.generateVideoName());
             responseModel.setCreateDate(date);
             responseModel.setIsCrop(isCrop);
             responseModel.setIsCompress(isCompress);
