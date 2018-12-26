@@ -2,9 +2,6 @@ package com.silversnowsoftware.vc.ui.base;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.DialogFragment;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,7 +9,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.silversnowsoftware.vc.R;
@@ -21,11 +17,8 @@ import com.silversnowsoftware.vc.di.component.ActivityComponent;
 import com.silversnowsoftware.vc.di.component.DaggerActivityComponent;
 import com.silversnowsoftware.vc.di.module.ActivityModule;
 import com.silversnowsoftware.vc.model.FileModel;
-import com.silversnowsoftware.vc.ui.editor.EditorDialogFragment;
 import com.silversnowsoftware.vc.ui.main.MainActivity;
-import com.silversnowsoftware.vc.utils.constants.Constants;
 import com.silversnowsoftware.vc.utils.constants.Globals;
-import com.silversnowsoftware.vc.utils.helpers.LogManager;
 
 import java.util.List;
 
