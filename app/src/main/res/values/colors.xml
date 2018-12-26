@@ -15,11 +15,11 @@
 
     <color name="primaryDangerDarkColor">#b61827</color>
 
-    <color name="primaryInfoColor">#00acc1</color>
+    <color name="primaryInfoColor">#555555</color>
 
-    <color name="primaryInfoLightColor">#5ddef4</color>
+    <color name="primaryInfoLightColor">#818181</color>
 
-    <color name="primaryInfoDarkColor">#007c91</color>
+    <color name="primaryInfoDarkColor">#2c2c2c</color>
 
     <color name="primaryTextColor">#FFFFFF</color>
     <!--appTheme-->
