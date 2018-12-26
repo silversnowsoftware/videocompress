@@ -69,8 +69,5 @@
         <item name="android:background">@color/black_overlay</item>
     </style>
 
-    <style name="RadioButtonStyle" parent="@android:style/Widget.CompoundButton.RadioButton">
-        <item name="android:button">@drawable/custom_radio_button</item>
-    </style>
 
 </resources>
