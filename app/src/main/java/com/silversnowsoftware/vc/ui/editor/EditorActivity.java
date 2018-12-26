@@ -1,5 +1,6 @@
 package com.silversnowsoftware.vc.ui.editor;
 
+import android.app.ProgressDialog;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,6 +20,7 @@ import com.silversnowsoftware.vc.ui.base.BaseActivity;
 import com.silversnowsoftware.vc.ui.list.ListActivity;
 import com.silversnowsoftware.vc.ui.main.MainActivity;
 import com.silversnowsoftware.vc.utils.Utility;
+import com.silversnowsoftware.vc.utils.constants.Constants;
 import com.silversnowsoftware.vc.utils.constants.Globals;
 import com.silversnowsoftware.vc.utils.enums.FileStatusEnum;
 import com.silversnowsoftware.vc.utils.helpers.LogManager;
@@ -34,11 +36,12 @@ public class EditorActivity extends BaseActivity implements IEditorView {
     IEditorPresenter<IEditorView> mPresenter;
     EditorViewHolder meditorViewHolder;
     FileModel fileModel = null;
-
+    ProgressDialog progressDialog;
     OnVideoTrimListener mOnVideoTrimListener = new OnVideoTrimListener() {
         @Override
         public void onTrimStarted() {
-            mPresenter.showEditorProgressDialog(getFragmentManager());
+            progressDialog.show();
+            progressDialog.setProgress(10);
         }
 
         @Override
@@ -48,10 +51,12 @@ public class EditorActivity extends BaseActivity implements IEditorView {
             fileModel.setVideoLength(Utility.ConvertToVideoTime(Integer.valueOf(String.valueOf(getVideoDuration(EditorActivity.this, fileModel.getPath())))));
             mPresenter.updateFileModel(fileModel);
 
-            //  mPresenter.dismissEditorProgressDialog();
-           // finish();
-            //if (!fileModel.getIsCompress())
-              //      redirectToActivity(ListActivity.class);
+            if (!fileModel.getIsCompress()) {
+                progressDialog.setProgress(100);
+                finish();
+                redirectToActivity(ListActivity.class);
+            }
+            progressDialog.hide();
         }
 
         @Override
@@ -59,7 +64,9 @@ public class EditorActivity extends BaseActivity implements IEditorView {
             fileModel.setFileStatus(FileStatusEnum.CANCELED);
             mPresenter.updateFileModel(fileModel);
             mPresenter.dismissEditorProgressDialog();
-            redirectToMainActivity();
+            progressDialog.hide();
+            redirectToActivity(MainActivity.class, Constants.DELLAY);
+
         }
 
         @Override
@@ -67,23 +74,27 @@ public class EditorActivity extends BaseActivity implements IEditorView {
             fileModel.setFileStatus(FileStatusEnum.ERROR);
             mPresenter.updateFileModel(fileModel);
             mPresenter.dismissEditorProgressDialog();
-            redirectToMainActivity();
+            progressDialog.hide();
+            redirectToActivity(MainActivity.class, Constants.DELLAY);
         }
     };
     ICustomListener mCustomListener = new ICustomListener() {
         @Override
         public void onSuccess(Double rate) {
+            progressDialog.hide();
 
             fileModel.setFileStatus(FileStatusEnum.SUCCESS);
             fileModel.setVideoLength(Utility.ConvertToVideoTime(Integer.valueOf(String.valueOf(getVideoDuration(EditorActivity.this, fileModel.getPath())))));
             fileModel.setPath(Globals.currentOutputVideoPath + fileModel.getName());
             mPresenter.updateFileModel(fileModel);
+            finish();
+            redirectToActivity(ListActivity.class);
         }
 
         @Override
         public void onProgress(Double rate) {
-            if (rate > 0) {
-
+            if (rate.intValue() > 10) {
+                progressDialog.setProgress(rate.intValue());
             }
         }
 
@@ -96,7 +107,9 @@ public class EditorActivity extends BaseActivity implements IEditorView {
             mPresenter.updateFileModel(fileModel);
 
             showToastMethod(getString(R.string.compression_failed));
-            redirectToMainActivity();
+            progressDialog.hide();
+            finish();
+            redirectToActivity(MainActivity.class, Constants.DELLAY);
 
         }
     };
@@ -141,6 +154,7 @@ public class EditorActivity extends BaseActivity implements IEditorView {
             @Override
             public void onClick(View view) {
                 try {
+                    progressDialog = progressBarDialog(EditorActivity.this);
 
                     fileModel = mPresenter.processFile();
 
@@ -159,11 +173,11 @@ public class EditorActivity extends BaseActivity implements IEditorView {
                             FileCompressor fc = new FileCompressor(EditorActivity.this);
                             fc.Compress(fileModel);
                             fileModel.getCustomListener(mCustomListener);
-                        }else if (fileModel.getFileStatus() == FileStatusEnum.CANCELED ||
-                                  fileModel.getFileStatus() == FileStatusEnum.ERROR ||
-                                  fileModel.getFileStatus() == FileStatusEnum.NONE){
+                        } else if (fileModel.getFileStatus() == FileStatusEnum.CANCELED ||
+                                fileModel.getFileStatus() == FileStatusEnum.ERROR ||
+                                fileModel.getFileStatus() == FileStatusEnum.NONE) {
 
-                            redirectToMainActivity();
+                           redirectToActivity(MainActivity.class, Constants.DELLAY);
                         }
                     }
 
@@ -203,19 +217,4 @@ public class EditorActivity extends BaseActivity implements IEditorView {
         return R.layout.activity_editor;
     }
 
-    private void redirectToMainActivity() {
-        try {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    finish();
-                    redirectToActivity(MainActivity.class);
-
-                }
-            }, 2000);
-        } catch (Exception ex) {
-
-            LogManager.Log(className, ex);
-        }
-    }
 }

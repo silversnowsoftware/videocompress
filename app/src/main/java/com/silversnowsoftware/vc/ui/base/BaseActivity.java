@@ -10,7 +10,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.silversnowsoftware.vc.R;
@@ -20,8 +22,10 @@ import com.silversnowsoftware.vc.di.component.DaggerActivityComponent;
 import com.silversnowsoftware.vc.di.module.ActivityModule;
 import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.ui.editor.EditorDialogFragment;
+import com.silversnowsoftware.vc.ui.main.MainActivity;
 import com.silversnowsoftware.vc.utils.constants.Constants;
 import com.silversnowsoftware.vc.utils.constants.Globals;
+import com.silversnowsoftware.vc.utils.helpers.LogManager;
 
 import java.util.List;
 
@@ -36,6 +40,7 @@ public class BaseActivity extends AppCompatActivity implements IBaseView {
     private ActivityComponent mActivityComponent;
     private ProgressDialog mProgressDialog;
     private ProgressDialog progress;
+
     protected Context getContext() {
         return getApplicationContext();
     }
@@ -77,14 +82,32 @@ public class BaseActivity extends AppCompatActivity implements IBaseView {
 
     }
 
+    public void redirectToActivity(final Class<?> activityClass, long delayMillis) {
+        try {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(getContext(), activityClass);
+                    redirectToActivity(MainActivity.class);
+                    startActivity(intent);
+
+                }
+            }, delayMillis);
+        } catch (Exception ex) {
+
+
+        }
+
+    }
+
     @Override
     public void showProgressDialog(Context context, String title) {
-       mProgressDialog = new ProgressDialog(context);
-       mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-       mProgressDialog.setTitle(title);
-       mProgressDialog.setIndeterminate(true);
-       mProgressDialog.setCancelable(false);
-       mProgressDialog.show();
+        mProgressDialog = new ProgressDialog(context);
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        mProgressDialog.setTitle(title);
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.show();
 
     }
 
@@ -110,12 +133,14 @@ public class BaseActivity extends AppCompatActivity implements IBaseView {
                     }).show();
         }
     }
-    public void progressBarDialog(Context context){
-        progress=new ProgressDialog(context);
+
+    public ProgressDialog progressBarDialog(Context context) {
+        progress = new ProgressDialog(context);
         progress.setMessage("Downloading Music");
         progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progress.setIndeterminate(true);
+        progress.setIndeterminate(false);
         progress.setProgress(0);
-        progress.show();
+        return progress;
     }
+
 }

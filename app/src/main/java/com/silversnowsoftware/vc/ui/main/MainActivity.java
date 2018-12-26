@@ -1,5 +1,6 @@
 package com.silversnowsoftware.vc.ui.main;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -41,10 +42,7 @@ public class MainActivity extends BaseActivity implements IMainView {
     IMainPresenter<IMainView> mPresenter;
     MainViewHolder mainViewHolder;
     private static final String className = MainActivity.class.getSimpleName();
-    AdListener mAdListener = new AdListener() {
-
-    };
-
+    AdListener mAdListener = new AdListener() {};
     @Override
     public void onCreate(Bundle savedInstanceState) {
         handler = new Handler();

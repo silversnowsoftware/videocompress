@@ -15,4 +15,5 @@ public class Constants {
     public static final String APP_NAME="Video Compress";
     public static final String DATE_FORMAT_ONE="yyyy-MM-dd HH:mm";
     public static final String DATE_FORMAT_TWO="yyyyMMdd-HHmmss";
+    public static final long DELLAY=2000;
 }
