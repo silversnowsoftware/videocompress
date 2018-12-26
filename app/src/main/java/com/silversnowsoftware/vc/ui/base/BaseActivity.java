@@ -136,9 +136,10 @@ public class BaseActivity extends AppCompatActivity implements IBaseView {
 
     public ProgressDialog progressBarDialog(Context context) {
         progress = new ProgressDialog(context);
-        progress.setMessage("Downloading Music");
+        progress.setMessage(getString(R.string.progressing));
         progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progress.setIndeterminate(false);
+        progress.setCancelable(false);
         progress.setProgress(0);
         return progress;
     }
