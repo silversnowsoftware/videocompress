@@ -14,6 +14,7 @@
     <string name="not_crop_or_compress">Please you should make crop or compress!</string>
     <string name="video_compress">Video Compress</string>
     <string name="clear">Clear</string>
+    <string name="reset">Reset</string>
     <string name="apply">Apply</string>
     <string name="previewLoading">Preview is loading…</string>
     <string name="ChooseAnyVideoForShare">Please select min 1 video for share!</string>
