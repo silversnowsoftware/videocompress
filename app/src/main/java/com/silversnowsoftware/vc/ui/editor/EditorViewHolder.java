@@ -68,7 +68,6 @@ public final class EditorViewHolder {
     public TextView tvPreviewThumb;
     @BindView(R.id.adViewEditor)
     public AdView adViewEditor;
-    @BindView(R.id.pbCompressTrimmingBar)
 
 
     public SimpleExoPlayer exoPlayer;
