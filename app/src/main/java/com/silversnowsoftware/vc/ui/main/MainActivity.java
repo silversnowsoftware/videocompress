@@ -55,7 +55,7 @@ public class MainActivity extends BaseActivity implements IMainView {
         AdRequest adRequest = new AdRequest.Builder().addTestDevice("B3E228E2A3DF6402D6DCF40712D066F6").build();
         mainViewHolder.adViewMain.loadAd(adRequest);
         mainViewHolder.adViewMain.setAdListener(mAdListener);
-
+        progressBarDialog(MainActivity.this);
         try {
 
             getActivityComponent().inject(this);

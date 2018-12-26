@@ -35,7 +35,7 @@ public class BaseActivity extends AppCompatActivity implements IBaseView {
 
     private ActivityComponent mActivityComponent;
     private ProgressDialog mProgressDialog;
-
+    private ProgressDialog progress;
     protected Context getContext() {
         return getApplicationContext();
     }
@@ -110,7 +110,12 @@ public class BaseActivity extends AppCompatActivity implements IBaseView {
                     }).show();
         }
     }
-    public void progressDialog(Context context){
-        
+    public void progressBarDialog(Context context){
+        progress=new ProgressDialog(context);
+        progress.setMessage("Downloading Music");
+        progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progress.setIndeterminate(true);
+        progress.setProgress(0);
+        progress.show();
     }
 }
