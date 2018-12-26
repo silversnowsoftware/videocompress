@@ -214,11 +214,9 @@ public class EditorActivity extends BaseActivity implements IEditorView {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         super.onKeyDown(keyCode, event);
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (progressDialog != null && progressDialog.isShowing())
-                return false;
-            finish();
-        }
+        if (progressDialog != null && progressDialog.isShowing())
+            return false;
+        finish();
         return true;
     }
 
