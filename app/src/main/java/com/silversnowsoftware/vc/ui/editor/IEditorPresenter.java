@@ -52,8 +52,5 @@ public interface IEditorPresenter<V extends IEditorView> extends IBasePresenter<
 
     boolean removeLastVideo();
 
-    void showEditorProgressDialog(FragmentManager fragmentManager);
-
-    void dismissEditorProgressDialog();
 
 }

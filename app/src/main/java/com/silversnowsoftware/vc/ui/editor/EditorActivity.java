@@ -63,7 +63,6 @@ public class EditorActivity extends BaseActivity implements IEditorView {
         public void cancelAction() {
             fileModel.setFileStatus(FileStatusEnum.CANCELED);
             mPresenter.updateFileModel(fileModel);
-            mPresenter.dismissEditorProgressDialog();
             progressDialog.hide();
             redirectToActivity(MainActivity.class, Constants.DELLAY);
 
@@ -73,7 +72,6 @@ public class EditorActivity extends BaseActivity implements IEditorView {
         public void onError(String message) {
             fileModel.setFileStatus(FileStatusEnum.ERROR);
             mPresenter.updateFileModel(fileModel);
-            mPresenter.dismissEditorProgressDialog();
             progressDialog.hide();
             redirectToActivity(MainActivity.class, Constants.DELLAY);
         }

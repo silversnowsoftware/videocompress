@@ -66,7 +66,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
     private int mStartPosition = 0;
     private int mEndPosition = 0;
     // set your max video trim seconds
-    private int mMaxDuration = 60;
+    private int mMaxDuration = 6000000;
     private Handler mHandler = new Handler();
     private DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     private boolean isCrop;
@@ -692,24 +692,6 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
         }
     }
 
-    @Override
-    public void showEditorProgressDialog(FragmentManager fragmentManager)
-    {
-        FragmentTransaction ft = fragmentManager.beginTransaction();
-        Fragment prev = fragmentManager.findFragmentByTag("dialog");
-        if (prev != null) {
-            ft.remove(prev);
-        }
-        ft.addToBackStack(null);
-        dialogFragment = new EditorDialogFragment();
-        dialogFragment.show(ft, "dialog");
-    }
 
-    @Override
-    public void dismissEditorProgressDialog()
-    {
-        if(dialogFragment != null)
-            dialogFragment.dismiss();
-    }
 
 }
