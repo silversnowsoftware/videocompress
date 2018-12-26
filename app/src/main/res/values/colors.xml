@@ -68,7 +68,7 @@
     <item name="darkgreen" type="color">#FF669900</item>
     <item name="darkorange" type="color">#FFFF8800</item>
     <item name="darkred" type="color">#FFCC0000</item>
-    <item name="gray" type="color">#000000</item>
+    <item name="gray" type="color">#555555</item>
     <item name="white" type="color">#ffffff</item>
     <item name="black" type="color">#000000</item>
     <item name="powderblue" type="color">#b0e0e6</item>
