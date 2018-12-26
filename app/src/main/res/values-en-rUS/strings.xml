@@ -17,6 +17,7 @@
     <string name="clear">Clear</string>
     <string name="reset">Reset</string>
     <string name="apply">Apply</string>
+    <string name="resolutionTitle">Resolution:</string>
     <string name="previewLoading">Preview is loading…</string>
     <string name="ChooseAnyVideoForShare">Please select min 1 video for share!</string>
     <string name="ChooseAnyVideoForDelete">Please select min 1 video for delete!</string>

@@ -18,6 +18,7 @@
     <string name="clear">Temizle</string>
     <string name="reset">Sıfırla</string>
     <string name="apply">Uygula</string>
+    <string name="resolutionTitle">Çözünürlük:</string>
     <string name="previewLoading">Önizleme yükleniyor…</string>
     <string name="ChooseAnyVideoForShare">Lütfen paylaşmak için en az 1 video seçin!</string>
     <string name="ChooseAnyVideoForDelete">Lütfen silmek için en az 1 video seçin!</string>
