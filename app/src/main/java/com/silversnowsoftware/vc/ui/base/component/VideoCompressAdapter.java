@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.model.FileModel;
+import com.silversnowsoftware.vc.utils.Utility;
 import com.silversnowsoftware.vc.utils.constants.Constants;
 import com.silversnowsoftware.vc.utils.constants.Globals;
 import com.silversnowsoftware.vc.utils.helpers.FileHelper;
@@ -129,7 +130,7 @@ public class VideoCompressAdapter extends ArrayAdapter {
             if (model.getCreateDate() != null)
                 viewHolder.tvCreateDate.setText(new SimpleDateFormat(Constants.DATE_FORMAT_ONE).format(model.getCreateDate()));
 
-            viewHolder.tvVideoDuration.setText(String.valueOf(model.getVideoLength()));
+            viewHolder.tvVideoDuration.setText(Utility.ConvertToVideoTime(model.getVideoLength()));
         }
         return view;
     }

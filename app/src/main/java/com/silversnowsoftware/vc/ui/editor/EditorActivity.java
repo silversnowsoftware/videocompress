@@ -52,8 +52,7 @@ public class EditorActivity extends BaseActivity implements IEditorView {
         public void getResult(Uri uri) {
             fileModel.setFileStatus(FileStatusEnum.SUCCESS);
             fileModel.setPath(uri.getPath());
-            fileModel.setVideoLength(Utility.ConvertToVideoTime(Integer.valueOf(String.valueOf(getVideoDuration(EditorActivity.this, fileModel.getPath())))));
-            fileModel.setTempVideoLenght(getVideoDuration(EditorActivity.this,fileModel.getPath()));
+            fileModel.setVideoLength(getVideoDuration(EditorActivity.this, fileModel.getPath()));
             mPresenter.updateFileModel(fileModel);
 
             if (!fileModel.getIsCompress()) {
@@ -87,9 +86,7 @@ public class EditorActivity extends BaseActivity implements IEditorView {
         @Override
         public void onSuccess(Double rate) {
             progressDialog.hide();
-
             fileModel.setFileStatus(FileStatusEnum.SUCCESS);
-            fileModel.setVideoLength(Utility.ConvertToVideoTime(Integer.valueOf(String.valueOf(getVideoDuration(EditorActivity.this, fileModel.getPath())))));
             fileModel.setPath(Globals.currentOutputVideoPath + fileModel.getName());
             mPresenter.updateFileModel(fileModel);
             finish();
@@ -108,7 +105,6 @@ public class EditorActivity extends BaseActivity implements IEditorView {
 
             fileModel.setFileStatus(FileStatusEnum.ERROR);
             fileModel.setPath(Globals.currentOutputVideoPath + fileModel.getName());
-            fileModel.setVideoLength(Utility.ConvertToVideoTime(Integer.valueOf(String.valueOf(getVideoDuration(EditorActivity.this, fileModel.getPath())))));
             mPresenter.updateFileModel(fileModel);
 
             showToastMethod(getString(R.string.compression_failed));
@@ -226,7 +222,7 @@ public class EditorActivity extends BaseActivity implements IEditorView {
         if (fileModel.getIsCompress()) {
             if (fileModel.getFileStatus() == FileStatusEnum.PREPEARING || (fileModel.getIsCrop() && fileModel.getFileStatus() == FileStatusEnum.SUCCESS)) {
                 fileModel.setFileStatus(FileStatusEnum.PROGRESSING);
-                fileModel.setTempVideoLenght(getVideoDuration(EditorActivity.this,fileModel.getPath()));
+                fileModel.setVideoLength(getVideoDuration(EditorActivity.this,fileModel.getPath()));
                 FileCompressor fc = new FileCompressor(EditorActivity.this);
                 fc.Compress(fileModel);
                 fileModel.getCustomListener(mCustomListener);

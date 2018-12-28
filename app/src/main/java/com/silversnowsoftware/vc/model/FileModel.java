@@ -53,13 +53,12 @@ public class FileModel extends BaseResponse implements Serializable  {
     @DatabaseField(columnName = "Resolution")
     private String Resolution;
     @DatabaseField(columnName = "VideoLength")
-    private String VideoLength;
+    private Integer VideoLength;
     private Double Progress;
     @DatabaseField(columnName = "IsCrop")
     private Boolean IsCrop;
     @DatabaseField(columnName = "IsCompress")
     private Boolean IsCompress;
-    private Integer TempVideoLenght;
 
     public String getName() {
         return Name;
@@ -124,13 +123,13 @@ public class FileModel extends BaseResponse implements Serializable  {
                 "-crf#24#-acodec#aac#-ar#44100#-ac#2#-b:a#96k#-s#" + getResolution() + "#-aspect#16:9#" + Globals.currentOutputVideoPath + this.Name;
     }
 
-    public String getVideoLength() {
+    public Integer getVideoLength() {
         if (VideoLength == null)
-            return "0";
+            return 0;
         return VideoLength;
     }
 
-    public void setVideoLength(String videoLength) {
+    public void setVideoLength(Integer videoLength) {
         VideoLength = videoLength;
     }
 
@@ -194,11 +193,4 @@ public class FileModel extends BaseResponse implements Serializable  {
         IsCompress = isCompress;
     }
 
-    public Integer getTempVideoLenght() {
-        return TempVideoLenght;
-    }
-
-    public void setTempVideoLenght(Integer tempVideoLenght) {
-        TempVideoLenght = tempVideoLenght;
-    }
 }
