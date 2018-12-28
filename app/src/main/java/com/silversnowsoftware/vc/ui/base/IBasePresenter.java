@@ -15,5 +15,5 @@ public interface IBasePresenter<V extends IBaseView> {
     void onDetach();
 
     public V getView();
-
+    public void deleteErrorFileModel();
 }

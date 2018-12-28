@@ -49,12 +49,13 @@ public class FileModel extends BaseResponse implements Serializable  {
     private MediaTypeEnum MediaType;
     @DatabaseField(columnName = "Resolution")
     private String Resolution;
-    private Double VideoLength;
+    @DatabaseField(columnName = "VideoLength")
+    private String VideoLength;
     private Double Progress;
     @DatabaseField(columnName = "IsCrop")
-    private Integer IsCrop;
+    private Boolean IsCrop;
     @DatabaseField(columnName = "IsCompress")
-    private Integer IsCompress;
+    private Boolean IsCompress;
 
     public String getName() {
         return Name;
@@ -119,11 +120,13 @@ public class FileModel extends BaseResponse implements Serializable  {
                 "-crf 24 -acodec aac -ar 44100 -ac 2 -b:a 96k -s " + getResolution() + " -aspect 16:9 " + Globals.currentOutputVideoPath + this.Name;
     }
 
-    public Double getVideoLength() {
+    public String getVideoLength() {
+        if (VideoLength == null)
+            return "0";
         return VideoLength;
     }
 
-    public void setVideoLength(Double videoLength) {
+    public void setVideoLength(String videoLength) {
         VideoLength = videoLength;
     }
 
@@ -167,19 +170,24 @@ public class FileModel extends BaseResponse implements Serializable  {
         CreateDate = createDate;
     }
 
-    public Integer getIsCrop() {
+    public Boolean getIsCrop() {
+        if (IsCrop == null)
+            return false;
         return IsCrop;
     }
 
-    public void setIsCrop(Integer isCrop) {
+    public void setIsCrop(Boolean isCrop) {
         IsCrop = isCrop;
     }
 
-    public Integer getIsCompress() {
+    public boolean getIsCompress() {
+        if (IsCompress == null)
+            return false;
         return IsCompress;
     }
 
-    public void setIsCompress(Integer isCompress) {
+    public void setIsCompress(boolean isCompress) {
         IsCompress = isCompress;
     }
+
 }

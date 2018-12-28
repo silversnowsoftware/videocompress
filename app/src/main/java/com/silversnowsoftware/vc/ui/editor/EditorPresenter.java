@@ -1,23 +1,18 @@
 package com.silversnowsoftware.vc.ui.editor;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
+import android.app.DialogFragment;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.MediaController;
 import android.widget.SeekBar;
-import android.widget.Toast;
 
 import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
 import com.google.android.exoplayer2.extractor.ExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
@@ -25,12 +20,9 @@ import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
-import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
-import com.google.android.exoplayer2.util.Util;
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.model.customvideoviews.BackgroundTask;
@@ -38,39 +30,26 @@ import com.silversnowsoftware.vc.model.customvideoviews.BarThumb;
 import com.silversnowsoftware.vc.model.customvideoviews.CustomRangeSeekBar;
 import com.silversnowsoftware.vc.model.listener.OnRangeSeekBarChangeListener;
 import com.silversnowsoftware.vc.model.listener.OnVideoTrimListener;
-import com.silversnowsoftware.vc.model.logger.LogModel;
 import com.silversnowsoftware.vc.operations.compressor.FileCompressor;
 import com.silversnowsoftware.vc.ui.base.BasePresenter;
-import com.silversnowsoftware.vc.ui.base.BaseResponse;
-import com.silversnowsoftware.vc.ui.list.ListActivity;
-import com.silversnowsoftware.vc.ui.trimmer.VideoTimmerActivity;
-import com.silversnowsoftware.vc.utils.Types;
 import com.silversnowsoftware.vc.utils.Utility;
-import com.silversnowsoftware.vc.utils.constants.Constants;
-import com.silversnowsoftware.vc.utils.constants.Keys;
 import com.silversnowsoftware.vc.utils.enums.FileStatusEnum;
+import com.silversnowsoftware.vc.utils.helpers.FileHelper;
 import com.silversnowsoftware.vc.utils.helpers.LogManager;
 
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.inject.Inject;
 
-import static android.app.Activity.RESULT_OK;
-import static com.silversnowsoftware.vc.utils.SharedPref.getData;
-import static com.silversnowsoftware.vc.utils.SharedPref.putData;
 import static com.silversnowsoftware.vc.utils.constants.Arrays.VideoResolutions;
 import static com.silversnowsoftware.vc.utils.helpers.FileHelper.getVideoDuration;
 import static com.silversnowsoftware.vc.utils.helpers.FileHelper.getVideoResoution;
-import static com.silversnowsoftware.vc.utils.helpers.FileHelper.retriveVideoFrameFromVideo;
 
 /**
  * Created by burak on 11/1/2018.
@@ -87,14 +66,18 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
     private int mStartPosition = 0;
     private int mEndPosition = 0;
     // set your max video trim seconds
-    private int mMaxDuration = 60;
+    private int mMaxDuration = 6000000;
     private Handler mHandler = new Handler();
-    private  DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+    private DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     private boolean isCrop;
-    private boolean isCompress;
-
+    private boolean isCompress = false;
     String dstFile = null;
     FileModel responseModel;
+    DialogFragment dialogFragment;
+
+    private List<FileModel> getFileModelList() {
+        return getRepositoryFileModel().getAll();
+    }
 
     @Inject
     public EditorPresenter() {
@@ -119,12 +102,11 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
     }
 
 
-    @Override
-    public void setVideoToVideoView() {
-        try {
-            List<FileModel> fileModelList = getRepositoryFileModel().getAll();
 
-            srcFile = fileModelList.get(fileModelList.size() - 1).getPath();
+    private void setVideoPrepared() {
+        try {
+
+            srcFile = getFileModelList().get(getFileModelList().size() - 1).getPath();
             mMaxDuration = getVideoDuration((Activity) getView(), srcFile);
             mDefaultResolutionId = findVideoResolution(srcFile);
             setSelectedResolution(mDefaultResolutionId);
@@ -132,82 +114,11 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             mViewHolder.tileView.post(new Runnable() {
                 @Override
                 public void run() {
-
                     setBitmap(Uri.parse(srcFile));
-                    setExoPlayer();
-                }
-            });
-
-            mViewHolder.imgPlay.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    playPauseVideo();
-                }
-            });
-
-            mViewHolder.exoPlayerView.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View view, MotionEvent motionEvent) {
-                    playPauseVideo();
-                    return false;
-                }
-            });
-
-            mViewHolder.mCustomRangeSeekBarNew.addOnRangeSeekBarListener(new OnRangeSeekBarChangeListener() {
-                @Override
-                public void onCreate(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
-                    // Do nothing
-                }
-
-                @Override
-                public void onSeek(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
-                    onSeekThumbs(index, value);
-                }
-
-                @Override
-                public void onSeekStart(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
-                    if (mViewHolder.exoPlayer != null) {
-                        mHandler.removeCallbacks(mUpdateTimeTask);
-                        mViewHolder.seekBarVideo.setProgress(0);
-                        mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
-                        mViewHolder.exoPlayer.setPlayWhenReady(false);
-                        mViewHolder.imgPlay.setBackgroundResource(R.drawable.ic_white_play);
-                    }
-                }
-
-                @Override
-                public void onSeekStop(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
-
                 }
             });
 
 
-            mViewHolder.seekBarVideo.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
-
-            {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-
-                }
-
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-                    if (mViewHolder.exoPlayer != null) {
-                        mHandler.removeCallbacks(mUpdateTimeTask);
-                        mViewHolder.seekBarVideo.setMax(mTimeVideo * 1000);
-                        mViewHolder.seekBarVideo.setProgress(0);
-                        mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
-                        mViewHolder.exoPlayer.setPlayWhenReady(false);
-                        mViewHolder.imgPlay.setBackgroundResource(R.drawable.ic_white_play);
-                    }
-                }
-
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-                    mHandler.removeCallbacks(mUpdateTimeTask);
-                    mViewHolder.exoPlayer.seekTo((mStartPosition * 1000) - mViewHolder.seekBarVideo.getProgress());
-                }
-            });
         } catch (Exception ex) {
 
             LogManager.Log(className, ex);
@@ -272,30 +183,34 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
 
     @Override
     public void setExoPlayer() {
+        mViewHolder.tileView.post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    srcFile = getFileModelList().get(getFileModelList().size() - 1).getPath();
+                    BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+                    TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(bandwidthMeter));
+                    mViewHolder.exoPlayer = ExoPlayerFactory.newSimpleInstance((Activity) getView(), trackSelector);
 
-        try {
-            BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-            TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(bandwidthMeter));
-            mViewHolder.exoPlayer = ExoPlayerFactory.newSimpleInstance((Activity) getView(), trackSelector);
+                    DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(getContext(), "exoplayer_video");
+                    ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+                    MediaSource mediaSource = new ExtractorMediaSource(
+                            Uri.parse(srcFile),
+                            dataSourceFactory,
+                            new DefaultExtractorsFactory(),
+                            null,
+                            null);
 
-            DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(getContext(), "exoplayer_video");
-            ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-            MediaSource mediaSource = new ExtractorMediaSource(
-                    Uri.parse(srcFile),
-                    dataSourceFactory,
-                    new DefaultExtractorsFactory(),
-                    null,
-                    null);
+                    mViewHolder.exoPlayerView.setPlayer(mViewHolder.exoPlayer);
+                    mViewHolder.exoPlayer.prepare(mediaSource);
+                    onVideoPrepared();
+                    setVideoPrepared();
+                } catch (Exception ex) {
 
-            mViewHolder.exoPlayerView.setPlayer(mViewHolder.exoPlayer);
-            mViewHolder.exoPlayer.prepare(mediaSource);
-            onVideoPrepared();
-            //  exoPlayer.setPlayWhenReady(true);
-        } catch (Exception ex) {
-
-            LogManager.Log(className, ex);
-        }
-
+                    LogManager.Log(className, ex);
+                }
+            }
+        });
     }
 
     @Override
@@ -335,7 +250,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
 
     @Override
     public void setBitmap(Uri mVideoUri) {
-        mViewHolder.tileView.setVideo(mVideoUri);
+        mViewHolder.tileView.setVideo(mVideoUri, mViewHolder);
     }
 
     @Override
@@ -384,10 +299,19 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
                 case BarThumb.LEFT: {
                     mStartPosition = (int) ((mDuration * value) / 100L);
                     mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
+
+                    if (mStartPosition > 0)
+                        isCrop = true;
+                    else
+                        isCrop = false;
                     break;
                 }
                 case BarThumb.RIGHT: {
                     mEndPosition = (int) ((mDuration * value) / 100L);
+                    if (mEndPosition < mDuration)
+                        isCrop = true;
+                    else
+                        isCrop = false;
                     break;
                 }
             }
@@ -409,10 +333,8 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             int endMin = Integer.parseInt(mEnd) / 60;
             int endSec = Integer.parseInt(mEnd) % 60;
 
-            if (endSec<mDuration || startSec > startMin)
 
-
-                mViewHolder.txtVideoTrimSeconds.setText(String.format(Locale.US, "%02d:%02d - %02d:%02d", startMin, startSec, endMin, endSec));
+            mViewHolder.txtVideoTrimSeconds.setText(String.format(Locale.US, "%02d:%02d - %02d:%02d", startMin, startSec, endMin, endSec));
         } catch (Exception ex) {
 
             LogManager.Log(className, ex);
@@ -453,8 +375,93 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
         return dstFile;
     }
 
+    public boolean addFileModel(FileModel model) {
+        boolean result = true;
+        try {
+            getRepositoryFileModel().add(model);
+        } catch (Exception ex) {
+        }
+        return result;
+    }
+
     @Override
-    public FileModel addSelectedFile() {
+    public void customRangeSeekBarNewInit() {
+
+        mViewHolder.mCustomRangeSeekBarNew.addOnRangeSeekBarListener(new OnRangeSeekBarChangeListener() {
+            @Override
+            public void onCreate(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
+                // Do nothing
+            }
+
+            @Override
+            public void onSeek(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
+                onSeekThumbs(index, value);
+            }
+
+            @Override
+            public void onSeekStart(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
+                if (mViewHolder.exoPlayer != null) {
+                    mHandler.removeCallbacks(mUpdateTimeTask);
+                    mViewHolder.seekBarVideo.setProgress(0);
+                    mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
+                    mViewHolder.exoPlayer.setPlayWhenReady(false);
+                    mViewHolder.imgPlay.setBackgroundResource(R.drawable.ic_white_play);
+                }
+            }
+
+            @Override
+            public void onSeekStop(CustomRangeSeekBar customRangeSeekBarNew, int index, float value) {
+
+            }
+        });
+    }
+
+    @Override
+    public void seekBarVideoInit() {
+
+        mViewHolder.seekBarVideo.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
+
+        {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+                if (mViewHolder.exoPlayer != null) {
+                    mHandler.removeCallbacks(mUpdateTimeTask);
+                    mViewHolder.seekBarVideo.setMax(mTimeVideo * 1000);
+                    mViewHolder.seekBarVideo.setProgress(0);
+                    mViewHolder.exoPlayer.seekTo(mStartPosition * 1000);
+                    mViewHolder.exoPlayer.setPlayWhenReady(false);
+                    mViewHolder.imgPlay.setBackgroundResource(R.drawable.ic_white_play);
+                }
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                mHandler.removeCallbacks(mUpdateTimeTask);
+                mViewHolder.exoPlayer.seekTo((mStartPosition * 1000) - mViewHolder.seekBarVideo.getProgress());
+            }
+        });
+    }
+
+    @Override
+    public boolean removeLastVideo() {
+        Boolean result = true;
+        try {
+            FileModel fileModel = getFileModelList().get(getFileModelList().size() - 1);
+            getRepositoryFileModel().remove(fileModel);
+        } catch (Exception ex) {
+            LogManager.Log(className, ex);
+            result = false;
+        }
+        return result;
+    }
+
+    @Override
+    public FileModel processFile() {
 
 
         try {
@@ -467,18 +474,20 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             int height = videoResolutions.get("height");
 
             String videoResolution = getSelectedResolution();
-            if (!videoResolution.isEmpty()) {
+
+            if(!videoResolution.isEmpty()) {
                 String resolution = getFitResolution(width, height, videoResolution);
                 responseModel.setResolution(resolution);
-                responseModel.setFileStatus(FileStatusEnum.PREPEARING);
-                Date date = new Date();
-                responseModel.setCreateDate(date);
-                getRepositoryFileModel().add(responseModel);
-
-            } else {
-                responseModel.setSuccess(false);
-                responseModel.setMessage(getContext().getString(R.string.choose_format));
             }
+            responseModel.setFileStatus(FileStatusEnum.PREPEARING);
+            Date date = new Date();
+            responseModel.setName(FileHelper.generateVideoName());
+            responseModel.setCreateDate(date);
+            responseModel.setIsCrop(isCrop);
+            responseModel.setIsCompress(isCompress);
+            return responseModel;
+
+
         } catch (Exception ex) {
             responseModel.setSuccess(false);
             responseModel.setMessage(getContext().getString(R.string.error));
@@ -515,7 +524,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
     }
 
     @Override
-    public void updateModel(FileModel model) {
+    public void updateFileModel(FileModel model) {
         try {
             getRepositoryFileModel().update(model);
         } catch (Exception ex) {
@@ -532,18 +541,25 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             int id = mViewHolder.rgResolution.getCheckedRadioButtonId();
             switch (id) {
                 case R.id.rb144p:
+                    isCompress = true;
                     return (String) mViewHolder.rb144p.getText();
                 case R.id.rb240p:
+                    isCompress = true;
                     return (String) mViewHolder.rb240p.getText();
                 case R.id.rb360p:
+                    isCompress = true;
                     return (String) mViewHolder.rb360p.getText();
                 case R.id.rb480p:
+                    isCompress = true;
                     return (String) mViewHolder.rb480p.getText();
                 case R.id.rb720p:
+                    isCompress = true;
                     return (String) mViewHolder.rb720p.getText();
                 case R.id.rb1080p:
+                    isCompress = true;
                     return (String) mViewHolder.rb1080p.getText();
                 default:
+                    isCompress = false;
                     return "";
 
             }
@@ -551,7 +567,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
 
             LogManager.Log(className, ex);
         }
-            return "";
+        return "";
 
 
     }
@@ -645,7 +661,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
         return resolution;
     }
 
-    void playPauseVideo() {
+    public void playPauseVideo() {
         try {
 
 
@@ -675,5 +691,7 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             LogManager.Log(className, ex);
         }
     }
+
+
 
 }

@@ -21,10 +21,10 @@
             android:id="@+id/seekBarLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/app_blue"
-            android:orientation="horizontal"
             android:layout_gravity="bottom"
-            android:alpha="0.75">
+            android:alpha="0.75"
+            android:background="@color/app_blue"
+            android:orientation="horizontal">
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -38,7 +38,7 @@
                     android:id="@+id/imgPlay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/ic_white_play"/>
+                    android:background="@drawable/ic_white_play" />
             </RelativeLayout>
 
 
@@ -93,23 +93,43 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal" />
 
+            <TextView
+                android:id="@+id/tvPreviewThumb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/previewLoading" />
+
             <com.silversnowsoftware.vc.model.customvideoviews.CustomRangeSeekBar
                 android:id="@+id/timeLineBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true" />
+                android:layout_centerInParent="true"
+                android:visibility="invisible" />
         </RelativeLayout>
 
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/txtResolutionTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/trimmerLayout"
+        android:layout_marginTop="5dp"
+        android:paddingStart="5dp"
+        android:text="@string/resolutionTitle"
+        android:textColor="@color/gray" />
+
     <RadioGroup
         android:id="@+id/rgResolution"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/txtResolutionTitle"
+        android:background="@drawable/border"
         android:orientation="horizontal"
-        android:layout_below="@+id/trimmerLayout"
-        android:layout_marginTop="5dp"
+        android:paddingEnd="5dp"
+        android:paddingStart="5dp"
         android:weightSum="120">
 
         <RadioButton
@@ -117,68 +137,107 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="20"
-            android:text="@string/resolution_144p"/>
+            android:text="@string/resolution_144p"
+            android:textSize="10sp" />
+
         <RadioButton
             android:id="@+id/rb240p"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="20"
-            android:text="@string/resolution_240p"/>
+            android:text="@string/resolution_240p"
+            android:textSize="10sp" />
+
         <RadioButton
             android:id="@+id/rb360p"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="20"
-            android:text="@string/resolution_360p"/>
+            android:text="@string/resolution_360p"
+            android:textSize="10sp" />
+
         <RadioButton
             android:id="@+id/rb480p"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="20"
-            android:text="@string/resolution_480p"/>
+            android:text="@string/resolution_480p"
+            android:textSize="10sp" />
+
         <RadioButton
             android:id="@+id/rb720p"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="20"
-            android:text="@string/resolution_720p"/>
+            android:text="@string/resolution_720p"
+            android:textSize="10sp" />
+
         <RadioButton
             android:id="@+id/rb1080p"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="20"
-            android:text="@string/resolution_1080p"/>
+            android:text="@string/resolution_1080p"
+            android:textSize="10sp" />
     </RadioGroup>
 
-
     <LinearLayout
+        android:id="@+id/lyProgressbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="15dp"
-        android:gravity="center|bottom"
+        android:layout_marginBottom="130dp"
         android:orientation="horizontal"
-        android:id="@+id/linearLayout">
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/pbCompressTrimmingBar"
+            style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rgResolution"
+        android:layout_marginTop="40dp"
+        android:gravity="center|bottom"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/btnClear"
-            style="@style/AppTheme.MainButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Clear"
-            android:drawableStart="@mipmap/clear"
-            android:paddingRight="10dp"
-            android:layout_marginRight="5dp"/>
+            style="@style/AppTheme.MainInfoButton"
+            android:layout_width="120dp"
+            android:layout_height="45dp"
+            android:layout_marginEnd="30dp"
+            android:enabled="false"
+            android:text="@string/reset" />
+
         <Button
             android:id="@+id/btnCompress"
             style="@style/AppTheme.MainButton"
-            android:layout_width="150dp"
-            android:layout_height="50dp"
-            android:text="Compress" />
+            android:layout_width="120dp"
+            android:layout_height="45dp"
+            android:text="@string/apply" />
 
 
     </LinearLayout>
 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linearLayout">
+        <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adViewEditor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            ads:adSize="SMART_BANNER"
+            ads:adUnitId="ca-app-pub-9069451453527664/2879358754"></com.google.android.gms.ads.AdView>
+    </RelativeLayout>
 
 
 </RelativeLayout>

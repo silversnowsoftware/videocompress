@@ -15,20 +15,9 @@ import retrofit.client.Response;
  */
 
 public class LogManager {
-    private static RestAdapter restAdapter;
-
-    private static RestAdapter getRestAdapter() {
-        if (restAdapter == null) {
-            return restAdapter = new RestAdapter.Builder()
-                    .setEndpoint(Constants.REST_BASE_SERVICE)
-                    .build();
-        }
-        return restAdapter;
-    }
-
 
     public static void Log(String className, Exception ex) {
-
+      /*  ex.printStackTrace();
         LogModel logModel = new LogModel.LogBuilder()
                 .apiVersion(Utility.getAndroidVersion())
                 .appName(Constants.APP_NAME)
@@ -51,6 +40,6 @@ public class LogManager {
             public void failure(RetrofitError error) {
 
             }
-        });
+        });*/
     }
 }

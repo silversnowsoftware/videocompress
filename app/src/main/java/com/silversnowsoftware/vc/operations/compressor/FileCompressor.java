@@ -56,7 +56,7 @@ public class FileCompressor implements IFileCompressor {
             if (mFile.exists()) {
                 mFile.delete();
             }
-            Log.i("Progress ", fileModel.getName() + "--" + fileModel.getVideoLength());
+
             mCompressor.execCommand(fileModel.getCompressCmd(), new CompressListener() {
                 int counter = 0;
 
@@ -71,13 +71,13 @@ public class FileCompressor implements IFileCompressor {
 
                 @Override
                 public void onExecFail(String reason) {
-                    Toast.makeText(context, reason, Toast.LENGTH_SHORT).show();
+                   fileModel.listener.onFailure(reason);
                 }
 
                 @Override
                 public void onExecProgress(String message) {
 
-                    Double progress = getProgress(message, fileModel.getVideoLength()) * 100;
+                    Double progress = getProgress(message, Double.valueOf(fileModel.getVideoLength())) * 100;
                     fileModel.setProgress(progress);
                     fileModel.listener.onProgress(progress);
 

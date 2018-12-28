@@ -3,10 +3,15 @@ package com.silversnowsoftware.vc.ui.list;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.model.listener.OnEventListener;
@@ -30,7 +35,7 @@ public class ListActivity extends BaseActivity implements IListView {
 
     @Inject
     IListPresenter<IListView> mPresenter;
-
+    ListViewHolder mListViewHolder;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,13 +45,63 @@ public class ListActivity extends BaseActivity implements IListView {
         ButterKnife.bind(this);
 
         try {
-            SharedPref.RemoveKey(Keys.SELECTED_FILE_LIST, this);
-            SharedPref.RemoveKey(Keys.SELECTION_MODE, this);
+
+            mListViewHolder = new ListViewHolder(this);
+
+            MobileAds.initialize(this, "ca-app-pub-9069451453527664~1459246129");
+            mListViewHolder.mInterstitialAd = new InterstitialAd(this);
+            mListViewHolder.mInterstitialAd.setAdListener(new AdListener(){
+                @Override
+                public void onAdClosed() {
+                    super.onAdClosed();
+                }
+
+                @Override
+                public void onAdFailedToLoad(int i) {
+                    super.onAdFailedToLoad(i);
+                }
+
+                @Override
+                public void onAdLeftApplication() {
+                    super.onAdLeftApplication();
+                }
+
+                @Override
+                public void onAdOpened() {
+                    super.onAdOpened();
+
+                }
+
+                @Override
+                public void onAdLoaded() {
+                    super.onAdLoaded();
+                    mListViewHolder.mInterstitialAd.show();
+                }
+
+                @Override
+                public void onAdClicked() {
+                    super.onAdClicked();
+                }
+
+                @Override
+                public void onAdImpression() {
+                    super.onAdImpression();
+                }
+            });
+            mListViewHolder.mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+            mListViewHolder.mInterstitialAd.loadAd(new AdRequest.Builder().addTestDevice("B3E228E2A3DF6402D6DCF40712D066F6").build());
+
+
+            AdRequest adRequest = new AdRequest.Builder().addTestDevice("B3E228E2A3DF6402D6DCF40712D066F6").build();
+            mListViewHolder.adViewList.loadAd(adRequest);
+            mListViewHolder.adViewList.setAdListener(new AdListener());
+
 
             mPresenter.onAttach(this);
             mPresenter.setViewHolder();
+            mPresenter.deleteErrorFileModel();
             mPresenter.fillListView();
-        }catch (Exception ex) {
+        } catch (Exception ex) {
 
             LogManager.Log(className, ex);
         }
@@ -75,7 +130,7 @@ public class ListActivity extends BaseActivity implements IListView {
                 deleteFilesOperation();
                 break;
             case R.id.action_share:
-                    mPresenter.shareVideoFiles(getSelectedFiles());
+                mPresenter.shareVideoFiles(getSelectedFiles());
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -100,8 +155,6 @@ public class ListActivity extends BaseActivity implements IListView {
                     File file = new File(fileModel.getPath());
                     if (file.exists()) {
                         file.delete();
-
-
                     }
                     mPresenter.deleteSelectedFile(fileModel);
                 }
@@ -136,7 +189,7 @@ public class ListActivity extends BaseActivity implements IListView {
 
     private void deleteFilesOperation() {
 
-        if (getSelectedFiles() != null) {
+        if (getSelectedFiles() != null && getSelectedFiles().size() > 0) {
 
             DeleteFilesOperationAsync deleteFilesOperationAsync = new DeleteFilesOperationAsync(getContext(), new OnEventListener() {
                 @Override
@@ -150,6 +203,9 @@ public class ListActivity extends BaseActivity implements IListView {
                 }
             });
             deleteFilesOperationAsync.execute();
+        } else {
+            alertDialog(ListActivity.this,getString(R.string.Alert),getString(R.string.ChooseAnyVideoForDelete));
         }
     }
+
 }

@@ -25,10 +25,13 @@ import com.silversnowsoftware.vc.utils.Utility;
 import com.silversnowsoftware.vc.utils.constants.Constants;
 import com.silversnowsoftware.vc.utils.constants.Globals;
 import com.silversnowsoftware.vc.utils.constants.Keys;
+import com.silversnowsoftware.vc.utils.enums.FileStatusEnum;
 import com.silversnowsoftware.vc.utils.helpers.LogManager;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -59,7 +62,6 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
         try {
             viewHolder = new ListViewHolder(getView());
         } catch (Exception ex) {
-
             LogManager.Log(className, ex);
         }
     }
@@ -72,9 +74,7 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
             response.setSuccess(true);
         } catch (Exception ex) {
             response.setSuccess(false);
-
             LogManager.Log(className, ex);
-
         }
         return response;
     }
@@ -83,34 +83,38 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
     public void shareVideoFiles(List<FileModel> fileModelList) {
         try {
 
+            if (fileModelList != null && fileModelList.size() > 0) {
+                StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+                StrictMode.setVmPolicy(builder.build());
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_SEND_MULTIPLE);
+                intent.setType("video/*");
+                ArrayList<Uri> files = new ArrayList<Uri>();
 
-            StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-            StrictMode.setVmPolicy(builder.build());
-            Intent intent = new Intent();
-            intent.setAction(Intent.ACTION_SEND_MULTIPLE);
-            intent.setType("video/*");
-            ArrayList<Uri> files = new ArrayList<Uri>();
-
-            for (FileModel fileModel : fileModelList) {
-                File file = new File(fileModel.getPath());
-                Uri uri = Uri.fromFile(file);
-                files.add(uri);
+                for (FileModel fileModel : fileModelList) {
+                    File file = new File(fileModel.getPath());
+                    Uri uri = Uri.fromFile(file);
+                    files.add(uri);
+                }
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
+                getContext().startActivity(intent);
+            } else {
+                alertDialog(((Activity) getView()), getContext().getString(R.string.Alert), getContext().getString(R.string.ChooseAnyVideoForShare));
             }
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, files);
-            getContext().startActivity(intent);
         } catch (Exception ex) {
 
             LogManager.Log(className, ex);
         }
     }
 
-
     public void fillListView() {
         try {
 
-
             List<FileModel> fileModelList = getFileModelList();
+            if (fileModelList != null && fileModelList.size() > 0) {
+                Collections.reverse(fileModelList);
+            }
             VideoCompressAdapter videoCompressAdapter = getVideoCompressAdapter(fileModelList);
             videoCompressAdapter.setActivity((Activity) getView());
             Globals.selectionMode = false;
@@ -118,8 +122,8 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
             if (fileModelList != null) {
                 videoCompressAdapter.notifyDataSetChanged();
                 viewHolder.lvFileModel.setAdapter(videoCompressAdapter);
-
             }
+
             viewHolder.lvFileModel.setEmptyView(viewHolder.tvNoDataFound);
         } catch (Exception ex) {
 
@@ -133,10 +137,7 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
             list = getRepositoryFileModel().getAll();
 
         } catch (Exception ex) {
-
-
             LogManager.Log(className, ex);
-
         }
         return list;
     }
@@ -145,11 +146,9 @@ public class ListPresenter<V extends IListView> extends BasePresenter<V> impleme
         VideoCompressAdapter adapter = null;
         try {
             adapter = new VideoCompressAdapter(getContext(), R.layout.file_model_list, fileModelList);
-
         } catch (Exception ex) {
 
             LogManager.Log(className, ex);
-
         }
         return adapter;
     }

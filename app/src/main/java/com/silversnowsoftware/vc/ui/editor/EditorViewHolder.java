@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.model.customvideoviews.CustomRangeSeekBar;
 import com.silversnowsoftware.vc.model.customvideoviews.TileView;
@@ -61,6 +64,11 @@ public final class EditorViewHolder {
     public RadioGroup rgResolution;
     @BindView(R.id.btnClear)
     public Button btnClear;
+    @BindView(R.id.tvPreviewThumb)
+    public TextView tvPreviewThumb;
+    @BindView(R.id.adViewEditor)
+    public AdView adViewEditor;
+
 
     public SimpleExoPlayer exoPlayer;
 

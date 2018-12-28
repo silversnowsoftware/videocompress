@@ -1,5 +1,6 @@
 package com.silversnowsoftware.vc.ui.editor;
 
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.net.Uri;
 
@@ -19,13 +20,13 @@ public interface IEditorPresenter<V extends IEditorView> extends IBasePresenter<
 
     void setViewHolder();
 
-    void setVideoToVideoView();
-
     void onVideoPrepared();
 
     void setSeekBarPosition();
 
     void setExoPlayer();
+
+    void playPauseVideo();
 
     void updateProgressBar();
 
@@ -37,9 +38,19 @@ public interface IEditorPresenter<V extends IEditorView> extends IBasePresenter<
 
     String trimVideo(OnVideoTrimListener mOnVideoTrimListener);
 
-    FileModel addSelectedFile();
+    FileModel processFile();
 
     void setDefaultEditor();
 
-    void updateModel(FileModel model);
+    void updateFileModel(FileModel model);
+
+    boolean addFileModel(FileModel model);
+
+    void customRangeSeekBarNewInit();
+
+    void seekBarVideoInit();
+
+    boolean removeLastVideo();
+
+
 }

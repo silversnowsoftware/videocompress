@@ -30,6 +30,7 @@ import android.view.View;
 
 
 import com.silversnowsoftware.vc.R;
+import com.silversnowsoftware.vc.ui.editor.EditorViewHolder;
 import com.silversnowsoftware.vc.utils.helpers.FileHelper;
 
 import java.util.HashMap;
@@ -44,6 +45,7 @@ public class TileView extends View {
     private LongSparseArray<Bitmap> mBitmapList = null;
     private int viewWidth = 0;
     private int viewHeight = 0;
+    private EditorViewHolder viewHolder;
 
     public TileView(@NonNull Context context, AttributeSet attrs) {
         this(context, attrs, 0);
@@ -87,8 +89,8 @@ public class TileView extends View {
                              public void execute() {
                                  try {
 
-                                     FFmpegMediaMetadataRetriever mediaMetadataRetriever = new FFmpegMediaMetadataRetriever();
-                                     mediaMetadataRetriever.setDataSource(String.valueOf(mVideoUri));
+                                     MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
+                                     mediaMetadataRetriever.setDataSource(mVideoUri.getPath());
 
 
                                      LongSparseArray<Bitmap> thumbnailList = new LongSparseArray<>();
@@ -110,8 +112,6 @@ public class TileView extends View {
 
                                          Bitmap bitmap = mediaMetadataRetriever.getFrameAtTime(frame, FFmpegMediaMetadataRetriever.OPTION_CLOSEST); // frame at 2 seconds
 
-
-                                         String xy = FileHelper.getBase64FromBitmap(bitmap);
                                          try {
                                              bitmap = Bitmap.createScaledBitmap(bitmap, thumbWidth, thumbHeight, false);
                                          } catch (Exception e) {
@@ -156,11 +156,21 @@ public class TileView extends View {
                     x = x + bitmap.getWidth();
                 }
             }
+            if (this.viewHolder != null) {
+                this.viewHolder.tvPreviewThumb.setVisibility(GONE);
+                this.viewHolder.mCustomRangeSeekBarNew.setVisibility(VISIBLE);
+                this.viewHolder.btnCompress.setEnabled(true);
+                this.viewHolder.btnClear.setEnabled(true);
+                this.viewHolder.btnCompress.setAlpha((float) 1.0);
+                this.viewHolder.btnClear.setAlpha((float) 1.0);
+            }
+
         }
     }
 
-    public void setVideo(@NonNull Uri data) {
+    public void setVideo(@NonNull Uri data, EditorViewHolder viewHolder) {
         mVideoUri = data;
+        this.viewHolder = viewHolder;
         getBitmap();
     }
 

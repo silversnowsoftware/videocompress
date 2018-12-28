@@ -1,6 +1,7 @@
 package com.silversnowsoftware.vc.data.db;
 
 import com.silversnowsoftware.vc.model.FileModel;
+import com.silversnowsoftware.vc.utils.enums.FileStatusEnum;
 
 import java.util.List;
 
@@ -31,4 +32,6 @@ public interface IRepository<T> {
     T getByObject(T item);
 
     boolean exist(Integer id);
+
+    public List<FileModel> getFileModelListWithFileStatus();
 }

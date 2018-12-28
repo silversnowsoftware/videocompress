@@ -5,34 +5,27 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.silversnowsoftware.vc.R;
-import com.silversnowsoftware.vc.data.db.DbFileModel;
 import com.silversnowsoftware.vc.model.FileModel;
-import com.silversnowsoftware.vc.model.listener.ICustomListener;
-import com.silversnowsoftware.vc.operations.compressor.FileCompressor;
+import com.silversnowsoftware.vc.utils.constants.Constants;
 import com.silversnowsoftware.vc.utils.constants.Globals;
-import com.silversnowsoftware.vc.utils.enums.FileStatusEnum;
 import com.silversnowsoftware.vc.utils.helpers.FileHelper;
 
-import org.w3c.dom.Text;
-
-import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
 
 /**
  * Created by burak on 10/29/2018.
@@ -66,6 +59,9 @@ public class VideoCompressAdapter extends ArrayAdapter {
             @Override
             public boolean onLongClick(View view) {
 
+                if (Globals.selectedFiles == null)
+                    Globals.selectedFiles = new ArrayList<FileModel>();
+
                 FileModel model = (FileModel) getItem(position);
                 Globals.selectedFiles.add(model);
                 Globals.selectionMode = true;
@@ -73,7 +69,7 @@ public class VideoCompressAdapter extends ArrayAdapter {
                 viewHolder.ivSelectRow.setVisibility(View.VISIBLE);
                 viewHolder.selectRow.setBackgroundResource(R.color.selectedListItemColor);
                 viewHolder.setSelected(true);
-                notifyDataSetChanged();
+
                 return true;
             }
         });
@@ -120,49 +116,20 @@ public class VideoCompressAdapter extends ArrayAdapter {
                 }
             }
         });
+
         final FileModel model = (FileModel) getItem(position);
         if (model != null) {
             viewHolder.setId(model.getId());
-            viewHolder.tvVideoName.setText(model.getName());
-            viewHolder.ivVideoTumbnail.setImageBitmap(FileHelper.getBitmapFromBase64(model.getThumbnail()));
-            viewHolder.tvResolution.setText(model.getResolution());
-            viewHolder.tvCreateDate.setText(DateFormat.getDateTimeInstance(DateFormat.DEFAULT,DateFormat.SHORT).format(model.getCreateDate()));
-        }
+            if (model.getName() != null)
+                viewHolder.tvVideoName.setText(model.getName());
+            if (model.getThumbnail() != null)
+                viewHolder.ivVideoTumbnail.setImageBitmap(FileHelper.getBitmapFromBase64(model.getThumbnail()));
+            if (model.getResolution() != null)
+                viewHolder.tvResolution.setText(model.getResolution());
+            if (model.getCreateDate() != null)
+                viewHolder.tvCreateDate.setText(new SimpleDateFormat(Constants.DATE_FORMAT_ONE).format(model.getCreateDate()));
 
-
-        if (model.getFileStatus() == FileStatusEnum.PREPEARING) {
-            model.setFileStatus(FileStatusEnum.PROGRESSING);
-            final ViewHolder finalViewHolder = viewHolder;
-            FileCompressor fc = new FileCompressor(mActivity);
-
-            model.getCustomListener(new ICustomListener() {
-                @Override
-                public void onSuccess(Double rate) {
-                    Log.i("Success Rate: ", String.valueOf(rate.intValue()));
-                    finalViewHolder.tvProgress.setText("100%");
-                    model.setFileStatus(FileStatusEnum.SUCCESS);
-                    model.setPath(Globals.currentOutputVideoPath + model.getName());
-                    DbFileModel dbFileModel = new DbFileModel(getContext());
-                    dbFileModel.update(model);
-                    notifyDataSetChanged();
-                }
-
-                @Override
-                public void onProgress(Double rate) {
-
-                    if (rate.intValue() > 0) {
-                        Log.i("Rate: ", String.valueOf(rate.intValue()));
-                        finalViewHolder.tvProgress.setText(rate.intValue() + "%");
-                    }
-                    notifyDataSetChanged();
-                }
-
-                @Override
-                public void onFailure(String error) {
-                    model.setFileStatus(FileStatusEnum.ERROR);
-                }
-            });
-            fc.Compress(model);
+            viewHolder.tvVideoDuration.setText(String.valueOf(model.getVideoLength()));
         }
         return view;
     }
@@ -173,8 +140,6 @@ public class VideoCompressAdapter extends ArrayAdapter {
         private int _id;
         @BindView(R.id.tvVideoName)
         TextView tvVideoName;
-        @BindView(R.id.tvProgress)
-        TextView tvProgress;
         @BindView(R.id.ivVideoTumbnail)
         ImageView ivVideoTumbnail;
         @BindView(R.id.tvResolution)
@@ -188,6 +153,8 @@ public class VideoCompressAdapter extends ArrayAdapter {
         @BindView(R.id.playButton)
         ImageView playButton;
         private boolean isSelected;
+        @BindView(R.id.tvVideoDuration)
+        TextView tvVideoDuration;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);

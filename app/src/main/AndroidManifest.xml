@@ -39,7 +39,9 @@
 
         </activity>
         <activity android:name=".ui.compression.permission.PermissionsActivity" />
-        <activity android:name=".ui.compression.videorecord.CameraActivity" />
+        <activity android:name=".ui.compression.videorecord.CameraActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
         <activity android:name=".ui.test.TestActivity" />
         <activity
             android:name=".ui.list.ListActivity"
@@ -49,6 +51,9 @@
             android:name="android.support.VERSION"
             android:value="26.1.0"
             tools:replace="android:value" />
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-9069451453527664~1459246129"/>
 
         <activity
             android:theme="@style/AppTheme.NoActionBar"
@@ -69,6 +74,9 @@
         <activity android:name=".ui.trimmer.VideoTimmerActivity"></activity>
 
         <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="25eeaa53a82d8ba87f9c6fc485b2529f5071d2fc" />
     </application>
 
 </manifest>

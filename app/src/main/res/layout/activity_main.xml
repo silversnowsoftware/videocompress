@@ -7,11 +7,18 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="140dp"
+        android:paddingTop="50dp"
         tools:context="com.silversnowsoftware.vc.ui.main.MainActivity">
+
+        <ImageView
+            android:layout_width="230dp"
+            android:layout_height="190dp"
+            android:layout_gravity="center_horizontal"
+            android:padding="10dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/app_logo" />
 
         <Button
             android:id="@+id/btnRecord"
@@ -19,8 +26,12 @@
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="@string/take_video"
-            android:layout_marginBottom="20dp"/>
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="50dp"
+            android:drawableStart="@mipmap/camera"
+            android:paddingEnd="15dp"
+            android:paddingStart="15dp"
+            android:text="@string/take_video" />
 
         <Button
             android:id="@+id/btnChoose"
@@ -28,9 +39,11 @@
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="@string/load_from_gallery"
-            android:drawableLeft="@mipmap/gallery"
-            android:layout_marginBottom="20dp"/>
+            android:layout_marginBottom="20dp"
+            android:drawableStart="@mipmap/gallery"
+            android:paddingEnd="15dp"
+            android:paddingStart="15dp"
+            android:text="@string/load_from_gallery" />
 
         <Button
             android:id="@+id/btnListFile"
@@ -39,6 +52,18 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="20dp"
+            android:drawableStart="@mipmap/recent"
+            android:paddingEnd="15dp"
+            android:paddingStart="15dp"
             android:text="@string/list" />
     </LinearLayout>
+
+    <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adViewMain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        ads:adSize="SMART_BANNER"
+        ads:adUnitId="ca-app-pub-9069451453527664/2879358754"></com.google.android.gms.ads.AdView>
 </RelativeLayout>

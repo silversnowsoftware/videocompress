@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.Switch;
 
 import com.coremedia.iso.boxes.Container;
 import com.googlecode.mp4parser.FileDataSourceViaHeapImpl;
@@ -13,9 +14,11 @@ import com.googlecode.mp4parser.authoring.builder.DefaultMp4Builder;
 import com.googlecode.mp4parser.authoring.container.mp4.MovieCreator;
 import com.googlecode.mp4parser.authoring.tracks.AppendTrack;
 import com.googlecode.mp4parser.authoring.tracks.CroppedTrack;
+import com.silversnowsoftware.vc.R;
 import com.silversnowsoftware.vc.model.listener.OnVideoTrimListener;
 import com.silversnowsoftware.vc.model.logger.LogModel;
 import com.silversnowsoftware.vc.utils.constants.Constants;
+import com.silversnowsoftware.vc.utils.constants.Globals;
 import com.silversnowsoftware.vc.utils.helpers.LogManager;
 
 import java.io.File;
@@ -40,13 +43,11 @@ public class Utility {
     public static void startTrim(@NonNull File src, @NonNull String dst, long startMs, long endMs,
                                  @NonNull OnVideoTrimListener callback) throws IOException {
         try {
-            final String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(new Date());
 
             File file = new File(dst);
             file.getParentFile().mkdirs();
-            Log.d(TAG, "Generated file path " + dst);
             generateVideo(src, file, startMs, endMs, callback);
-        }catch (Exception ex) {
+        } catch (Exception ex) {
 
 
             LogManager.Log(className, ex);
@@ -126,19 +127,52 @@ public class Utility {
 
             if (callback != null)
                 callback.getResult(Uri.parse(dst.toString()));
-        }catch (Exception ex) {
+        } catch (Exception ex) {
 
             LogManager.Log(className, ex);
         }
     }
+
     public static String getAndroidVersion() {
         String release = Build.VERSION.RELEASE;
         int sdkVersion = Build.VERSION.SDK_INT;
-        return "Android SDK: " + sdkVersion + " (" + release +")";
+        return "Android SDK: " + sdkVersion + " (" + release + ")";
     }
+
     public static String getCurrentClassAndMethodNames() {
         final StackTraceElement e = Thread.currentThread().getStackTrace()[2];
         final String s = e.getClassName();
         return s.substring(s.lastIndexOf('.') + 1, s.length()) + "." + e.getMethodName();
+    }
+
+
+    public static String ConvertToVideoTime(Integer value) {
+        String hour = "";
+        String min = "";
+        String doubleDot = ":";
+        String sec = "";
+        String zero = "0";
+
+        if (value > 3600) {
+            hour = String.valueOf(value / 3600);
+            int vestigalMin = (int) (value % 3600);
+            if (vestigalMin > 60) {
+                min = String.valueOf(vestigalMin / 60);
+                int vestigalSec = (int) (vestigalMin % 60);
+                sec = String.valueOf(vestigalSec);
+            }
+            return hour + doubleDot + min + doubleDot + sec;
+        } else if (value > 60) {
+            min = String.valueOf(value / 60);
+            int vestigalSec = (int) (value % 60);
+            sec = String.valueOf(vestigalSec);
+            return min + doubleDot + sec;
+        } else if (value > 9 && value < 60) {
+            sec = String.valueOf(value);
+            min = "00";
+            return min + doubleDot + sec;
+        }
+        return zero + doubleDot + zero + value;
+
     }
 }

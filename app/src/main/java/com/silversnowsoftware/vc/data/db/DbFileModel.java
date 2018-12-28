@@ -2,12 +2,15 @@ package com.silversnowsoftware.vc.data.db;
 
 import android.content.Context;
 
+import com.j256.ormlite.stmt.PreparedQuery;
 import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.model.logger.LogModel;
 import com.silversnowsoftware.vc.utils.Utility;
 import com.silversnowsoftware.vc.utils.constants.Constants;
+import com.silversnowsoftware.vc.utils.enums.FileStatusEnum;
 import com.silversnowsoftware.vc.utils.helpers.LogManager;
 
+import java.io.File;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -120,14 +123,15 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
 
     @Override
     public List<FileModel> getAll() {
+        List<FileModel> fileModelsList = null;
         try {
-            return db.getFileModel().queryForAll();
-
+            fileModelsList = db.getFileModel().queryForAll();
+            return fileModelsList;
         } catch (SQLException ex) {
 
             LogManager.Log(className, ex);
         }
-        return null;
+        return fileModelsList;
     }
 
     @Override
@@ -153,5 +157,18 @@ public class DbFileModel extends DbBaseModel implements IRepository<FileModel> {
             LogManager.Log(className, ex);
         }
         return b;
+    }
+
+    public List<FileModel> getFileModelListWithFileStatus() {
+        List<FileModel> fileModels = null;
+        try {
+            fileModels = db.getFileModel().query((PreparedQuery<FileModel>) db.getFileModel().queryBuilder().where()
+                    .eq("FileStatus", FileStatusEnum.NONE).or()
+                    .eq("FileStatus", FileStatusEnum.ERROR).or()
+                    .eq("FileStatus", FileStatusEnum.CANCELED).prepare());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return fileModels;
     }
 }
