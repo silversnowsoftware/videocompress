@@ -72,6 +72,7 @@ public class MainActivity extends BaseActivity implements IMainView {
                 public void onClick(View view) {
 
                     mPresenter.chooseFile();
+
                 }
             });
 
@@ -108,6 +109,7 @@ public class MainActivity extends BaseActivity implements IMainView {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
             mPresenter.collectFiles(data);
+            finish();
             startActivity(new Intent(getApplicationContext(), EditorActivity.class));
         }
     }
