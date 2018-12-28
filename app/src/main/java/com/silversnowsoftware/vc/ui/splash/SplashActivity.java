@@ -9,6 +9,7 @@ import com.silversnowsoftware.vc.ui.base.BaseActivity;
 import com.silversnowsoftware.vc.ui.main.MainActivity;
 import com.silversnowsoftware.vc.utils.Utility;
 import com.silversnowsoftware.vc.utils.constants.Constants;
+import com.silversnowsoftware.vc.utils.constants.Globals;
 import com.silversnowsoftware.vc.utils.helpers.LogManager;
 
 public class SplashActivity extends BaseActivity {
@@ -18,17 +19,25 @@ public class SplashActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResourceId());
-        try {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    redirectToActivity(MainActivity.class);
-                    finish();
-                }
-            }, 3000);
-        } catch (Exception ex) {
+        if (Globals.splahScreen) {
+            try {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        Globals.splahScreen = false;
+                        finish();
+                        redirectToActivity(MainActivity.class);
 
-            LogManager.Log(className, ex);
+                    }
+                }, 3000);
+            } catch (Exception ex) {
+
+                LogManager.Log(className, ex);
+            }
+        }
+        else {
+            finish();
+            redirectToActivity(MainActivity.class);
         }
     }
 

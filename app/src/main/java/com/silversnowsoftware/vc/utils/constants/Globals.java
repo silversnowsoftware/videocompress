@@ -18,4 +18,5 @@ public class Globals {
     public static Handler handler;
     public static ArrayList<FileModel> selectedFiles;
     public static Boolean selectionMode = false;
+    public static boolean splahScreen = true;
 }
