@@ -44,7 +44,7 @@ public class EditorActivity extends BaseActivity implements IEditorView {
     OnVideoTrimListener mOnVideoTrimListener = new OnVideoTrimListener() {
         @Override
         public void onTrimStarted() {
-            progressDialog.show();
+
             progressDialog.setProgress(10);
         }
 
@@ -61,7 +61,7 @@ public class EditorActivity extends BaseActivity implements IEditorView {
                 finish();
                 redirectToActivity(ListActivity.class);
             }
-            progressDialog.hide();
+
             compress();
 
         }
@@ -98,10 +98,6 @@ public class EditorActivity extends BaseActivity implements IEditorView {
 
         @Override
         public void onProgress(Double rate) {
-            if (!progressDialog.isShowing()) {
-                progressDialog = progressBarDialog(EditorActivity.this);
-                progressDialog.show();
-            }
             if (rate.intValue() > 10) {
                 progressDialog.setProgress(rate.intValue());
             }
@@ -179,6 +175,7 @@ public class EditorActivity extends BaseActivity implements IEditorView {
 
 
                     progressDialog = progressBarDialog(EditorActivity.this);
+                    progressDialog.show();
 
                     fileModel = mPresenter.processFile();
 
