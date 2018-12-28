@@ -18,6 +18,7 @@ import com.silversnowsoftware.vc.model.listener.ICustomListener;
 import com.silversnowsoftware.vc.model.listener.OnVideoTrimListener;
 import com.silversnowsoftware.vc.operations.compressor.FileCompressor;
 import com.silversnowsoftware.vc.ui.base.BaseActivity;
+import com.silversnowsoftware.vc.ui.compression.videocompress.InitListener;
 import com.silversnowsoftware.vc.ui.list.ListActivity;
 import com.silversnowsoftware.vc.ui.main.MainActivity;
 import com.silversnowsoftware.vc.utils.Utility;
@@ -129,6 +130,19 @@ public class EditorActivity extends BaseActivity implements IEditorView {
         meditorViewHolder.btnCompress.setEnabled(false);
         meditorViewHolder.btnClear.setEnabled(false);
 
+        FileCompressor fileCompressor = new FileCompressor(EditorActivity.this);
+        fileCompressor.loadBinary(new InitListener() {
+            @Override
+            public void onLoadSuccess() {
+
+            }
+
+            @Override
+            public void onLoadFail(String reason) {
+                showToastMethod(reason);
+            }
+        });
+
         try {
 
             mPresenter.onAttach(this);
@@ -153,6 +167,8 @@ public class EditorActivity extends BaseActivity implements IEditorView {
             @Override
             public void onClick(View view) {
                 try {
+
+
                     progressDialog = progressBarDialog(EditorActivity.this);
 
                     fileModel = mPresenter.processFile();
