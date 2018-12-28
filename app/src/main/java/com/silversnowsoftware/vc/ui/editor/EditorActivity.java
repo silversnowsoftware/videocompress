@@ -229,6 +229,7 @@ public class EditorActivity extends BaseActivity implements IEditorView {
         if (fileModel.getIsCompress()) {
             if (fileModel.getFileStatus() == FileStatusEnum.PREPEARING || (fileModel.getIsCrop() && fileModel.getFileStatus() == FileStatusEnum.SUCCESS)) {
                 fileModel.setFileStatus(FileStatusEnum.PROGRESSING);
+                fileModel.setTempVideoLenght(getVideoDuration(EditorActivity.this,fileModel.getPath()));
                 FileCompressor fc = new FileCompressor(EditorActivity.this);
                 fc.Compress(fileModel);
                 fileModel.getCustomListener(mCustomListener);
