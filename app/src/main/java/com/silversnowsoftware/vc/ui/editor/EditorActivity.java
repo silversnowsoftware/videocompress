@@ -93,6 +93,9 @@ public class EditorActivity extends BaseActivity implements IEditorView {
 
         @Override
         public void onProgress(Double rate) {
+            if (!progressDialog.isShowing())
+                    progressDialog.show();
+
             if (rate.intValue() > 10) {
                 progressDialog.setProgress(rate.intValue());
             }
