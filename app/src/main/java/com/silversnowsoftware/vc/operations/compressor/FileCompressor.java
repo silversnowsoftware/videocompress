@@ -77,7 +77,7 @@ public class FileCompressor implements IFileCompressor {
                 @Override
                 public void onExecProgress(String message) {
 
-                    Double progress = getProgress(message, Double.valueOf(fileModel.getVideoLength())) * 100;
+                    Double progress = getProgress(message, Double.valueOf(fileModel.getTempVideoLenght())) * 100;
                     fileModel.setProgress(progress);
                     fileModel.listener.onProgress(progress);
 

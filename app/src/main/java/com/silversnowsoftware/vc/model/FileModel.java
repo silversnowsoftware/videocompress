@@ -56,6 +56,7 @@ public class FileModel extends BaseResponse implements Serializable  {
     private Boolean IsCrop;
     @DatabaseField(columnName = "IsCompress")
     private Boolean IsCompress;
+    private Integer TempVideoLenght;
 
     public String getName() {
         return Name;
@@ -190,4 +191,11 @@ public class FileModel extends BaseResponse implements Serializable  {
         IsCompress = isCompress;
     }
 
+    public Integer getTempVideoLenght() {
+        return TempVideoLenght;
+    }
+
+    public void setTempVideoLenght(Integer tempVideoLenght) {
+        TempVideoLenght = tempVideoLenght;
+    }
 }

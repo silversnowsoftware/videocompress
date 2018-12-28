@@ -27,6 +27,8 @@ import com.silversnowsoftware.vc.utils.constants.Globals;
 import com.silversnowsoftware.vc.utils.enums.FileStatusEnum;
 import com.silversnowsoftware.vc.utils.helpers.LogManager;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import static com.silversnowsoftware.vc.utils.helpers.FileHelper.getVideoDuration;
@@ -51,6 +53,7 @@ public class EditorActivity extends BaseActivity implements IEditorView {
             fileModel.setFileStatus(FileStatusEnum.SUCCESS);
             fileModel.setPath(uri.getPath());
             fileModel.setVideoLength(Utility.ConvertToVideoTime(Integer.valueOf(String.valueOf(getVideoDuration(EditorActivity.this, fileModel.getPath())))));
+            fileModel.setTempVideoLenght(getVideoDuration(EditorActivity.this,fileModel.getPath()));
             mPresenter.updateFileModel(fileModel);
 
             if (!fileModel.getIsCompress()) {
@@ -59,6 +62,8 @@ public class EditorActivity extends BaseActivity implements IEditorView {
                 redirectToActivity(ListActivity.class);
             }
             progressDialog.hide();
+            compress();
+
         }
 
         @Override
@@ -93,9 +98,10 @@ public class EditorActivity extends BaseActivity implements IEditorView {
 
         @Override
         public void onProgress(Double rate) {
-            if (!progressDialog.isShowing())
-                    progressDialog.show();
-
+            if (!progressDialog.isShowing()) {
+                progressDialog = progressBarDialog(EditorActivity.this);
+                progressDialog.show();
+            }
             if (rate.intValue() > 10) {
                 progressDialog.setProgress(rate.intValue());
             }
@@ -185,19 +191,8 @@ public class EditorActivity extends BaseActivity implements IEditorView {
                     if (fileModel.getIsCrop())
                         mPresenter.trimVideo(mOnVideoTrimListener);
 
-                    if (fileModel.getIsCompress()) {
-                        if (fileModel.getFileStatus() == FileStatusEnum.PREPEARING) {
-                            fileModel.setFileStatus(FileStatusEnum.PROGRESSING);
-                            FileCompressor fc = new FileCompressor(EditorActivity.this);
-                            fc.Compress(fileModel);
-                            fileModel.getCustomListener(mCustomListener);
-                        } else if (fileModel.getFileStatus() == FileStatusEnum.CANCELED ||
-                                fileModel.getFileStatus() == FileStatusEnum.ERROR ||
-                                fileModel.getFileStatus() == FileStatusEnum.NONE) {
-
-                            redirectToActivity(MainActivity.class, Constants.DELLAY);
-                        }
-                    }
+                    if (!fileModel.getIsCrop())
+                        compress();
 
                 } catch (Exception ex) {
 
@@ -229,7 +224,22 @@ public class EditorActivity extends BaseActivity implements IEditorView {
             }
         });
     }
+    private void compress(){
 
+        if (fileModel.getIsCompress()) {
+            if (fileModel.getFileStatus() == FileStatusEnum.PREPEARING || (fileModel.getIsCrop() && fileModel.getFileStatus() == FileStatusEnum.SUCCESS)) {
+                fileModel.setFileStatus(FileStatusEnum.PROGRESSING);
+                FileCompressor fc = new FileCompressor(EditorActivity.this);
+                fc.Compress(fileModel);
+                fileModel.getCustomListener(mCustomListener);
+            } else if (fileModel.getFileStatus() == FileStatusEnum.CANCELED ||
+                    fileModel.getFileStatus() == FileStatusEnum.ERROR ||
+                    fileModel.getFileStatus() == FileStatusEnum.NONE) {
+
+                redirectToActivity(MainActivity.class, Constants.DELLAY);
+            }
+        }
+    }
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         super.onKeyDown(keyCode, event);
