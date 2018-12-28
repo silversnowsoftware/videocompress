@@ -1,6 +1,7 @@
 package com.silversnowsoftware.vc.model;
 
 import android.graphics.Bitmap;
+import android.net.Uri;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.silversnowsoftware.vc.model.listener.ICustomListener;
@@ -11,6 +12,8 @@ import com.silversnowsoftware.vc.utils.enums.MediaTypeEnum;
 import com.silversnowsoftware.vc.utils.helpers.FileHelper;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -116,9 +119,9 @@ public class FileModel extends BaseResponse implements Serializable  {
     }
 
 
-    public String getCompressCmd() {
-        return "-y -i " + this.Path + " -strict -2 -vcodec libx264 -preset ultrafast " +
-                "-crf 24 -acodec aac -ar 44100 -ac 2 -b:a 96k -s " + getResolution() + " -aspect 16:9 " + Globals.currentOutputVideoPath + this.Name;
+    public String getCompressCmd() throws UnsupportedEncodingException {
+        return "-y#-i#" + this.Path + "#-strict#-2#-vcodec#libx264#-preset#ultrafast#" +
+                "-crf#24#-acodec#aac#-ar#44100#-ac#2#-b:a#96k#-s#" + getResolution() + "#-aspect#16:9#" + Globals.currentOutputVideoPath + this.Name;
     }
 
     public String getVideoLength() {

@@ -63,7 +63,7 @@ public class Compressor {
 
     public void execCommand(String cmd, final CompressListener mListener) {
         try {
-            String[] cmds = cmd.split(" ");
+            String[] cmds = cmd.split("#");
             ffmpeg.execute(cmds, new ExecuteBinaryResponseHandler() {
 
                 @Override
