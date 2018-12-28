@@ -1,6 +1,7 @@
 package com.silversnowsoftware.vc.ui.editor;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -69,7 +70,7 @@ public class EditorActivity extends BaseActivity implements IEditorView {
         public void cancelAction() {
             fileModel.setFileStatus(FileStatusEnum.CANCELED);
             mPresenter.updateFileModel(fileModel);
-            progressDialog.hide();
+            //progressDialog.hide();
             redirectToActivity(MainActivity.class, Constants.DELLAY);
 
         }
@@ -78,14 +79,13 @@ public class EditorActivity extends BaseActivity implements IEditorView {
         public void onError(String message) {
             fileModel.setFileStatus(FileStatusEnum.ERROR);
             mPresenter.updateFileModel(fileModel);
-            progressDialog.hide();
+            //progressDialog.hide();
             redirectToActivity(MainActivity.class, Constants.DELLAY);
         }
     };
     ICustomListener mCustomListener = new ICustomListener() {
         @Override
         public void onSuccess(Double rate) {
-            progressDialog.hide();
             fileModel.setFileStatus(FileStatusEnum.SUCCESS);
             fileModel.setPath(Globals.currentOutputVideoPath + fileModel.getName());
             mPresenter.updateFileModel(fileModel);
@@ -95,7 +95,9 @@ public class EditorActivity extends BaseActivity implements IEditorView {
 
         @Override
         public void onProgress(Double rate) {
-            if (rate.intValue() > 10) {
+            if (rate.intValue() > 10 && fileModel.getIsCrop()) {
+                progressDialog.setProgress(rate.intValue());
+            }else{
                 progressDialog.setProgress(rate.intValue());
             }
         }
@@ -108,7 +110,7 @@ public class EditorActivity extends BaseActivity implements IEditorView {
             mPresenter.updateFileModel(fileModel);
 
             showToastMethod(getString(R.string.compression_failed));
-            progressDialog.hide();
+            //progressDialog.hide();
             finish();
             redirectToActivity(MainActivity.class, Constants.DELLAY);
 
@@ -168,11 +170,6 @@ public class EditorActivity extends BaseActivity implements IEditorView {
             @Override
             public void onClick(View view) {
                 try {
-
-
-                    progressDialog = progressBarDialog(EditorActivity.this);
-                    progressDialog.show();
-
                     fileModel = mPresenter.processFile();
 
                     if (!fileModel.getIsCompress() && !fileModel.getIsCrop()) {
@@ -181,11 +178,7 @@ public class EditorActivity extends BaseActivity implements IEditorView {
                     }
 
                     mPresenter.addFileModel(fileModel);
-                    if (fileModel.getIsCrop())
-                        mPresenter.trimVideo(mOnVideoTrimListener);
-
-                    if (!fileModel.getIsCrop())
-                        compress();
+                    progressDialog.show();
 
                 } catch (Exception ex) {
 
@@ -194,7 +187,18 @@ public class EditorActivity extends BaseActivity implements IEditorView {
 
             }
         });
+        progressDialog = progressBarDialog(EditorActivity.this);
+        progressDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                progressDialog.setProgress(1);
+                if (fileModel.getIsCrop())
+                    mPresenter.trimVideo(mOnVideoTrimListener);
 
+                if (!fileModel.getIsCrop())
+                    compress();
+            }
+        });
         meditorViewHolder.btnClear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -217,12 +221,13 @@ public class EditorActivity extends BaseActivity implements IEditorView {
             }
         });
     }
-    private void compress(){
+
+    private void compress() {
 
         if (fileModel.getIsCompress()) {
             if (fileModel.getFileStatus() == FileStatusEnum.PREPEARING || (fileModel.getIsCrop() && fileModel.getFileStatus() == FileStatusEnum.SUCCESS)) {
                 fileModel.setFileStatus(FileStatusEnum.PROGRESSING);
-                fileModel.setVideoLength(getVideoDuration(EditorActivity.this,fileModel.getPath()));
+                fileModel.setVideoLength(getVideoDuration(EditorActivity.this, fileModel.getPath()));
                 FileCompressor fc = new FileCompressor(EditorActivity.this);
                 fc.Compress(fileModel);
                 fileModel.getCustomListener(mCustomListener);
@@ -234,6 +239,7 @@ public class EditorActivity extends BaseActivity implements IEditorView {
             }
         }
     }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         super.onKeyDown(keyCode, event);
@@ -247,5 +253,6 @@ public class EditorActivity extends BaseActivity implements IEditorView {
     protected int getLayoutResourceId() {
         return R.layout.activity_editor;
     }
+
 
 }

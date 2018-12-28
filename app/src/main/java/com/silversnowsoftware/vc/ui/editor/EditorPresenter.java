@@ -627,6 +627,8 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             int minResult = (int) (minValue * minRate);
             int maxResult = (int) (maxValue * maxRate);
 
+            minResult +=minResult%2;
+            maxResult +=maxResult%2;
 
             if (orientation == 0) {
                 resolution = minResult + "x" + maxResult;
