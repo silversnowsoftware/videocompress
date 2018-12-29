@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
@@ -188,23 +189,30 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
             public void run() {
                 try {
                     srcFile = getFileModelList().get(getFileModelList().size() - 1).getPath();
-                    BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-                    TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(bandwidthMeter));
-                    mViewHolder.exoPlayer = ExoPlayerFactory.newSimpleInstance((Activity) getView(), trackSelector);
+                    File file = new File(srcFile);
+                    if(file.exists()) {
+                        BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
+                        TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(bandwidthMeter));
+                        mViewHolder.exoPlayer = ExoPlayerFactory.newSimpleInstance((Activity) getView(), trackSelector);
 
-                    DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(getContext(), "exoplayer_video");
-                    ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
-                    MediaSource mediaSource = new ExtractorMediaSource(
-                            Uri.parse(srcFile),
-                            dataSourceFactory,
-                            new DefaultExtractorsFactory(),
-                            null,
-                            null);
+                        DefaultDataSourceFactory dataSourceFactory = new DefaultDataSourceFactory(getContext(), "exoplayer_video");
+                        ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
+                        MediaSource mediaSource = new ExtractorMediaSource(
+                                Uri.parse(srcFile),
+                                dataSourceFactory,
+                                new DefaultExtractorsFactory(),
+                                null,
+                                null);
 
-                    mViewHolder.exoPlayerView.setPlayer(mViewHolder.exoPlayer);
-                    mViewHolder.exoPlayer.prepare(mediaSource);
-                    onVideoPrepared();
-                    setVideoPrepared();
+                        mViewHolder.exoPlayerView.setPlayer(mViewHolder.exoPlayer);
+                        mViewHolder.exoPlayer.prepare(mediaSource);
+                        onVideoPrepared();
+                        setVideoPrepared();
+                    }
+                    else
+                    {
+                        Toast.makeText(((Activity)getView()),((Activity)getView()).getString(R.string.file_not_found),Toast.LENGTH_LONG).show();
+                    }
                 } catch (Exception ex) {
 
                     LogManager.Log(className, ex);
