@@ -55,7 +55,7 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
             // mediaIntent.setType("*/*");
             mediaIntent.setType("video/*");
             mediaIntent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"video/*"});
-            mediaIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+           /* mediaIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);*/
             activity.startActivityForResult(mediaIntent, 1);
         } catch (Exception ex) {
 
@@ -118,7 +118,7 @@ public class MainPresenter<V extends IMainView> extends BasePresenter<V>
 
                 LogManager.Log(className, ex);
             }
-            fileModel.setVideoLength(String.valueOf(videoLength));
+            fileModel.setVideoLength(videoLength.intValue());
 
         } catch (Exception ex) {
             LogManager.Log(className, ex);

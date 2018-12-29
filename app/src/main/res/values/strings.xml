@@ -1,4 +1,5 @@
 <resources>
+    <string name="file_not_found">File not found!</string>
     <string name="progressing">Progressing...</string>
     <string name="changing_flashLight_mode">Flash mode is changed.</string>
     <string name="camera_init_fail">Camera is init fail.</string>

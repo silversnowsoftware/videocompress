@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,6 +18,7 @@ import com.silversnowsoftware.vc.model.FileModel;
 import com.silversnowsoftware.vc.model.listener.OnEventListener;
 import com.silversnowsoftware.vc.model.logger.LogModel;
 import com.silversnowsoftware.vc.ui.base.BaseActivity;
+import com.silversnowsoftware.vc.ui.main.MainActivity;
 import com.silversnowsoftware.vc.utils.SharedPref;
 import com.silversnowsoftware.vc.utils.Utility;
 import com.silversnowsoftware.vc.utils.constants.Constants;
@@ -50,7 +52,7 @@ public class ListActivity extends BaseActivity implements IListView {
 
             MobileAds.initialize(this, "ca-app-pub-9069451453527664~1459246129");
             mListViewHolder.mInterstitialAd = new InterstitialAd(this);
-            mListViewHolder.mInterstitialAd.setAdListener(new AdListener(){
+            mListViewHolder.mInterstitialAd.setAdListener(new AdListener() {
                 @Override
                 public void onAdClosed() {
                     super.onAdClosed();
@@ -136,6 +138,13 @@ public class ListActivity extends BaseActivity implements IListView {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        redirectToActivity(MainActivity.class);
+    }
+
     private class DeleteFilesOperationAsync extends AsyncTask<Void, Void, Boolean> {
 
         private OnEventListener<String> mCallBack;
@@ -204,7 +213,7 @@ public class ListActivity extends BaseActivity implements IListView {
             });
             deleteFilesOperationAsync.execute();
         } else {
-            alertDialog(ListActivity.this,getString(R.string.Alert),getString(R.string.ChooseAnyVideoForDelete));
+            alertDialog(ListActivity.this, getString(R.string.Alert), getString(R.string.ChooseAnyVideoForDelete));
         }
     }
 

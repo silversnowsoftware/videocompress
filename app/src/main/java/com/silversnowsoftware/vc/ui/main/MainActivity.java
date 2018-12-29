@@ -33,6 +33,7 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 import static com.silversnowsoftware.vc.utils.constants.Globals.handler;
+import static java.lang.System.exit;
 
 
 public class MainActivity extends BaseActivity implements IMainView {
@@ -103,7 +104,12 @@ public class MainActivity extends BaseActivity implements IMainView {
         return R.layout.activity_main;
     }
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        //exit(0);
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

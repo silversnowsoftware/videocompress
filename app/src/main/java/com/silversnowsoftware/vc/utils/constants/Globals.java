@@ -4,6 +4,7 @@ import android.os.Environment;
 import android.os.Handler;
 
 import com.silversnowsoftware.vc.model.FileModel;
+import com.silversnowsoftware.vc.utils.helpers.FileHelper;
 
 import java.util.ArrayList;
 
@@ -13,9 +14,11 @@ import java.util.ArrayList;
 
 public class Globals {
 
-    public static String currentInputVideoPath = Environment.getExternalStorageDirectory().getPath() + "/videoKit/in.mp4";
+    public static String currentInputVideoPath = Environment.getExternalStorageDirectory().getPath() + "/videoKit/" + FileHelper.originalGenerateVideoName();
     public static String currentOutputVideoPath = Environment.getExternalStorageDirectory().getPath() + "/videoKit/";
+    public static String currentOutputVideoPathTrimmed = Environment.getExternalStorageDirectory().getPath() + "/videoKit/Trimmed/";
     public static Handler handler;
     public static ArrayList<FileModel> selectedFiles;
     public static Boolean selectionMode = false;
+    public static boolean splahScreen = true;
 }

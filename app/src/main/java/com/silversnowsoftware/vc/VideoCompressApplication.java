@@ -30,6 +30,7 @@ public class VideoCompressApplication extends Application {
     public void onCreate() {
         super.onCreate();
         try {
+            Globals.splahScreen = true;
             Globals.selectedFiles = new ArrayList<FileModel>();
 
             mApplicationComponent = DaggerApplicationComponent.builder()

@@ -1,5 +1,5 @@
 <resources>
-
+    <string name="file_not_found">Dosya bulunamadı!</string>
     <string name="progressing">İşlem yapılıyor...</string>
     <string name="changing_flashLight_mode">Flash modu açık.</string>
     <string name="camera_init_fail">Kamera yüklenemedi.</string>
