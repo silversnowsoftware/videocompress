@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.silversnowsoftware.vc">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
 
@@ -22,30 +23,33 @@
     <uses-permission-sdk-23 android:name="android.permission.CAMERA" />
 
 
-
     <application
         android:name=".VideoCompressApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:usesCleartextTraffic="true"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
         <activity
+            android:screenOrientation="portrait"
             android:name=".ui.main.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            >
+            android:theme="@style/AppTheme.NoActionBar">
 
 
         </activity>
-        <activity android:name=".ui.compression.permission.PermissionsActivity" />
-        <activity android:name=".ui.compression.videorecord.CameraActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
+        <activity
+            android:name=".ui.compression.permission.PermissionsActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.compression.videorecord.CameraActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".ui.test.TestActivity" />
         <activity
             android:name=".ui.list.ListActivity"
-            android:label="@string/title_activity_list" />
+            android:label="@string/title_activity_list"
+            android:screenOrientation="portrait" />
 
         <meta-data
             android:name="android.support.VERSION"
@@ -53,11 +57,12 @@
             tools:replace="android:value" />
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-9069451453527664~1459246129"/>
+            android:value="ca-app-pub-9069451453527664~1459246129" />
 
         <activity
-            android:theme="@style/AppTheme.NoActionBar"
-            android:name=".ui.splash.SplashActivity" >
+            android:name=".ui.splash.SplashActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -65,15 +70,22 @@
         </activity>
         <activity
             android:name=".ui.editor.EditorActivity"
-            android:label="@string/editor_activity">
+            android:label="@string/editor_activity"
+            android:screenOrientation="portrait">
 
         </activity>
-        <activity android:name=".ui.trimmer.MainTrimmerActivity" >
+        <activity
+            android:name=".ui.trimmer.MainTrimmerActivity"
+            android:screenOrientation="portrait">
 
         </activity>
-        <activity android:name=".ui.trimmer.VideoTimmerActivity"></activity>
+        <activity
+            android:name=".ui.trimmer.VideoTimmerActivity"
+            android:screenOrientation="portrait"></activity>
 
-        <uses-library android:name="org.apache.http.legacy" android:required="false"/>
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="25eeaa53a82d8ba87f9c6fc485b2529f5071d2fc" />
