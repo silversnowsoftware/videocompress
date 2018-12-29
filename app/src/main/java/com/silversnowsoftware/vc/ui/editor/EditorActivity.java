@@ -147,7 +147,7 @@ public class EditorActivity extends BaseActivity implements IEditorView {
 
             mPresenter.onAttach(this);
             MobileAds.initialize(this, "ca-app-pub-9069451453527664~1459246129");
-            AdRequest adRequest = new AdRequest.Builder().addTestDevice("B3E228E2A3DF6402D6DCF40712D066F6").build();
+            AdRequest adRequest = new AdRequest.Builder().build();
             meditorViewHolder.adViewEditor.loadAd(adRequest);
             meditorViewHolder.adViewEditor.setAdListener(mAdListener);
 
