@@ -90,11 +90,11 @@ public class ListActivity extends BaseActivity implements IListView {
                     super.onAdImpression();
                 }
             });
-            mListViewHolder.mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
-            mListViewHolder.mInterstitialAd.loadAd(new AdRequest.Builder().addTestDevice("B3E228E2A3DF6402D6DCF40712D066F6").build());
+            mListViewHolder.mInterstitialAd.setAdUnitId("ca-app-pub-9069451453527664/3257868364");
+            mListViewHolder.mInterstitialAd.loadAd(new AdRequest.Builder().build());
 
 
-            AdRequest adRequest = new AdRequest.Builder().addTestDevice("B3E228E2A3DF6402D6DCF40712D066F6").build();
+            AdRequest adRequest = new AdRequest.Builder().build();
             mListViewHolder.adViewList.loadAd(adRequest);
             mListViewHolder.adViewList.setAdListener(new AdListener());
 
