@@ -52,6 +52,12 @@ public class FileHelper {
         filename = "V-" + dateFormat + ".mp4";
         return filename;
     }
+    public static String originalGenerateVideoName() {
+        String filename = null;
+        String dateFormat = new SimpleDateFormat(Constants.DATE_FORMAT_TWO).format(new Date());
+        filename = "O-" + dateFormat + ".mp4";
+        return filename;
+    }
 
     public static String getMIMEType(File file) {
 
