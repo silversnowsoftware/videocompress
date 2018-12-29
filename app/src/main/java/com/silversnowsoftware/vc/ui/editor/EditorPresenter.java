@@ -34,6 +34,8 @@ import com.silversnowsoftware.vc.model.listener.OnVideoTrimListener;
 import com.silversnowsoftware.vc.operations.compressor.FileCompressor;
 import com.silversnowsoftware.vc.ui.base.BasePresenter;
 import com.silversnowsoftware.vc.utils.Utility;
+import com.silversnowsoftware.vc.utils.constants.Constants;
+import com.silversnowsoftware.vc.utils.constants.Globals;
 import com.silversnowsoftware.vc.utils.enums.FileStatusEnum;
 import com.silversnowsoftware.vc.utils.helpers.FileHelper;
 import com.silversnowsoftware.vc.utils.helpers.LogManager;
@@ -351,8 +353,8 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
 
     @Override
     public String trimVideo(final OnVideoTrimListener mOnVideoTrimListener) {
-        dstFile = Environment.getExternalStorageDirectory() + "/" + getContext().getString(R.string.app_name) + new Date().getTime()
-                + Utility.VIDEO_FORMAT;
+        dstFile = Globals.currentOutputVideoPathTrimmed + "/" + FileHelper.generateVideoName();
+
         try {
 
             MediaMetadataRetriever

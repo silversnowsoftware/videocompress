@@ -26,8 +26,10 @@ import com.silversnowsoftware.vc.utils.Utility;
 import com.silversnowsoftware.vc.utils.constants.Constants;
 import com.silversnowsoftware.vc.utils.constants.Globals;
 import com.silversnowsoftware.vc.utils.enums.FileStatusEnum;
+import com.silversnowsoftware.vc.utils.helpers.FileHelper;
 import com.silversnowsoftware.vc.utils.helpers.LogManager;
 
+import java.io.File;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -84,6 +86,7 @@ public class EditorActivity extends BaseActivity implements IEditorView {
     ICustomListener mCustomListener = new ICustomListener() {
         @Override
         public void onSuccess(Double rate) {
+            deleteTrimmedVideo();
             fileModel.setFileStatus(FileStatusEnum.SUCCESS);
             fileModel.setPath(Globals.currentOutputVideoPath + fileModel.getName());
             mPresenter.updateFileModel(fileModel);
@@ -102,7 +105,7 @@ public class EditorActivity extends BaseActivity implements IEditorView {
 
         @Override
         public void onFailure(String error) {
-
+            deleteTrimmedVideo();
             fileModel.setFileStatus(FileStatusEnum.ERROR);
             fileModel.setPath(Globals.currentOutputVideoPath + fileModel.getName());
             mPresenter.updateFileModel(fileModel);
@@ -217,7 +220,10 @@ public class EditorActivity extends BaseActivity implements IEditorView {
             }
         });
     }
+    private void deleteTrimmedVideo(){
 
+        FileHelper.deleteFile(Globals.currentOutputVideoPathTrimmed + fileModel.getName());
+    }
     private void compress() {
 
         if (fileModel.getIsCompress()) {
