@@ -138,11 +138,10 @@ public class ListActivity extends BaseActivity implements IListView {
         return super.onOptionsItemSelected(item);
     }
 
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        super.onKeyDown(keyCode, event);
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
         finish();
-        redirectToActivity(MainActivity.class);
-        return true;
     }
 
     private class DeleteFilesOperationAsync extends AsyncTask<Void, Void, Boolean> {

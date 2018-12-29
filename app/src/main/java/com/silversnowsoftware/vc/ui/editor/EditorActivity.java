@@ -33,6 +33,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import static com.silversnowsoftware.vc.utils.helpers.FileHelper.getVideoDuration;
+import static java.lang.System.exit;
 
 public class EditorActivity extends BaseActivity implements IEditorView {
 
@@ -45,7 +46,6 @@ public class EditorActivity extends BaseActivity implements IEditorView {
     OnVideoTrimListener mOnVideoTrimListener = new OnVideoTrimListener() {
         @Override
         public void onTrimStarted() {
-
             progressDialog.setProgress(10);
         }
 
@@ -70,7 +70,6 @@ public class EditorActivity extends BaseActivity implements IEditorView {
         public void cancelAction() {
             fileModel.setFileStatus(FileStatusEnum.CANCELED);
             mPresenter.updateFileModel(fileModel);
-            //progressDialog.hide();
             redirectToActivity(MainActivity.class, Constants.DELLAY);
 
         }
@@ -79,7 +78,6 @@ public class EditorActivity extends BaseActivity implements IEditorView {
         public void onError(String message) {
             fileModel.setFileStatus(FileStatusEnum.ERROR);
             mPresenter.updateFileModel(fileModel);
-            //progressDialog.hide();
             redirectToActivity(MainActivity.class, Constants.DELLAY);
         }
     };
@@ -97,7 +95,7 @@ public class EditorActivity extends BaseActivity implements IEditorView {
         public void onProgress(Double rate) {
             if (rate.intValue() > 10 && fileModel.getIsCrop()) {
                 progressDialog.setProgress(rate.intValue());
-            }else{
+            } else {
                 progressDialog.setProgress(rate.intValue());
             }
         }
@@ -108,9 +106,7 @@ public class EditorActivity extends BaseActivity implements IEditorView {
             fileModel.setFileStatus(FileStatusEnum.ERROR);
             fileModel.setPath(Globals.currentOutputVideoPath + fileModel.getName());
             mPresenter.updateFileModel(fileModel);
-
             showToastMethod(getString(R.string.compression_failed));
-            //progressDialog.hide();
             finish();
             redirectToActivity(MainActivity.class, Constants.DELLAY);
 
@@ -241,12 +237,12 @@ public class EditorActivity extends BaseActivity implements IEditorView {
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        super.onKeyDown(keyCode, event);
-        if (progressDialog != null && progressDialog.isShowing())
-            return false;
-        finish();
-        return true;
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (progressDialog != null && !progressDialog.isShowing()) {
+            finish();
+            redirectToActivity(MainActivity.class);
+        }
     }
 
     @Override
