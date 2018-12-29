@@ -62,10 +62,6 @@ public class FileCompressor implements IFileCompressor {
 
                 @Override
                 public void onExecSuccess(String message) {
-                    File trimFile = new File(fileModel.getPath());
-                    if (trimFile.exists()) {
-                        trimFile.delete();
-                    }
                     fileModel.listener.onSuccess(100.0);
                 }
 

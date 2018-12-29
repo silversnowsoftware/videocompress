@@ -142,6 +142,7 @@ public class ListActivity extends BaseActivity implements IListView {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+        redirectToActivity(MainActivity.class);
     }
 
     private class DeleteFilesOperationAsync extends AsyncTask<Void, Void, Boolean> {
