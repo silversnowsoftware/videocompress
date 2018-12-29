@@ -109,8 +109,8 @@ public class EditorPresenter<V extends IEditorView> extends BasePresenter<V>
 
             srcFile = getFileModelList().get(getFileModelList().size() - 1).getPath();
             mMaxDuration = getVideoDuration((Activity) getView(), srcFile);
-            mDefaultResolutionId = findVideoResolution(srcFile);
-            setSelectedResolution(mDefaultResolutionId);
+           // mDefaultResolutionId = findVideoResolution(srcFile);
+           // setSelectedResolution(mDefaultResolutionId);
 
             mViewHolder.tileView.post(new Runnable() {
                 @Override
